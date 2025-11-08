@@ -108,11 +108,11 @@ export default function Navbar({ onQuickAdd }: Props) {
               {/* user / auth */}
               {session ? (
                 <div className="flex items-center gap-2">
-                  <img
+                  {/* <img
                     src={session.user?.image || `/api/avatar/${session.user?.email}`}
                     alt={session.user?.name || "user"}
                     className="w-8 h-8 rounded-full object-cover border"
-                  />
+                  /> */}
                   <div className="hidden sm:flex flex-col text-sm">
                     <button className="text-sm font-medium text-gray-700" onClick={() => router.push("/profile")}>{session.user?.name}</button>
                     <button
