@@ -41,7 +41,7 @@ export default function Navbar({ onQuickAdd }: Props) {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-b border-gray-200">
+      <header className=" bb fixed top-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14">
             {/* Left: logo + title */}
