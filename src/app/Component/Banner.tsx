@@ -6,6 +6,7 @@ import { useUser } from "@/Hooks/useUser";
 
 const Banner = () => {
   const { user } = useUser();
+  
 
   return (
     <section className="relative w-full h-[400px] flex items-center justify-center text-center rounded-2xl overflow-hidden shadow-lg">
@@ -46,7 +47,7 @@ const Banner = () => {
         ) : (
           <div className="space-y-3">
             <p className="text-sm md:text-base text-gray-200">
-              Welcome back, <span className="font-semibold">{user?.displayName || "User"}</span> 👋
+              Welcome back, <span className="font-semibold">{user?.name || "User"}</span> 👋
             </p>
             <Link
               href="/my-list"

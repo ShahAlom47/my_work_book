@@ -1,6 +1,7 @@
 // hooks/useUser.ts
 "use client";
 
+import { UserData } from "@/Interfaces/userInterfaces";
 import { useSession } from "next-auth/react";
 
 export const useUser = () => {
@@ -10,7 +11,7 @@ export const useUser = () => {
   const user = session?.user;
 
   return {
-    user,
+    user: user as UserData | undefined,
     isAuthenticated,
     isLoading: status === "loading",
   };
