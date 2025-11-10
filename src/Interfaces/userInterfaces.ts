@@ -15,7 +15,7 @@ export interface UserData {
   _id?: string | ObjectId;
   email: string; // not editable
   name: string;
-  password?: string; // optional, only for password update
+  password?: string ; // optional, only for password update
   role?: string;
   image?: string | null;
   phone?: string;

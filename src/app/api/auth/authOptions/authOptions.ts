@@ -77,6 +77,14 @@ export const authOptions: NextAuthOptions = {
           }
 
           // 🔐 Password check
+          if (!existingUser.password) {
+            throw new Error(
+              JSON.stringify({
+                code: "INVALID_PASSWORD",
+                message: "Invalid password format.",
+              })
+            );
+          }
           const isValid = await bcrypt.compare(
             credentials.password,
             existingUser.password
@@ -122,18 +130,6 @@ export const authOptions: NextAuthOptions = {
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
-    GitHubProvider({
-      clientId: process.env.GITHUB_ID!,
-      clientSecret: process.env.GITHUB_SECRET!,
-    }),
-    FacebookProvider({
-      clientId: process.env.FACEBOOK_CLIENT_ID!,
-      clientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
-    }),
-    LinkedinProvider({
-      clientId: process.env.LINKEDIN_CLIENT_ID!,
-      clientSecret: process.env.LINKEDIN_CLIENT_SECRET!,
     }),
   ],
 

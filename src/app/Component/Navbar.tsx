@@ -34,6 +34,7 @@ export default function Navbar({ onQuickAdd }: Props) {
 
   const navLinks = [
     { href: "/", label: "Home" },
+    { href: "/my-book", label: "My Book" },
     { href: "/entries", label: "Entries" },
     { href: "/summary", label: "Summary" },
     { href: "/settings", label: "Settings" },
