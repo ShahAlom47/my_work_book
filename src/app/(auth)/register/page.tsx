@@ -56,18 +56,18 @@ const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     <div className="max-w flex flex-col items-center justify-center h-screen bg-gray-100">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-color-primary rounded px-8 pt-6 pb-8 mb-4 lg:w-4/12 md:w-6/12 sm:w-9/12 w-11/12 h-fit"
+        className="bg-gray-300 rounded px-8 pt-6 pb-8 mb-4 lg:w-4/12 md:w-6/12 sm:w-9/12 w-11/12 h-fit"
       >
-        <h1 className="text-3xl font-semibold text-white text-center mb-6 border-b-2 border-color-secondary pb-2">
+        <h1 className="text-3xl font-semibold text-center mb-6 border-b-2 border-color-secondary pb-2">
           Register
         </h1>
         {/* Register Form */}
-        <div className="mb-4 text-white">
+        <div className="mb-4 ">
           <input
             type="text"
             placeholder="Full Name"
             {...register("name", { required: "Name is required" })}
-            className="w-full px-4 py-1 rounded-sm focus:outline-none mb-3 border-b border-color-secondary"
+              className="w-full px-4 py-1 rounded-sm focus:outline-none mb-3 border-b border-color-secondary"
           />
           {errors.name && (
             <p className="text-red-500 text-xs">{errors.name.message}</p>
@@ -93,7 +93,7 @@ const onSubmit: SubmitHandler<IFormInput> = async (data) => {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white pb-1"
+              className="absolute right-4 top-1/2 transform -translate-y-1/2  pb-1"
             >
               {showPassword ? <FaEyeSlash /> : <FaEye />}
             </button>
@@ -108,15 +108,15 @@ const onSubmit: SubmitHandler<IFormInput> = async (data) => {
         {/* Social Login */}
         <SocialLogin /> {/* Using the SocialLogin Component here */}
         {/* Login Link */}
-        <div className="text-center text-sm text-white">
+        <div className="text-center text-sm ">
           <p>
             Already have an account?{" "}
-            <Link href="/login" className="text-blue-300 hover:underline">
+            <Link href="/login" className="text-blue-500 hover:underline">
               Login here
             </Link>
           </p>
           <p>
-            <Link href="/" className="text-blue-300 hover:underline">
+            <Link href="/" className="text-blue-500 hover:underline">
               Go to Home
             </Link>
           </p>
