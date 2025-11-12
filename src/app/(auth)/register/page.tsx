@@ -1,15 +1,15 @@
 "use client";
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import Link from "next/link";
-import PrimaryButton from "@/components/PrimaryButton";
-import SocialLogin from "@/components/SocialLogin"; // SocialLogin Component Import
+import Link from "next/link"; // SocialLogin Component Import
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { registerUser } from "@/lib/allApiRequest/apiRequests";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { useLoading } from "@/hooks/useLoading";
 import { handleApiError } from "@/utils/handleApiError";
+import PrimaryButton from "@/app/Component/PrimaryButton";
+import SocialLogin from "@/app/Component/SocialLogin";
+import { useLoading } from "@/Hooks/useLoading";
 
 export interface IFormInput {
   name: string;
