@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 
-type RegisterForm = {
+export type RegisterForm = {
   name: string;
   email: string;
   password: string;

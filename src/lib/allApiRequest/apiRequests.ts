@@ -1,5 +1,5 @@
 // src/utils/api.ts
-import { IFormInput } from "@/app/(auth)/register/page";
+import { RegisterForm } from "@/app/(auth)/register/page";
 import axios from "axios";
 
 export interface IApiResponse<T = unknown> {
@@ -47,6 +47,6 @@ export const request = async <T>(
 
 
 // Auth API requests
-export const registerUser = async (data: IFormInput) => {
+export const registerUser = async (data: RegisterForm) => {
   return request("POST", "/auth/register", { ...data }, );
 }
