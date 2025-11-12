@@ -1,82 +1,129 @@
 "use client";
-
-import { useForm } from "react-hook-form";
+import React, { useState } from "react";
+import { useForm, SubmitHandler } from "react-hook-form";
+import Link from "next/link";
+import PrimaryButton from "@/components/PrimaryButton";
+import SocialLogin from "@/components/SocialLogin"; // SocialLogin Component Import
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { registerUser } from "@/lib/allApiRequest/apiRequests";
+import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useLoading } from "@/hooks/useLoading";
+import { handleApiError } from "@/utils/handleApiError";
 
-export type RegisterForm = {
+export interface IFormInput {
   name: string;
   email: string;
   password: string;
+}
+
+const Register: React.FC = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
+    const { loading, startLoading, stopLoading } = useLoading();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IFormInput>();
+
+const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+  try {
+    startLoading(); // Start loading state
+    const res = await registerUser({ ...data });
+
+    if (res?.success) {
+      toast.success(res.message || "Registration successful");
+      router.push("/login"); // Redirect to login page after successful registration
+
+
+
+    } else {
+      toast.error(res.message || "Registration failed");
+      console.warn("Server responded with success: false", res);
+   
+
+    }
+  } catch (error) {
+    handleApiError(error);  // Use the centralized error handler
+  } finally {
+    console.log("Form Data:", data);
+    stopLoading(); // Stop loading state
+  }
 };
 
-export default function RegisterPage() {
-  const { register, handleSubmit, formState: { errors } } = useForm<RegisterForm>();
-  const router = useRouter();
-
-  const onSubmit = async (data: RegisterForm) => {
-    const res = await fetch("/api/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
-
-    if (res.ok) {
-      alert("✅ Registration successful!");
-      router.push("/login");
-    } else {
-      const err = await res.json();
-      alert(`❌ ${err.message}`);
-    }
-  };
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="max-w flex flex-col items-center justify-center h-screen bg-gray-100">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white p-6 rounded-xl shadow-lg w-80 space-y-4"
+        className="bg-color-primary rounded px-8 pt-6 pb-8 mb-4 lg:w-4/12 md:w-6/12 sm:w-9/12 w-11/12 h-fit"
       >
-        <h1 className="text-2xl font-bold text-center">Create Account</h1>
-
-        <input
-          {...register("name", { required: "Name is required" })}
-          placeholder="Full Name"
-          className="border w-full p-2 rounded"
-        />
-        {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
-
-        <input
-          type="email"
-          {...register("email", {
-            required: "Email is required",
-            pattern: { value: /^\S+@\S+$/i, message: "Invalid email address" },
-          })}
-          placeholder="Email"
-          className="border w-full p-2 rounded"
-        />
-        {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
-
-        <input
-          type="password"
-          {...register("password", { required: "Password is required", minLength: 6 })}
-          placeholder="Password"
-          className="border w-full p-2 rounded"
-        />
-        {errors.password && <p className="text-red-500 text-sm">Min 6 characters</p>}
-
-        <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white w-full py-2 rounded">
+        <h1 className="text-3xl font-semibold text-white text-center mb-6 border-b-2 border-color-secondary pb-2">
           Register
-        </button>
+        </h1>
+        {/* Register Form */}
+        <div className="mb-4 text-white">
+          <input
+            type="text"
+            placeholder="Full Name"
+            {...register("name", { required: "Name is required" })}
+            className="w-full px-4 py-1 rounded-sm focus:outline-none mb-3 border-b border-color-secondary"
+          />
+          {errors.name && (
+            <p className="text-red-500 text-xs">{errors.name.message}</p>
+          )}
 
-        <p className="text-sm text-center text-gray-600">
-          Already have an account?{" "}
-          <span
-            onClick={() => router.push("/login")}
-            className="text-blue-600 hover:underline cursor-pointer"
-          >
-            Login
-          </span>
-        </p>
+          <input
+            type="email"
+            placeholder="Email"
+            {...register("email", { required: "Email is required" })}
+            className="w-full px-4 py-1 rounded-sm focus:outline-none mb-3 border-b border-color-secondary"
+          />
+          {errors.email && (
+            <p className="text-red-500 text-xs">{errors.email.message}</p>
+          )}
+
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              {...register("password", { required: "Password is required" })}
+              className="w-full px-4 py-1 rounded-sm focus:outline-none mb-3 border-b border-color-secondary"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white pb-1"
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
+          </div>
+          {errors.password && (
+            <p className="text-red-500 text-xs">{errors.password.message}</p>
+          )}
+        </div>
+        <PrimaryButton className="w-full mb-3 rounded-sm" type="submit" isLoading={loading}>
+          Register
+        </PrimaryButton>
+        {/* Social Login */}
+        <SocialLogin /> {/* Using the SocialLogin Component here */}
+        {/* Login Link */}
+        <div className="text-center text-sm text-white">
+          <p>
+            Already have an account?{" "}
+            <Link href="/login" className="text-blue-300 hover:underline">
+              Login here
+            </Link>
+          </p>
+          <p>
+            <Link href="/" className="text-blue-300 hover:underline">
+              Go to Home
+            </Link>
+          </p>
+        </div>
       </form>
     </div>
   );
-}
+};
+
+export default Register;
