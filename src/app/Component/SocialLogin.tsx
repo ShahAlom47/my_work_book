@@ -12,22 +12,7 @@ const handleSignIn = (provider: "google" | "github" | "facebook"|"linkedin") => 
 const SocialLogin: React.FC = () => {
   return (
     <div className="flex gap-4 justify-center mb-4">
-      <button
-        type="button"
-        onClick={() => handleSignIn("facebook")}
-        className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700"
-        aria-label="Sign in with Facebook"
-      >
-        <FaFacebook size={15} />
-      </button>
-      <button
-        type="button"
-        onClick={() => handleSignIn("github")}
-        className="bg-black text-white p-2 rounded-full hover:bg-gray-800"
-        aria-label="Sign in with GitHub"
-      >
-        <FaGithub size={15} />
-      </button>
+     
       <button
         type="button"
         onClick={() => handleSignIn("google")}
@@ -36,14 +21,7 @@ const SocialLogin: React.FC = () => {
       >
         <FaGoogle size={15} />
       </button>
-      <button
-        type="button"
-        onClick={() => handleSignIn("linkedin")}
-        className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700"
-        aria-label="Sign in with Google"
-      >
-        <FaLinkedin size={15} />
-      </button>
+     
     </div>
   );
 };
