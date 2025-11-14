@@ -2,9 +2,9 @@
 import React from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { NavLink } from "./NavLink";
 import logo from "@/assets/images/devDiaryLogo.png";
-import SocialLink from "./SocialLink";
+import Link from "next/link";
+import { SlSocialLinkedin } from "react-icons/sl";
 
 const Footer = () => {
   const pathname = usePathname();
@@ -35,7 +35,8 @@ const Footer = () => {
         <div className="md: cols-span-1 row-span-1 md:row-start-1 row-start-2">
           <h2 className="text-lg font-bold mb-2 ml-3 ">Links</h2>
           <nav className="  grid grid-cols-2  gap-1 w-fit   ">
-            {NavLink(pathname)}
+           <Link href={'/'}>Home</Link>
+           <Link href={'/my-books'}>myBooks</Link>
           </nav>
         </div>
 
@@ -43,7 +44,7 @@ const Footer = () => {
         <div className=" md: cols-span-1 row-span-1 md:row-start-1 row-start-2  ml-aut">
           <h2 className="text-lg font-bold mb-2">Follow Me</h2>
           <div className="flex space-x-2  flex-col  gap-2">
-           <SocialLink></SocialLink>
+           <SlSocialLinkedin/>
           </div>
         </div>
       </div>
