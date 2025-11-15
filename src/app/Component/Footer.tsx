@@ -1,13 +1,11 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
 import logo from "@/assets/images/devDiaryLogo.png";
 import Link from "next/link";
 import { SlSocialLinkedin } from "react-icons/sl";
 
 const Footer = () => {
-  const pathname = usePathname();
 
   return (
     <footer className="bg-color-primary dark:bg-gray-900 text-gray-100 dark:text-gray-200 mt-10 py-10">
