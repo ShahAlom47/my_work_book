@@ -47,7 +47,7 @@ const onSubmit: SubmitHandler<IFormInput> = async (data) => {
   } catch (error) {
     handleApiError(error);  // Use the centralized error handler
   } finally {
-    console.log("Form Data:", data);
+    // console.log("Form Data:", data);
     stopLoading(); // Stop loading state
   }
 };
