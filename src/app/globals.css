@@ -1,7 +1,6 @@
 @import "tailwindcss";
 
 
-
 @custom-variant dark (&:is(.dark *));
 
 @theme  {
@@ -129,13 +128,11 @@
   }
 }
 
-
+.bb{
+  border: solid 2px red;
+}
 .max-w{
   max-width: 1400%;
   margin-right: auto ;
   margin-left: auto ;
-}
-
-.bb{
-  border: solid 2px red;
 }

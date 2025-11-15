@@ -17,8 +17,6 @@ export const POST = async (req: Request): Promise<NextResponse> => {
     const usersCollection = await getUserCollection();
     const body: RequestBody = await req.json();
 
-    console.log(body ,"body")
-
     const { email, password, name,  } = body;
     console.log( email, password, name);
 

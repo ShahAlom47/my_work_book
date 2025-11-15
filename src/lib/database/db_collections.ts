@@ -1,12 +1,12 @@
 import { Collection, Db } from "mongodb";
 import clientPromise from "./db_connection";
-import { UserData } from "@/Interfaces/userInterfaces";
+import { User } from "../interfaces/interfaces";
 
 // Define the User type (you can extend it as needed)
 
 
-export const getUserCollection = async (): Promise<Collection<UserData>> => {
+export const getUserCollection = async (): Promise<Collection<User>> => {
   const client = await clientPromise;
-  const db: Db = client.db("MyWorkBook"); // Specify your database name here
-  return db.collection<UserData>("users");
+  const db: Db = client.db("devDiary");
+  return db.collection<User>("users");
 };
