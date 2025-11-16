@@ -2,14 +2,14 @@
 import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import Link from "next/link";
-import PrimaryButton from "@/components/PrimaryButton";
-import SocialLogin from "@/components/SocialLogin"; // SocialLogin Component Import
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { registerUser } from "@/lib/allApiRequest/apiRequests";
 import toast from "react-hot-toast";
 import { handleApiError } from "@/utils/handleApiError";
 import { useRouter } from "next/navigation";
 import { useLoading } from "@/hooks/useLoading";
+import PrimaryButton from "@/Component/PrimaryButton";
+import SocialLogin from "@/Component/SocialLogin";
 
 export interface IFormInput {
   name: string;

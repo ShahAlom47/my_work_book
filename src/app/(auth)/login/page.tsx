@@ -5,12 +5,12 @@ import {
   FaEyeSlash,
 } from "react-icons/fa";
 import Link from "next/link";
-import PrimaryButton from "@/components/PrimaryButton";
-import SocialLogin from "@/components/SocialLogin";
 import { useLoading } from "@/hooks/useLoading";
 import { signIn } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import PrimaryButton from "@/Component/PrimaryButton";
+import SocialLogin from "@/Component/SocialLogin";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
