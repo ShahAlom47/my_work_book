@@ -1,12 +1,12 @@
 // lib/mongodb.ts
 import { MongoClient, ServerApiVersion, Db } from "mongodb";
 
-const uri: string = process.env.MONGODB_URI as string;
+const uri: string = process.env.NEXT_PUBLIC_MONGODB_URI as string;
 
 let client: MongoClient;
 let clientPromise: Promise<MongoClient>;
 
-if (process.env.NODE_ENV === "development") {
+if (process.env.NEXT_PUBLIC_NODE_ENV === "development") {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   if (!(global as any)._mongoClientPromise) {
     client = new MongoClient(uri, {

@@ -176,6 +176,6 @@ export const authOptions: NextAuthOptions = {
   },
 
   // ✅ 6. Secret for signing JWT tokens
-  secret: process.env.NEXT_AUTH_SECRET,
+  secret: process.env.NEXT_PUBLIC_AUTH_SECRET,
 };
 export default authOptions;
