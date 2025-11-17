@@ -1,7 +1,7 @@
 // hooks/useUser.ts
 "use client";
 
-import { UserData } from "@/Interfaces/userInterfaces";
+import { UserData } from "@/lib/interfaces/interfaces";
 import { useSession } from "next-auth/react";
 
 export const useUser = () => {
