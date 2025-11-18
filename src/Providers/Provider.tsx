@@ -1,8 +1,10 @@
 "use client";
 
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SessionProvider } from "next-auth/react";
 import { ReactNode } from "react";
 import { Toaster } from 'react-hot-toast';
+const queryClient = new QueryClient()
 
 // import { SessionProvider } from "next-auth/react";
 // import { ImageKitProvider } from "imagekitio-next";
@@ -38,8 +40,10 @@ export default function Providers({ children }: { children: ReactNode }) {
               urlEndpoint={urlEndpoint}
               authenticator={authenticator}
             > */}
+             <QueryClientProvider client={queryClient}>
             <Toaster position="top-right" /> 
               {children}
+              </QueryClientProvider>
             {/* </ImageKitProvider>
           </NotificationProvider>
         </ReactQueryProvider>

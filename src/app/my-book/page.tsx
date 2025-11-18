@@ -1,47 +1,28 @@
-import React, { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+"use client";
+import React, { use, useState } from 'react';
 import { FiEdit, FiTrash2, FiPlus } from 'react-icons/fi';
 import axios from 'axios';
+import { useQuery } from '@tanstack/react-query';
+import { fetchEntries } from '@/lib/allApiRequest/apiRequests';
 
-const fetchTitles = async () => {
-  const { data } = await axios.get('/api/titles'); // API endpoint
-  return data;
-};
 
-const deleteTitle = async (id) => {
-  await axios.delete(`/api/titles/${id}`);
-};
+
+
 
 const MyWorkBook = () => {
-  const queryClient = useQueryClient();
   const [showAddModal, setShowAddModal] = useState(false);
   const [newTitle, setNewTitle] = useState('');
 
-  // fetch titles
-  const { data: titles = [], isLoading } = useQuery(['titles'], fetchTitles);
 
-  // mutation for delete
-  const deleteMutation = useMutation(deleteTitle, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['titles']);
+  const {data}= useQuery({
+    queryKey: ['entries'],
+    queryFn: async () =>{
+        const res = await fetchEntries();
+        return res.data;
     },
-  });
+})
 
-  const handleDelete = (id) => {
-    if (window.confirm('Are you sure you want to delete this title?')) {
-      deleteMutation.mutate(id);
-    }
-  };
 
-  const handleAddTitle = async () => {
-    if (!newTitle.trim()) return;
-    await axios.post('/api/titles', { name: newTitle });
-    queryClient.invalidateQueries(['titles']);
-    setNewTitle('');
-    setShowAddModal(false);
-  };
-
-  if (isLoading) return <div>Loading...</div>;
 
   return (
     <div className="p-6">
