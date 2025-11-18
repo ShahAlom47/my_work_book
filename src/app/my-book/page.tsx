@@ -1,7 +1,6 @@
 "use client";
-import React, { use, useState } from 'react';
+import React, {  useState } from 'react';
 import { FiEdit, FiTrash2, FiPlus } from 'react-icons/fi';
-import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
 import { fetchEntries } from '@/lib/allApiRequest/apiRequests';
 
@@ -66,7 +65,8 @@ const MyWorkBook = () => {
         </div>
       )}
 
-      {/* Title List Table */}
+      {/* Entry  List Table */}
+      
       <table className="w-full border border-gray-300 rounded">
         <thead>
           <tr className="bg-gray-100">
