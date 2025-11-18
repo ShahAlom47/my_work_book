@@ -1,27 +1,39 @@
 "use client";
-import React, {  useState } from 'react';
-import { FiEdit, FiTrash2, FiPlus } from 'react-icons/fi';
+import React, { useState } from 'react';
+import { FiPlus } from 'react-icons/fi';
 import { useQuery } from '@tanstack/react-query';
 import { fetchEntries } from '@/lib/allApiRequest/apiRequests';
-
-
-
-
+import EntryTable from './EntryTable';
 
 const MyWorkBook = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [newTitle, setNewTitle] = useState('');
 
-
-  const {data}= useQuery({
+  const { data: entries = [], isLoading } = useQuery({
     queryKey: ['entries'],
-    queryFn: async () =>{
-        const res = await fetchEntries();
-        return res.data;
+    queryFn: async () => {
+      const res = await fetchEntries();
+      return res.data;
     },
-})
+  });
 
+  const handleDelete = (id) => {
+    alert(`Delete logic for id: ${id}`);
+  };
 
+  const handleEdit = (id) => {
+    alert(`Edit logic for id: ${id}`);
+  };
+
+  const handleAddTitle = () => {
+    alert(`Add logic for title: ${newTitle}`);
+  };
+
+  const handleTitleClick = (id) => {
+    alert(`Navigate to detail page for title id: ${id}`);
+  };
+
+  if (isLoading) return <div>Loading...</div>;
 
   return (
     <div className="p-6">
@@ -65,45 +77,13 @@ const MyWorkBook = () => {
         </div>
       )}
 
-      {/* Entry  List Table */}
-      
-      <table className="w-full border border-gray-300 rounded">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="p-2 border">Title Name</th>
-            <th className="p-2 border">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {titles.map((title) => (
-            <tr key={title.id} className="hover:bg-gray-50 cursor-pointer">
-              <td
-                className="p-2 border"
-                onClick={() => {
-                  // navigate to detail table page
-                  window.location.href = `/title/${title.id}`;
-                }}
-              >
-                {title.name}
-              </td>
-              <td className="p-2 border flex gap-2">
-                <button
-                  onClick={() => alert('Edit logic here')}
-                  className="text-yellow-500 hover:text-yellow-700"
-                >
-                  <FiEdit />
-                </button>
-                <button
-                  onClick={() => handleDelete(title.id)}
-                  className="text-red-500 hover:text-red-700"
-                >
-                  <FiTrash2 />
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {/* Entry Table */}
+      <EntryTable
+        entries={entries}
+        onTitleClick={handleTitleClick}
+        handleEdit={handleEdit}
+        handleDelete={handleDelete}
+      />
     </div>
   );
 };
