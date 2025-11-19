@@ -1,4 +1,4 @@
-import { Entry, EntryData } from './../../../../lib/interfaces/interfaces';
+import { Entry } from './../../../../lib/interfaces/interfaces';
 // app/api/title/add/route.ts
 import { getEntriesCollection } from "@/lib/database/db_collections";
 import { NextResponse } from "next/server";

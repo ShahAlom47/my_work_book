@@ -2,9 +2,10 @@
 import React, { useState } from "react";
 import { FiPlus } from "react-icons/fi";
 import { useQuery } from "@tanstack/react-query";
-import { fetchEntries } from "@/lib/allApiRequest/apiRequests";
+import { addEntry, fetchEntries } from "@/lib/allApiRequest/apiRequests";
 import EntryTable from "@/Component/EntryTable";
 import { Entry } from "@/lib/interfaces/interfaces";
+import toast from "react-hot-toast";
 
 const MyWorkBook = () => {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -30,8 +31,21 @@ const MyWorkBook = () => {
     alert(`Edit logic for id: ${id}`);
   };
 
-  const handleAddTitle = () => {
-    alert(`Add logic for title: ${newTitle}`);
+  const handleAddTitle = async () => {
+    const trimmedTitle = newTitle.trim();
+    if (!trimmedTitle) {
+      alert("Title name cannot be empty");
+      return;
+    }
+    const res = await addEntry( trimmedTitle );
+    if (res.success) {
+      toast.success("Title added successfully");
+      setShowAddModal(false);
+      setNewTitle("");
+    } else {
+      toast.error(`Error adding title: ${res.message}`);
+    } 
+
   };
 
   const handleTitleClick = (id: string) => {
