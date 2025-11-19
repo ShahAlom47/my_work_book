@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { FiPlus } from 'react-icons/fi';
 import { useQuery } from '@tanstack/react-query';
 import { fetchEntries } from '@/lib/allApiRequest/apiRequests';
-import EntryTable from './EntryTable';
+import EntryTable from '@/Component/EntryTable';
 
 const MyWorkBook = () => {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -17,11 +17,11 @@ const MyWorkBook = () => {
     },
   });
 
-  const handleDelete = (id) => {
+  const handleDelete = (id:string) => {
     alert(`Delete logic for id: ${id}`);
   };
 
-  const handleEdit = (id) => {
+  const handleEdit = (id: string  ) => {
     alert(`Edit logic for id: ${id}`);
   };
 
@@ -29,7 +29,7 @@ const MyWorkBook = () => {
     alert(`Add logic for title: ${newTitle}`);
   };
 
-  const handleTitleClick = (id) => {
+  const handleTitleClick = (id: string) => {
     alert(`Navigate to detail page for title id: ${id}`);
   };
 
