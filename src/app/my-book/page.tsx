@@ -43,14 +43,14 @@ const MyWorkBook = () => {
           onClick={() => setShowAddModal(true)}
           className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
-          <FiPlus /> Add Hisab Name
+          <FiPlus /> Add Entry Name
         </button>
       </div>
 
       {/* Add Title Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded shadow-md w-96">
+          <div className="bg-white p-6 rounded shadow-md min-w-96 md:w-6/12 w-full">
             <h2 className="text-lg font-bold mb-4">Add New Title</h2>
             <input
               type="text"

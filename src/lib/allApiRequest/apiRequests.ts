@@ -1,6 +1,7 @@
 // src/utils/api.ts
 import { IFormInput } from "@/app/(auth)/register/page";
 import axios from "axios";
+import { EntryData } from "../interfaces/interfaces";
 
 export interface IApiResponse<T = unknown> {
   success: boolean;
@@ -53,4 +54,7 @@ export const registerUser = async (data: IFormInput) => {
 
 export const fetchEntries = async () => {
   return request("GET", "/entries");
+}
+export const addEntry = async (data:EntryData) => {
+  return request("POST", "/entries", {...data});
 }
