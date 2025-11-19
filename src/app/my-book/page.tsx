@@ -1,27 +1,32 @@
 "use client";
-import React, { useState } from 'react';
-import { FiPlus } from 'react-icons/fi';
-import { useQuery } from '@tanstack/react-query';
-import { fetchEntries } from '@/lib/allApiRequest/apiRequests';
-import EntryTable from '@/Component/EntryTable';
+import React, { useState } from "react";
+import { FiPlus } from "react-icons/fi";
+import { useQuery } from "@tanstack/react-query";
+import { fetchEntries } from "@/lib/allApiRequest/apiRequests";
+import EntryTable from "@/Component/EntryTable";
+import { Entry } from "@/lib/interfaces/interfaces";
 
 const MyWorkBook = () => {
   const [showAddModal, setShowAddModal] = useState(false);
-  const [newTitle, setNewTitle] = useState('');
+  const [newTitle, setNewTitle] = useState("");
 
-  const { data: entries = [], isLoading } = useQuery({
-    queryKey: ['entries'],
+  const { data, isLoading } = useQuery({
+    queryKey: ["entries"],
     queryFn: async () => {
       const res = await fetchEntries();
       return res.data;
     },
   });
 
-  const handleDelete = (id:string) => {
+  console.log(data)
+
+  const entries = data as Entry[];
+
+  const handleDelete = (id: string) => {
     alert(`Delete logic for id: ${id}`);
   };
 
-  const handleEdit = (id: string  ) => {
+  const handleEdit = (id: string) => {
     alert(`Edit logic for id: ${id}`);
   };
 

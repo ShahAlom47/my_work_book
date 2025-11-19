@@ -1,3 +1,5 @@
+import { ObjectId } from "mongodb";
+
 export interface UserData {
   email: string;
   name: string;
@@ -9,7 +11,7 @@ export interface UserData {
 }
 
 export interface Entry {
-  _id: string;
+  _id: string | ObjectId;
   title: string;
   entryData: []
   createdAt?: string;  // optional
