@@ -1,22 +1,22 @@
+import { Entry, EntryData } from './../../../../lib/interfaces/interfaces';
 // app/api/title/add/route.ts
+import { getEntriesCollection } from "@/lib/database/db_collections";
 import { NextResponse } from "next/server";
-import { getTitleCollection } from "@/lib/database/db_collections";
-import { TitleRequestBody } from "@/Interfaces/titleInterface";
 
 export async function POST(req: Request) {
   try {
-    const body: TitleRequestBody = await req.json();
-    const { name, createdAt, updatedAt } = body;
+   const body = await req.json();
+    const { entryName, createdAt, updatedAt } = body;
 
     // Validate payload
-    if (!name || name.trim().length < 1) {
+    if (!entryName || entryName.trim().length < 1) {
       return NextResponse.json(
         { message: "Invalid payload: title name required" },
         { status: 400 }
       );
     }
 
-    const titleCollection = await getTitleCollection();
+    const titleCollection = await getEntriesCollection();
 
     // Check if title already exists (optional)
     const existingTitle = await titleCollection.findOne({ name });
@@ -29,8 +29,9 @@ export async function POST(req: Request) {
     }
 
     // Create new Title object
-    const newTitle = {
-      name,
+    const newTitle: Entry = {
+      entryName,
+      entryData: [],
       createdAt: createdAt || new Date().toISOString(),
       updatedAt: updatedAt || new Date().toISOString(),
     };
