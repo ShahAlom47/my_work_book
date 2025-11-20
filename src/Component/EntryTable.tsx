@@ -1,14 +1,9 @@
 "use client";
+import { Entry } from "@/lib/interfaces/interfaces";
 import React from "react";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 
-// ---- Entry Interface ----
-export interface Entry {
-  id: string;
-  name: string;
-  createdAt?: string;
-  updatedAt?: string;
-}
+
 
 // ---- Props Interface ----
 interface EntryTableProps {
@@ -36,28 +31,28 @@ const EntryTable: React.FC<EntryTableProps> = ({
       <tbody>
         {entries.map((title) => (
           <tr
-            key={title.id}
+            key={title._id as string}
             className="hover:bg-gray-50 transition cursor-pointer"
           >
             {/* Title Cell */}
             <td
               className="p-2 border"
-              onClick={() => onTitleClick(title.id)}
+              onClick={() => onTitleClick(title._id as string)}
             >
-              {title.name}
+              {title.entryName}
             </td>
 
             {/* Action Buttons */}
             <td className="p-2 border flex items-center justify-center gap-3">
               <button
-                onClick={() => handleEdit(title.id)}
+                onClick={() => handleEdit(title._id as string)}
                 className="text-yellow-500 hover:text-yellow-700 transition"
               >
                 <FiEdit />
               </button>
 
               <button
-                onClick={() => handleDelete(title.id)}
+                onClick={() => handleDelete(title._id as string)}
                 className="text-red-500 hover:text-red-700 transition"
               >
                 <FiTrash2 />

@@ -52,8 +52,8 @@ export const registerUser = async (data: IFormInput) => {
   return request("POST", "/auth/register", { ...data }, );
 }
 
-export const fetchEntries = async () => {
-  return request("GET", "/entries");
+export const fetchEntriesName = async () => {
+  return request("GET", "/my-books/entries-name");
 }
 export const addEntry = async (entryName: string) => {
   return request("POST", "/my-books/add", { entryName });

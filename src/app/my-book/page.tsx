@@ -2,9 +2,10 @@
 import React, { useState } from "react";
 import { FiPlus } from "react-icons/fi";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { addEntry, fetchEntries } from "@/lib/allApiRequest/apiRequests";
+import { addEntry, fetchEntriesName } from "@/lib/allApiRequest/apiRequests";
 import EntryTable from "@/Component/EntryTable";
 import toast from "react-hot-toast";
+import { Entry } from "@/lib/interfaces/interfaces";
 
 const MyWorkBook = () => {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -15,13 +16,13 @@ const MyWorkBook = () => {
   const { data, isLoading } = useQuery({
     queryKey: ["entries"],
     queryFn: async () => {
-      const res = await fetchEntries();
-      return res.data || [];
+      const res = await fetchEntriesName();
+      return res.data as Entry[];
     },
   });
 
-  const entries = data || []; // safe fallback
-  console.log(entries)
+console.log(data )
+
 
   const handleAddTitle = async () => {
     const trimmedTitle = newTitle.trim();
@@ -57,7 +58,7 @@ const MyWorkBook = () => {
     alert(`Navigate to detail page for title id: ${id}`);
   };
 
-  if (!isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div>Loading...</div>;
 
   return (
     <div className="p-6">
@@ -102,7 +103,7 @@ const MyWorkBook = () => {
       )}
 
       <EntryTable
-        entries={[]}
+         entries={data || []}
         onTitleClick={handleTitleClick}
         handleEdit={handleEdit}
         handleDelete={handleDelete}
