@@ -7,26 +7,19 @@ export async function POST(req: Request) {
   try {
    const body = await req.json();
     const { entryName, createdAt, updatedAt } = body;
+    console.log(body)
 
     // Validate payload
     if (!entryName || entryName.trim().length < 1) {
       return NextResponse.json(
-        { message: "Invalid payload: title name required" },
+        {success: false, message: "Invalid payload: title name required" },
         { status: 400 }
       );
     }
 
     const titleCollection = await getEntriesCollection();
 
-    // Check if title already exists (optional)
-    const existingTitle = await titleCollection.findOne({ name });
-
-    if (existingTitle) {
-      return NextResponse.json(
-        { message: "Title already exists", title: existingTitle },
-        { status: 409 }
-      );
-    }
+    
 
     // Create new Title object
     const newTitle: Entry = {
@@ -43,13 +36,14 @@ export async function POST(req: Request) {
       {
         message: "Title created successfully",
         title: insertedTitle,
+        success: true ,
       },
       { status: 201 }
     );
   } catch (error) {
     console.error("Add title error:", error);
     return NextResponse.json(
-      { message: "Internal server error", error },
+      { message: "Internal server error", error, success: false },
       { status: 500 }
     );
   }

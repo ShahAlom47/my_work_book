@@ -1,27 +1,49 @@
 "use client";
 import React, { useState } from "react";
 import { FiPlus } from "react-icons/fi";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { addEntry, fetchEntries } from "@/lib/allApiRequest/apiRequests";
 import EntryTable from "@/Component/EntryTable";
-import { Entry } from "@/lib/interfaces/interfaces";
 import toast from "react-hot-toast";
 
 const MyWorkBook = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [newTitle, setNewTitle] = useState("");
 
+  const queryClient = useQueryClient();
+
   const { data, isLoading } = useQuery({
     queryKey: ["entries"],
     queryFn: async () => {
       const res = await fetchEntries();
-      return res.data;
+      return res.data || [];
     },
   });
 
-  console.log(data)
+  const entries = data || []; // safe fallback
+  console.log(entries)
 
-  const entries = data as Entry[];
+  const handleAddTitle = async () => {
+    const trimmedTitle = newTitle.trim();
+    if (!trimmedTitle) {
+      toast.error("Title name cannot be empty");
+      return;
+    }
+
+    const res = await addEntry(trimmedTitle);
+
+    if (res?.success) {
+      toast.success(res.message || "Title added successfully");
+
+      // re-fetch the updated list  
+      queryClient.invalidateQueries({ queryKey: ["entries"] });
+
+      setShowAddModal(false);
+      setNewTitle("");
+    } else {
+      toast.error(`Error adding title: ${res?.message || "Unknown Error"}`);
+    }
+  };
 
   const handleDelete = (id: string) => {
     alert(`Delete logic for id: ${id}`);
@@ -31,28 +53,11 @@ const MyWorkBook = () => {
     alert(`Edit logic for id: ${id}`);
   };
 
-  const handleAddTitle = async () => {
-    const trimmedTitle = newTitle.trim();
-    if (!trimmedTitle) {
-      alert("Title name cannot be empty");
-      return;
-    }
-    const res = await addEntry( trimmedTitle );
-    if (res.success) {
-      toast.success("Title added successfully");
-      setShowAddModal(false);
-      setNewTitle("");
-    } else {
-      toast.error(`Error adding title: ${res.message}`);
-    } 
-
-  };
-
   const handleTitleClick = (id: string) => {
     alert(`Navigate to detail page for title id: ${id}`);
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (!isLoading) return <div>Loading...</div>;
 
   return (
     <div className="p-6">
@@ -66,7 +71,6 @@ const MyWorkBook = () => {
         </button>
       </div>
 
-      {/* Add Title Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded shadow-md min-w-96 md:w-6/12 w-full">
@@ -78,6 +82,7 @@ const MyWorkBook = () => {
               className="border w-full p-2 mb-4 rounded"
               placeholder="Enter title name"
             />
+
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setShowAddModal(false)}
@@ -96,9 +101,8 @@ const MyWorkBook = () => {
         </div>
       )}
 
-      {/* Entry Table */}
       <EntryTable
-        entries={entries}
+        entries={[]}
         onTitleClick={handleTitleClick}
         handleEdit={handleEdit}
         handleDelete={handleDelete}
