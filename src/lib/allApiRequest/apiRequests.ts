@@ -1,3 +1,4 @@
+
 // src/utils/api.ts
 import { IFormInput } from "@/app/(auth)/register/page";
 import axios from "axios";
@@ -17,7 +18,7 @@ const api = axios.create({
 });
 
 export const request = async <T>(
-  method: "GET" | "POST" | "PUT" | "DELETE",
+  method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE",
   url: string,
   data?: Record<string, unknown> | FormData,
   isForm?: "formData",
@@ -57,4 +58,11 @@ export const fetchEntriesName = async () => {
 }
 export const addEntry = async (entryName: string) => {
   return request("POST", "/my-books/add", { entryName });
+}
+export const updateEntry = async (id: string, entryName: string) => {
+  return request("PATCH", `/my-books/update/${id}`, { entryName });
+}
+
+export const deleteEntry = async (id: string) => {
+  return request("DELETE", `/my-books/delete/${id}`);
 }

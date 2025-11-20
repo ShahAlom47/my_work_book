@@ -2,14 +2,18 @@
 import React, { useState } from "react";
 import { FiPlus } from "react-icons/fi";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { addEntry, fetchEntriesName } from "@/lib/allApiRequest/apiRequests";
+import { addEntry, fetchEntriesName, updateEntry, deleteEntry } from "@/lib/allApiRequest/apiRequests";
 import EntryTable from "@/Component/EntryTable";
 import toast from "react-hot-toast";
 import { Entry } from "@/lib/interfaces/interfaces";
 
 const MyWorkBook = () => {
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+
   const [newTitle, setNewTitle] = useState("");
+  const [editTitle, setEditTitle] = useState("");
+  const [editingId, setEditingId] = useState<string>("");
 
   const queryClient = useQueryClient();
 
@@ -21,61 +25,86 @@ const MyWorkBook = () => {
     },
   });
 
-console.log(data )
+  const entries = data || [];
 
-
+  // ADD ENTRY -------------------------
   const handleAddTitle = async () => {
-    const trimmedTitle = newTitle.trim();
-    if (!trimmedTitle) {
+    const trimmed = newTitle.trim();
+    if (!trimmed) {
       toast.error("Title name cannot be empty");
       return;
     }
 
-    const res = await addEntry(trimmedTitle);
-
+    const res = await addEntry(trimmed);
     if (res?.success) {
-      toast.success(res.message || "Title added successfully");
-
-      // re-fetch the updated list  
+      toast.success("Title added successfully");
       queryClient.invalidateQueries({ queryKey: ["entries"] });
-
       setShowAddModal(false);
       setNewTitle("");
     } else {
-      toast.error(`Error adding title: ${res?.message || "Unknown Error"}`);
+      toast.error(`Error adding title: ${res?.message}`);
     }
   };
 
-  const handleDelete = (id: string) => {
-    alert(`Delete logic for id: ${id}`);
+  // EDIT ENTRY ------------------------
+  const openEditModal = (entry: Entry) => {
+    setEditingId(entry._id as string);
+    setEditTitle(entry.entryName);
+    setShowEditModal(true);
   };
 
-  const handleEdit = (id: string) => {
-    alert(`Edit logic for id: ${id}`);
+  const handleEditSave = async () => {
+    const trimmed = editTitle.trim();
+    if (!trimmed) {
+      toast.error("Title name cannot be empty");
+      return;
+    }
+
+    const res = await updateEntry(editingId, trimmed);
+    if (res?.success) {
+      toast.success("Title updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["entries"] });
+      setShowEditModal(false);
+    } else {
+      toast.error(res?.message || "Failed to update");
+    }
   };
 
-  const handleTitleClick = (id: string) => {
-    alert(`Navigate to detail page for title id: ${id}`);
+  // DELETE ENTRY ----------------------
+  const handleDelete = async (id: string) => {
+    const confirmDelete = confirm("Are you sure you want to delete this title?");
+    if (!confirmDelete) return;
+
+    const res = await deleteEntry(id);
+    if (res?.success) {
+      toast.success("Title deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ["entries"] });
+    } else {
+      toast.error("Failed to delete");
+    }
   };
 
   if (isLoading) return <div>Loading...</div>;
 
   return (
     <div className="p-6">
+      {/* Header */}
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-bold">MyWorkBook Titles</h1>
+        <h1 className="md:text-2xl text-lg font-bold">MyWorkBook Titles</h1>
         <button
           onClick={() => setShowAddModal(true)}
-          className="flex items-center gap-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          className="flex text-sm items-center gap-2 bg-blue-500 text-white px-3 py-1.5 rounded hover:bg-blue-600"
         >
           <FiPlus /> Add Entry Name
         </button>
       </div>
 
+      {/* ADD MODAL */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
           <div className="bg-white p-6 rounded shadow-md min-w-96 md:w-6/12 w-full">
             <h2 className="text-lg font-bold mb-4">Add New Title</h2>
+
             <input
               type="text"
               value={newTitle}
@@ -102,10 +131,47 @@ console.log(data )
         </div>
       )}
 
+      {/* EDIT MODAL */}
+      {showEditModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-6 rounded shadow-md min-w-96 md:w-6/12 w-full">
+            <h2 className="text-lg font-bold mb-4">Edit Title</h2>
+
+            <input
+              type="text"
+              value={editTitle}
+              onChange={(e) => setEditTitle(e.target.value)}
+              className="border w-full p-2 mb-4 rounded"
+              placeholder="Enter new title name"
+            />
+
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setShowEditModal(false)}
+                className="px-4 py-2 rounded border hover:bg-gray-100"
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={handleEditSave}
+                className="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* TABLE */}
       <EntryTable
-         entries={data || []}
-        onTitleClick={handleTitleClick}
-        handleEdit={handleEdit}
+        entries={entries}
+        onTitleClick={(id) => console.log("Clicked:", id)}
+        handleEdit={(id) => {
+          const entry = entries.find((e) => e._id === id);
+          if (entry) openEditModal(entry);
+        }}
         handleDelete={handleDelete}
       />
     </div>
