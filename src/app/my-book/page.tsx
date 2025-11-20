@@ -6,15 +6,16 @@ import { addEntry, fetchEntriesName, updateEntry, deleteEntry } from "@/lib/allA
 import EntryTable from "@/Component/EntryTable";
 import toast from "react-hot-toast";
 import { Entry } from "@/lib/interfaces/interfaces";
+import { useConfirm } from "@/hooks/useConfirm";
 
 const MyWorkBook = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-
   const [newTitle, setNewTitle] = useState("");
   const [editTitle, setEditTitle] = useState("");
   const [editingId, setEditingId] = useState<string>("");
 
+  const { confirm ,ConfirmModal} = useConfirm();
   const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery({
@@ -27,13 +28,10 @@ const MyWorkBook = () => {
 
   const entries = data || [];
 
-  // ADD ENTRY -------------------------
+  // ADD ENTRY
   const handleAddTitle = async () => {
     const trimmed = newTitle.trim();
-    if (!trimmed) {
-      toast.error("Title name cannot be empty");
-      return;
-    }
+    if (!trimmed) return toast.error("Title name cannot be empty");
 
     const res = await addEntry(trimmed);
     if (res?.success) {
@@ -46,7 +44,7 @@ const MyWorkBook = () => {
     }
   };
 
-  // EDIT ENTRY ------------------------
+  // EDIT ENTRY
   const openEditModal = (entry: Entry) => {
     setEditingId(entry._id as string);
     setEditTitle(entry.entryName);
@@ -55,10 +53,7 @@ const MyWorkBook = () => {
 
   const handleEditSave = async () => {
     const trimmed = editTitle.trim();
-    if (!trimmed) {
-      toast.error("Title name cannot be empty");
-      return;
-    }
+    if (!trimmed) return toast.error("Title name cannot be empty");
 
     const res = await updateEntry(editingId, trimmed);
     if (res?.success) {
@@ -70,17 +65,23 @@ const MyWorkBook = () => {
     }
   };
 
-  // DELETE ENTRY ----------------------
+  // DELETE ENTRY
   const handleDelete = async (id: string) => {
-    const confirmDelete = confirm("Are you sure you want to delete this title?");
-    if (!confirmDelete) return;
+    const ok = await confirm({
+      title: "Delete Entry",
+      message: "Are you sure you want to delete this entry?",
+      confirmText: "Yes, Delete",
+      cancelText: "Cancel",
+    });
+
+    if (!ok) return;
 
     const res = await deleteEntry(id);
     if (res?.success) {
       toast.success("Title deleted successfully");
       queryClient.invalidateQueries({ queryKey: ["entries"] });
     } else {
-      toast.error("Failed to delete");
+      toast.error(res?.message || "Failed to delete");
     }
   };
 
@@ -101,10 +102,9 @@ const MyWorkBook = () => {
 
       {/* ADD MODAL */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+        <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
           <div className="bg-white p-6 rounded shadow-md min-w-96 md:w-6/12 w-full">
             <h2 className="text-lg font-bold mb-4">Add New Title</h2>
-
             <input
               type="text"
               value={newTitle}
@@ -112,7 +112,6 @@ const MyWorkBook = () => {
               className="border w-full p-2 mb-4 rounded"
               placeholder="Enter title name"
             />
-
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setShowAddModal(false)}
@@ -133,10 +132,9 @@ const MyWorkBook = () => {
 
       {/* EDIT MODAL */}
       {showEditModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+        <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
           <div className="bg-white p-6 rounded shadow-md min-w-96 md:w-6/12 w-full">
             <h2 className="text-lg font-bold mb-4">Edit Title</h2>
-
             <input
               type="text"
               value={editTitle}
@@ -144,7 +142,6 @@ const MyWorkBook = () => {
               className="border w-full p-2 mb-4 rounded"
               placeholder="Enter new title name"
             />
-
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setShowEditModal(false)}
@@ -152,7 +149,6 @@ const MyWorkBook = () => {
               >
                 Cancel
               </button>
-
               <button
                 onClick={handleEditSave}
                 className="px-4 py-2 rounded bg-green-500 text-white hover:bg-green-600"
@@ -174,6 +170,8 @@ const MyWorkBook = () => {
         }}
         handleDelete={handleDelete}
       />
+
+      {ConfirmModal}
     </div>
   );
 };

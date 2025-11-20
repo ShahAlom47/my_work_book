@@ -48,6 +48,7 @@ export default function Providers({ children }: { children: ReactNode }) {
           </NotificationProvider>
         </ReactQueryProvider>
       </Provider> */}
+      
     </SessionProvider>
   );
 }
