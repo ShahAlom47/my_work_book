@@ -60,9 +60,9 @@ export const addEntry = async (entryName: string) => {
   return request("POST", "/my-books/add", { entryName });
 }
 export const updateEntry = async (id: string, entryName: string) => {
-  return request("PATCH", `/my-books/update/${id}`, { entryName });
+  return request("PATCH", `/my-books/entries-name/update/${id}`, { entryName });
 }
 
 export const deleteEntry = async (id: string) => {
-  return request("DELETE", `/my-books/delete/${id}`);
+  return request("DELETE", `/my-books/entries-name/delete/${id}`);
 }
