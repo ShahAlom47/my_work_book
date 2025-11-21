@@ -23,9 +23,9 @@ export async function GET(
     // Only required fields — no entryData
     const titles = await titleCollection
       .find(
-        {_id: new ObjectId(userId) },
+        {userId: userId},
         {
-          projection: { entryName: 1, createdAt: 1, updatedAt: 1 }, // only needed fields
+          projection: { entryName: 1, userId: 1, createdAt: 1, updatedAt: 1 }, // only needed fields
         }
       )
       .sort({ createdAt: -1 }) // latest first
