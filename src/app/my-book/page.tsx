@@ -2,11 +2,17 @@
 import React, { useState } from "react";
 import { FiPlus } from "react-icons/fi";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { addEntry, fetchEntriesName, updateEntry, deleteEntry } from "@/lib/allApiRequest/apiRequests";
+import {
+  addEntry,
+  fetchEntriesName,
+  updateEntry,
+  deleteEntry,
+} from "@/lib/allApiRequest/apiRequests";
 import EntryTable from "@/Component/EntryTable";
 import toast from "react-hot-toast";
 import { Entry } from "@/lib/interfaces/interfaces";
 import { useConfirm } from "@/hooks/useConfirm";
+import { useUser } from "@/hooks/useUser";
 
 const MyWorkBook = () => {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -14,26 +20,36 @@ const MyWorkBook = () => {
   const [newTitle, setNewTitle] = useState("");
   const [editTitle, setEditTitle] = useState("");
   const [editingId, setEditingId] = useState<string>("");
-
-  const { confirm ,ConfirmModal} = useConfirm();
+  const { user } = useUser();
+  const { confirm, ConfirmModal } = useConfirm();
   const queryClient = useQueryClient();
+
+ const userId = user?.id ?? user?._id;
 
   const { data, isLoading } = useQuery({
     queryKey: ["entries"],
+    enabled: !!userId,
     queryFn: async () => {
-      const res = await fetchEntriesName();
+      const res = await fetchEntriesName(String(userId));
+      console.log(res)
       return res.data as Entry[];
     },
   });
 
   const entries = data || [];
-
+  console.log(entries);
   // ADD ENTRY
   const handleAddTitle = async () => {
     const trimmed = newTitle.trim();
     if (!trimmed) return toast.error("Title name cannot be empty");
+   
 
-    const res = await addEntry(trimmed);
+    if (!userId) {
+      return toast.error("User not found. Please login again.");
+    }
+
+    const res = await addEntry(trimmed, userId as string);
+
     if (res?.success) {
       toast.success("Title added successfully");
       queryClient.invalidateQueries({ queryKey: ["entries"] });

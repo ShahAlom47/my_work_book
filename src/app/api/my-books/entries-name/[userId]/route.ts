@@ -1,15 +1,29 @@
 // app/api/title/get/route.ts
 import { getEntriesCollection } from "@/lib/database/db_collections";
-import { NextResponse } from "next/server";
+import { ObjectId } from "mongodb";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
-  try {
+export async function GET(
+  req: NextRequest,
+ { params }: { params:Promise< { userId: string }> }
+    ) {
+      try {
+    const {userId} = await params;
+
+    if (!userId || !ObjectId.isValid(userId)) {
+      return NextResponse.json(
+        { message: "Invalid category ID", success: false },
+        { status: 400 }
+      );
+    }
+
+    console.log(userId,"params")
     const titleCollection = await getEntriesCollection();
 
     // Only required fields — no entryData
     const titles = await titleCollection
       .find(
-        {},
+        {_id: new ObjectId(userId) },
         {
           projection: { entryName: 1, createdAt: 1, updatedAt: 1 }, // only needed fields
         }

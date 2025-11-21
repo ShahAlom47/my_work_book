@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: Request) {
   try {
    const body = await req.json();
-    const { entryName, createdAt, updatedAt } = body;
+    const { entryName,userId, createdAt, updatedAt } = body;
     console.log(body)
 
     // Validate payload
@@ -24,6 +24,7 @@ export async function POST(req: Request) {
     // Create new Title object
     const newTitle: Entry = {
       entryName,
+      userId,
       entryData: [],
       createdAt: createdAt || new Date().toISOString(),
       updatedAt: updatedAt || new Date().toISOString(),

@@ -53,11 +53,11 @@ export const registerUser = async (data: IFormInput) => {
   return request("POST", "/auth/register", { ...data }, );
 }
 
-export const fetchEntriesName = async () => {
-  return request("GET", "/my-books/entries-name");
+export const fetchEntriesName = async (userId: string) => {
+  return request("GET", `/my-books/entries-name/${userId}`);  
 }
-export const addEntry = async (entryName: string) => {
-  return request("POST", "/my-books/add", { entryName });
+export const addEntry = async (entryName: string, userId: string) => {
+  return request("POST", "/my-books/add", { entryName, userId });   
 }
 export const updateEntry = async (id: string, entryName: string) => {
   return request("PATCH", `/my-books/entries-name/update/${id}`, { entryName });
