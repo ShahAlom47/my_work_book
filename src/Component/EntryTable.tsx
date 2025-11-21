@@ -1,9 +1,8 @@
 "use client";
 import { Entry } from "@/lib/interfaces/interfaces";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
-
-
 
 // ---- Props Interface ----
 interface EntryTableProps {
@@ -19,6 +18,12 @@ const EntryTable: React.FC<EntryTableProps> = ({
   handleEdit,
   handleDelete,
 }) => {
+  const route = useRouter();
+
+  const handleNavigate = (id: string) => () => {
+    route.push(`/my-book/entries/${id}`);
+  };
+
   return (
     <table className="w-full border border-gray-300 rounded">
       <thead>
@@ -31,6 +36,7 @@ const EntryTable: React.FC<EntryTableProps> = ({
       <tbody>
         {entries.map((title) => (
           <tr
+            onClick={handleNavigate(title?._id as string)}
             key={title._id as string}
             className="hover:bg-gray-50 transition cursor-pointer"
           >

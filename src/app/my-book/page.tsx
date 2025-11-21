@@ -37,7 +37,7 @@ const MyWorkBook = () => {
   });
 
   const entries = data || [];
-  console.log(entries);
+  
   // ADD ENTRY
   const handleAddTitle = async () => {
     const trimmed = newTitle.trim();

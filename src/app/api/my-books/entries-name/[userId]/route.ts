@@ -5,10 +5,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
- { params }: { params:Promise< { userId: string }> }
-    ) {
-      try {
-    const {userId} = await params;
+  { params }: { params: Promise<{ userId: string }> }
+) {
+  try {
+    const { userId } = await params;
 
     if (!userId || !ObjectId.isValid(userId)) {
       return NextResponse.json(
@@ -17,13 +17,12 @@ export async function GET(
       );
     }
 
-    console.log(userId,"params")
     const titleCollection = await getEntriesCollection();
 
     // Only required fields — no entryData
     const titles = await titleCollection
       .find(
-        {userId: userId},
+        { userId: userId },
         {
           projection: { entryName: 1, userId: 1, createdAt: 1, updatedAt: 1 }, // only needed fields
         }

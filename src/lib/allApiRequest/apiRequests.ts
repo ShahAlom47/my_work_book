@@ -56,6 +56,13 @@ export const registerUser = async (data: IFormInput) => {
 export const fetchEntriesName = async (userId: string) => {
   return request("GET", `/my-books/entries-name/${userId}`);  
 }
+
+
+export const fetchEntries = async (userId: string, entryId: string) => {
+  return request("GET", `/my-books/entries/${userId}/${entryId}`);  
+} 
+
+
 export const addEntry = async (entryName: string, userId: string) => {
   return request("POST", "/my-books/add", { entryName, userId });   
 }
