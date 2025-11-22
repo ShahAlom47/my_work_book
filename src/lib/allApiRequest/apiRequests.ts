@@ -58,9 +58,9 @@ export const fetchEntriesName = async (userId: string) => {
 }
 
 
-export const fetchEntries = async (userId: string, entryId: string) => {
-  return request("GET", `/my-books/entries/${userId}/${entryId}`);  
-} 
+export const fetchEntriesDataById = async (userId: string, entryId: string) => {
+  return request("GET", `/my-books/entries/${userId}?entryId=${entryId}`);
+};
 
 
 export const addEntry = async (entryName: string, userId: string) => {

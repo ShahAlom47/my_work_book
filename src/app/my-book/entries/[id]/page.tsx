@@ -1,7 +1,7 @@
 "use client";
 import { useConfirm } from '@/hooks/useConfirm';
 import { useUser } from '@/hooks/useUser';
-import { fetchEntries } from '@/lib/allApiRequest/apiRequests';
+import {  fetchEntriesDataById } from '@/lib/allApiRequest/apiRequests';
 import { Entry } from '@/lib/interfaces/interfaces';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
@@ -18,15 +18,15 @@ const Entries = () => {
         queryKey: ["entries"],
         enabled: !!userId,
         queryFn: async () => {
-          const res = await fetchEntries(String(userId), params.id as string);
+          const res = await fetchEntriesDataById(String(userId), params.id as string);
           console.log(res)
           return res.data as Entry[];
         },
       });
     
-      const entries = data || [];
+      const entriesData = data || [];
 
-      console.log(entries,params.id);
+      console.log(entriesData,params.id ,"ids data ");
 
 
     return (
