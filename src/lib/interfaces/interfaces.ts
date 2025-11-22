@@ -16,6 +16,10 @@ export interface Entry {
   _id?: string | ObjectId;
   userId: string | ObjectId;
   entryName: string;
+  perDaySalary?: number;
+  totalSalary?: number;
+  paidSalary?: number;
+  remainingSalary?: number;
   entryData?:EntryData []
   createdAt?: string;  // optional
   updatedAt?: string;  // optional
