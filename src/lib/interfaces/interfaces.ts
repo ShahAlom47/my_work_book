@@ -22,9 +22,9 @@ export interface Entry {
 }
 
 export interface EntryData {
-entryId: string;
+entryDataId: string;
 date: string;
-amount: number;
+addAmount: number;
 description: string;
 createdAt?: string;  // optional
 updatedAt?: string;  // optional
