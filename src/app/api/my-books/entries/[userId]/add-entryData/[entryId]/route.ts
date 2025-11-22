@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 import { getEntriesCollection } from "@/lib/database/db_collections";
 import { v4 as uuidv4 } from "uuid";
+import { EntryData } from "@/lib/interfaces/interfaces";
 
 export async function POST(
   req: NextRequest,
@@ -11,7 +12,7 @@ export async function POST(
     const { userId, entryId } = params;
     const body = await req.json();
 
-    const { date, name, description, addAmount } = body;
+    const { date, placeName, description, addAmount } = body;
 
     if (!userId || !ObjectId.isValid(userId)) {
       return NextResponse.json({ success: false, message: "Invalid user ID" }, { status: 400 });
@@ -21,16 +22,16 @@ export async function POST(
       return NextResponse.json({ success: false, message: "Invalid entry ID" }, { status: 400 });
     }
 
-    if (!date || !name || addAmount === undefined) {
+    if (!date || !placeName || addAmount === undefined) {
       return NextResponse.json({ success: false, message: "Missing required fields" }, { status: 400 });
     }
 
     const entriesCollection = await getEntriesCollection();
 
-    const newEntryData = {
+    const newEntryData: EntryData = {
       entryDataId: uuidv4(), // <-- unique ID backend generated
       date,
-      name,
+      placeName,
       description,
       addAmount,
       createdAt: new Date().toISOString(),
@@ -38,7 +39,7 @@ export async function POST(
     };
 
     const updateResult = await entriesCollection.updateOne(
-      { _id: new ObjectId(entryId), userId: new ObjectId(userId) },
+      { _id: new ObjectId(entryId), userId: userId },
       { $push: { entryData: newEntryData } }
     );
 

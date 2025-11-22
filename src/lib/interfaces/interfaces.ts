@@ -16,7 +16,7 @@ export interface Entry {
   _id?: string | ObjectId;
   userId: string | ObjectId;
   entryName: string;
-  entryData?: []
+  entryData?:EntryData []
   createdAt?: string;  // optional
   updatedAt?: string;  // optional
 }
@@ -24,6 +24,7 @@ export interface Entry {
 export interface EntryData {
 entryDataId: string;
 date: string;
+placeName: string;
 addAmount: number;
 description: string;
 createdAt?: string;  // optional
