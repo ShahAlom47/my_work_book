@@ -10,7 +10,14 @@ const EntryDataTable: React.FC<{
   handleEdit: (id: string) => void;
   handleDelete: (id: string) => void;
 }> = ({ entries, onTitleClick, handleEdit, handleDelete }) => {
+
+
+   
+
+
+
   return (
+
     <table className="w-full border-collapse border border-gray-300">
       <thead className="bg-gray-200">
         <tr>
@@ -27,7 +34,7 @@ const EntryDataTable: React.FC<{
             <td className="border p-2">{new Date(entry.date).toLocaleDateString()}</td>
             <td
               className="border p-2 cursor-pointer text-blue-600"
-              onClick={() => onTitleClick(entry.entryDataId)}
+              onClick={() => onTitleClick(String(entry.entryDataId))}
             >
               {entry.placeName}
             </td>
@@ -36,13 +43,13 @@ const EntryDataTable: React.FC<{
             <td className="border p-2 flex gap-2">
               <button
                 className="bg-yellow-500 px-2 py-1 text-white rounded"
-                onClick={() => handleEdit(entry.entryDataId)}
+                onClick={() => handleEdit(String(entry.entryDataId))}
               >
                 Edit
               </button>
               <button
                 className="bg-red-600 px-2 py-1 text-white rounded"
-                onClick={() => handleDelete(entry.entryDataId)}
+                onClick={() => handleDelete(String(entry.entryDataId))}
               >
                 Delete
               </button>
