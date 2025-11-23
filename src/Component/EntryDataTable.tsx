@@ -24,7 +24,7 @@ const EntryDataTable: React.FC<{
       <tbody>
         {entries.map((entry) => (
           <tr key={entry.entryDataId} className="hover:bg-gray-100">
-            <td className="border p-2">{entry.date}</td>
+            <td className="border p-2">{new Date(entry.date).toLocaleDateString()}</td>
             <td
               className="border p-2 cursor-pointer text-blue-600"
               onClick={() => onTitleClick(entry.entryDataId)}

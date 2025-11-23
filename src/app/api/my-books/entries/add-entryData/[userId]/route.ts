@@ -1,18 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ObjectId } from "mongodb";
 import { getEntriesCollection } from "@/lib/database/db_collections";
-import { v4 as uuidv4 } from "uuid";
 import { EntryData } from "@/lib/interfaces/interfaces";
+import { v4 as uuidv4 } from "uuid";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { userId: string; entryId: string } }
+    { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
-    const { userId, entryId } = params;
-    const body = await req.json();
+    const { userId } =  await params; // params is already resolved
+    const searchParams = req.nextUrl.searchParams;
+    const entryId = searchParams.get("entryId");
 
+    const body = await req.json();
     const { date, placeName, description, addAmount } = body;
+
+
+console.log(userId,entryId ,'user and entry id in add entry data api');
+
 
     if (!userId || !ObjectId.isValid(userId)) {
       return NextResponse.json({ success: false, message: "Invalid user ID" }, { status: 400 });
@@ -22,24 +28,24 @@ export async function POST(
       return NextResponse.json({ success: false, message: "Invalid entry ID" }, { status: 400 });
     }
 
-    if (!date || !placeName || addAmount === undefined) {
+    if (!date || !placeName) {
       return NextResponse.json({ success: false, message: "Missing required fields" }, { status: 400 });
     }
 
     const entriesCollection = await getEntriesCollection();
 
     const newEntryData: EntryData = {
-      entryDataId: uuidv4(), // <-- unique ID backend generated
+      entryDataId: uuidv4(),
       date,
       placeName,
-      description,
-      addAmount,
+      description: description || "",
+      addAmount: addAmount || 0,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
 
     const updateResult = await entriesCollection.updateOne(
-      { _id: new ObjectId(entryId), userId: userId },
+      { _id: new ObjectId(entryId), userId },
       { $push: { entryData: newEntryData } }
     );
 
@@ -48,7 +54,6 @@ export async function POST(
     }
 
     return NextResponse.json({ success: true, message: "EntryData added successfully", data: newEntryData }, { status: 200 });
-
   } catch (error) {
     console.error("Add entryData error:", error);
     return NextResponse.json({ success: false, message: "Internal server error" }, { status: 500 });

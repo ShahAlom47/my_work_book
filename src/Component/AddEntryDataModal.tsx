@@ -27,9 +27,9 @@ const AddEntryDataModal: React.FC<Props> = ({ entryId,userId, onClose }) => {
       addAmount: addAmount || 0,              // optional
       balance: 0,
     };
-console.log(data)
+
     try {
-      const response = await addEntryDataById("userId", entryId, data);
+      const response = await addEntryDataById(userId, entryId, data);
 
       if (response?.success) {
         toast.success(response.message || "Entry data added successfully");

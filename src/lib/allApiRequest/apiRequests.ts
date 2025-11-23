@@ -63,9 +63,20 @@ export const fetchEntriesDataById = async (userId: string, entryId: string) => {
 };
 
 
-export const addEntryDataById = async (userId: string, entryId: string, entryData:EntryData) => {
-  return request("POST", `/my-books/entries/${userId}/add-entryData/${entryId}`, {...entryData});   
-}
+export const addEntryDataById = async (
+  userId: string,
+  entryId: string,
+  entryData: EntryData
+) => {
+  return request(
+    "POST",
+    `/my-books/entries/add-entryData/${userId}?entryId=${entryId}`, // query param style
+    { ...entryData }
+  );
+};
+
+
+
 export const addEntry = async (entryName: string, userId: string) => {
   return request("POST", "/my-books/add", { entryName, userId });   
 }
