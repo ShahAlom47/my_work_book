@@ -6,9 +6,9 @@ import { useParams } from "next/navigation";
 import { useUser } from "@/hooks/useUser";
 import { useConfirm } from "@/hooks/useConfirm";
 import { fetchEntriesDataById } from "@/lib/allApiRequest/apiRequests";
-import { Entry, EntryData } from "@/lib/interfaces/interfaces";
-import EntryTable from "./EntryTable";
-import AddEntryDataModal from "./AddEntryDataModal";
+import { Entry } from "@/lib/interfaces/interfaces";
+import EntryDataTable from "@/Component/EntryDataTable";
+import AddEntryDataModal from "@/Component/AddEntryDataModal";
 
 const Entries = () => {
   const params = useParams();
@@ -71,14 +71,13 @@ const Entries = () => {
       </div>
 
       {/* Table */}
-      <EntryTable
+      <EntryDataTable
         entries={entryData}
         onTitleClick={(id) => console.log("Title clicked:", id)}
         handleEdit={(id) => console.log("Edit clicked:", id)}
         handleDelete={(id) => confirm({
           title: "Are you sure?",
           message: "Do you want to delete this entry data?",
-          onConfirm: () => console.log("Deleted:", id)
         })}
       />
 
@@ -86,6 +85,7 @@ const Entries = () => {
       {showAddModal && (
         <AddEntryDataModal
           entryId={entryId}
+          userId={String(userId)}
           onClose={() => setShowAddModal(false)}
         />
       )}

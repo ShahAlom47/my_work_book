@@ -63,8 +63,8 @@ export const fetchEntriesDataById = async (userId: string, entryId: string) => {
 };
 
 
-export const addEntryDataById = async (userId: string, entryId: string, entryData: { date: string; name: string; description?: string; joma: number; balance: number }) => {
-  return request("POST", `/my-books/entries/${userId}/add-entryData/${entryId}`, entryData);   
+export const addEntryDataById = async (userId: string, entryId: string, entryData:EntryData) => {
+  return request("POST", `/my-books/entries/${userId}/add-entryData/${entryId}`, {...entryData});   
 }
 export const addEntry = async (entryName: string, userId: string) => {
   return request("POST", "/my-books/add", { entryName, userId });   

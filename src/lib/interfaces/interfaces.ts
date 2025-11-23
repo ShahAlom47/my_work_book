@@ -26,7 +26,7 @@ export interface Entry {
 }
 
 export interface EntryData {
-entryDataId: string;
+entryDataId?: string;
 date: string;
 placeName: string;
 addAmount: number;
