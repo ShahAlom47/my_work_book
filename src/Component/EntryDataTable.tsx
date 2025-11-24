@@ -5,14 +5,18 @@ import { EntryData } from "@/lib/interfaces/interfaces";
 
 const EntryDataTable: React.FC<{
   entries: EntryData[];
-  onTitleClick: (id: string) => void;
-  handleEdit: (id: string) => void;
+  onTitleClick: (id: string) => void
   handleDelete: (id: string) => void;
-}> = ({ entries, onTitleClick, handleEdit, handleDelete }) => {
+}> = ({ entries, onTitleClick, handleDelete }) => {
 
 
    
 console.log(entries, "entries in entry data table component");
+const handleEdit = (entryDataId: string) => {
+  console.log("Edit entry data with id:", entryDataId);
+
+  // modaal open  hopbe 
+}
 
 
   return (

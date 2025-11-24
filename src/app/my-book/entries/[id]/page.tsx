@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useUser } from "@/hooks/useUser";
 import { useConfirm } from "@/hooks/useConfirm";
-import { deleteEntryData, fetchEntriesDataById } from "@/lib/allApiRequest/apiRequests";
+import { deleteEntryData, fetchEntriesDataById, updateEntryData } from "@/lib/allApiRequest/apiRequests";
 import { Entry } from "@/lib/interfaces/interfaces";
 import EntryDataTable from "@/Component/EntryDataTable";
 import AddEntryDataModal from "@/Component/AddEntryDataModal";
@@ -23,7 +23,7 @@ const Entries = () => {
   const [showAddModal, setShowAddModal] = useState(false);
 
   // Fetch entries
-  const { data, isLoading } = useQuery({
+  const { data, isLoading ,refetch} = useQuery({
     queryKey: ["entries", entryId],
     enabled: !!userId && !!entryId,
     queryFn: async () => {
@@ -42,6 +42,8 @@ const Entries = () => {
   const totalAddAmount = entryData.reduce((sum, d) => sum + d.addAmount, 0);
   const remainingSalary = (data.totalSalary || 0) - (data.paidSalary || 0);
 
+  
+
   const handleDelete = async (entryDataId: string) => {
     const ok = await confirm({
       title: "Delete Category",
@@ -54,6 +56,7 @@ const Entries = () => {
       // ✅ ইউজার Confirm করেছে, এখন delete কাজ করো
       await deleteEntryData(entryDataId, entryId, String(userId));
       toast.success("Category deleted!");
+      refetch();
     } else {
       // ❌ ইউজার Cancel করেছে
       console.log("User cancelled delete");
@@ -93,7 +96,7 @@ const Entries = () => {
       <EntryDataTable
         entries={entryData}
         onTitleClick={(id) => console.log("Title clicked:", id)}
-        handleEdit={(id) => console.log("Edit clicked:", id)}
+      
         handleDelete={(id) => handleDelete(id)}
       />
 

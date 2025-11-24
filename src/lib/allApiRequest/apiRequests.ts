@@ -80,6 +80,10 @@ export const deleteEntryData = async (entryDataId: string,  entryId: string, use
 
   return request("DELETE", `/my-books/entries/delete-entryData/${userId}?entryId=${entryId}&entryDataId=${entryDataId}`);
 };
+export const updateEntryData = async (entryDataId: string,  entryId: string, userId: string ,data:EntryData) => {
+
+  return request("PATCH", `/my-books/entries/update-entryData/${userId}?entryId=${entryId}&entryDataId=${entryDataId}`,{...data});
+};
 
 
 
