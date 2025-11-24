@@ -9,22 +9,25 @@ interface Props {
   onClose: () => void;
 }
 
-const AddEntryDataModal: React.FC<Props> = ({ entryId,userId, onClose }) => {
+const AddEntryDataModal: React.FC<Props> = ({ entryId, userId, onClose }) => {
   const [date, setDate] = useState("");
   const [placeName, setPlaceName] = useState("");
   const [description, setDescription] = useState("");
   const [addAmount, setAddAmount] = useState<number | "">("");
+  const [loading, setLoading] = useState(false); // <-- Loading State
 
   const handleSubmit = async () => {
     if (!date || !placeName) {
       return toast.error("Date and Place Name are required");
     }
 
+    setLoading(true); // <-- Start loading
+
     const data = {
-      date: new Date(date).toISOString(), // convert to ISO string
-      placeName: placeName,
-      description: description || "",    // optional
-      addAmount: addAmount || 0,              // optional
+      date: new Date(date).toISOString(),
+      placeName,
+      description: description || "",
+      addAmount: addAmount || 0,
       balance: 0,
     };
 
@@ -39,12 +42,12 @@ const AddEntryDataModal: React.FC<Props> = ({ entryId,userId, onClose }) => {
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
-        console.error(error.message || "Error adding entry data:");
         toast.error(error.message || "Failed to add entry data");
       } else {
-        console.error("Error adding entry data:", error);
         toast.error("Failed to add entry data");
       }
+    } finally {
+      setLoading(false); // <-- Stop loading
     }
   };
 
@@ -105,15 +108,20 @@ const AddEntryDataModal: React.FC<Props> = ({ entryId,userId, onClose }) => {
         <div className="flex justify-end gap-3">
           <button
             onClick={onClose}
+            disabled={loading}
             className="px-4 py-2 border rounded hover:bg-gray-100 transition"
           >
             Cancel
           </button>
+
           <button
             onClick={handleSubmit}
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+            disabled={loading}
+            className={`px-4 py-2 bg-blue-600 text-white rounded transition ${
+              loading ? "opacity-70 cursor-not-allowed" : "hover:bg-blue-700"
+            }`}
           >
-            Add
+            {loading ? "Adding..." : "Add"}
           </button>
         </div>
       </div>
