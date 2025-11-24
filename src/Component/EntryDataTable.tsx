@@ -2,7 +2,6 @@
 
 import React from "react";
 import { EntryData } from "@/lib/interfaces/interfaces";
-import { EntryTableProps } from "@/lib/interfaces/interfaces";
 
 const EntryDataTable: React.FC<{
   entries: EntryData[];

@@ -1,5 +1,6 @@
 "use client";
 import { addEntryDataById } from "@/lib/allApiRequest/apiRequests";
+import { queryClient } from "@/Providers/Provider";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -36,6 +37,8 @@ const AddEntryDataModal: React.FC<Props> = ({ entryId, userId, onClose }) => {
 
       if (response?.success) {
         toast.success(response.message || "Entry data added successfully");
+        queryClient.invalidateQueries({ queryKey: ["entries", entryId] });
+
         onClose();
       } else {
         toast.error(response?.message || "Something went wrong");
