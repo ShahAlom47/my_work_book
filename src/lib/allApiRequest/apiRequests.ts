@@ -76,6 +76,12 @@ export const addEntryDataById = async (
 };
 
 
+export const deleteEntryData = async (entryDataId: string,  entryId: string, userId: string) => {
+
+  return request("DELETE", `/my-books/entries/delete-entryData/${userId}?entryId=${entryId}&entryDataId=${entryDataId}`);
+};
+
+
 
 export const addEntry = async (entryName: string, userId: string) => {
   return request("POST", "/my-books/add", { entryName, userId });   
