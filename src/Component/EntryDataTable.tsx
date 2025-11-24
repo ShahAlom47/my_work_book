@@ -13,7 +13,7 @@ const EntryDataTable: React.FC<{
 
 
    
-
+console.log(entries, "entries in entry data table component");
 
 
   return (

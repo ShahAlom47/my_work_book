@@ -12,7 +12,7 @@ export async function GET(
 
     const entryId = searchParams.get("entryId"); // <-- Query param
 
-    console.log(userId,entryId ,"user and entry id in api route");
+    console.log(userId, entryId, "user and entry id in api route");
 
     // Validate userId
     if (!userId || !ObjectId.isValid(userId)) {
@@ -33,15 +33,24 @@ export async function GET(
 
     const entry = await entriesCollection.findOne({
       _id: new ObjectId(entryId),
-      userId: userId, // ensure entry belongs to user
+      userId: userId,
     });
 
-    if (!entry) {
+ if (!entry) {
       return NextResponse.json(
         { success: false, message: "Entry not found" },
         { status: 404 }
       );
     }
+
+    if (entry?.entryData && Array.isArray(entry?.entryData)) {
+      entry.entryData.sort(
+        (a, b) =>
+          new Date(b.updatedAt ?? 0).getTime() - new Date(a.updatedAt ?? 0).getTime()
+      );
+    }
+
+    
 
     return NextResponse.json(
       {
