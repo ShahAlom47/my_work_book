@@ -55,7 +55,7 @@ const Entries = () => {
   };
 
   return (
-    <div className="p-3 space-y-6 max-w-3xl mx-auto">
+    <div className="p-3 space-y-6  max-w-7xl mx-auto">
 
       {/* Header */}
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">

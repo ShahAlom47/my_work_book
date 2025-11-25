@@ -13,9 +13,7 @@ const EntryDataTable: React.FC<{
   handleDelete: (id: string) => void;
   userId: string;
   entryId: string;
-
-}> = ({ entries, onTitleClick, handleDelete, userId,entryId }) => {
-
+}> = ({ entries, onTitleClick, handleDelete, userId, entryId }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedEntry, setSelectedEntry] = useState<EntryData | null>(null);
 
@@ -28,56 +26,99 @@ const EntryDataTable: React.FC<{
     setIsModalOpen(false);
     setSelectedEntry(null);
   };
-console.log(entries)
+
   return (
     <>
-      <table className="w-full border-collapse border border-gray-300 overflow-x-scroll bb">
-        <thead className="bg-gray-200">
-          <tr>
-            <th className="border p-2">Date</th>
-            <th className="border p-2">Place</th>
-            <th className="border p-2">Comment</th>
-            <th className="border p-2">Amount</th>
-            <th className="border p-2">Actions</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {entries.map((entry) => (
-            <tr key={entry.entryDataId} className="hover:bg-gray-100 ">
-              <td className="border p-2">
-                {formatDateUI(entry.date)}
-              </td>
-
-              <td
-                className="border p-2 cursor-pointer text-blue-600"
-                onClick={() => onTitleClick(String(entry.entryDataId))}
-              >
-                {entry.placeName}
-              </td>
-
-              <td className="border p-2">{entry.description}</td>
-              <td className="border p-2">{entry.addAmount}</td>
-
-              <td className="border p-2 flex gap-2">
-                <button
-                  className="bg-yellow-500 px-2 py-1 text-white rounded"
-                  onClick={() => openEditModal(entry)}
-                >
-                 <FaEdit className=" text-black" />
-                </button>
-
-                <button
-                  className="bg-red-600 px-2 py-1 text-white rounded"
-                  onClick={() => handleDelete(String(entry.entryDataId))}
-                >
-                  <MdDeleteForever className=" text-lg text-white" />
-                </button>
-              </td>
+      {/* DESKTOP TABLE */}
+      <div className="hidden md:block">
+        <table className="w-full border-collapse border border-gray-300">
+          <thead className="bg-gray-200">
+            <tr>
+              <th className="border p-2">Date</th>
+              <th className="border p-2">Place</th>
+              <th className="border p-2">Comment</th>
+              <th className="border p-2">Amount</th>
+              <th className="border p-2">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {entries.map((entry) => (
+              <tr key={entry.entryDataId} className="hover:bg-gray-100">
+                <td className="border p-2">{formatDateUI(entry.date)}</td>
+
+                <td
+                  className="border p-2 cursor-pointer text-blue-600"
+                  onClick={() => onTitleClick(String(entry.entryDataId))}
+                >
+                  {entry.placeName}
+                </td>
+
+                <td className="border p-2">{entry.description}</td>
+                <td className="border p-2">{entry.addAmount}</td>
+
+                <td className="border p-2 flex gap-2">
+                  <button
+                    className="bg-yellow-500 px-2 py-1 text-white rounded"
+                    onClick={() => openEditModal(entry)}
+                  >
+                    <FaEdit className="text-black" />
+                  </button>
+
+                  <button
+                    className="bg-red-600 px-2 py-1 text-white rounded"
+                    onClick={() => handleDelete(String(entry.entryDataId))}
+                  >
+                    <MdDeleteForever className="text-lg text-white" />
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* MOBILE CARD VIEW */}
+      <div className="md:hidden space-y-4 mt-4">
+        {entries.map((entry) => (
+          <div
+            key={entry.entryDataId}
+            className="border rounded-lg p-4 shadow-sm bg-white"
+          >
+            <div className="flex justify-between text-sm text-gray-500">
+              <span>{formatDateUI(entry.date)}</span>
+              <span className="font-semibold text-green-700">
+                ৳ {entry.addAmount}
+              </span>
+            </div>
+
+            <h3
+              onClick={() => onTitleClick(String(entry.entryDataId))}
+              className="mt-2 text-lg font-bold text-blue-600 cursor-pointer"
+            >
+              {entry.placeName}
+            </h3>
+
+            <p className="mt-1 text-gray-700">{entry.description}</p>
+
+            <div className="flex justify-end gap-3 mt-3">
+              <button
+                className="px-3 py-1 bg-yellow-400 text-black rounded"
+                onClick={() => openEditModal(entry)}
+              >
+                <FaEdit />
+              </button>
+
+              <button
+                className="px-3 py-1 bg-red-600 text-white rounded"
+                onClick={() => handleDelete(String(entry.entryDataId))}
+              >
+                <MdDeleteForever className="text-lg" />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
 
       {/* EDIT MODAL */}
       {selectedEntry && (
