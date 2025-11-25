@@ -94,9 +94,10 @@ const Entries = () => {
 
       {/* Table */}
       <EntryDataTable
+        userId={String(userId)}
         entries={entryData}
         onTitleClick={(id) => console.log("Title clicked:", id)}
-      
+         entryId={entryId}
         handleDelete={(id) => handleDelete(id)}
       />
 

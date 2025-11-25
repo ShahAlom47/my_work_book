@@ -22,6 +22,8 @@ export async function PATCH(
 
     const body = await req.json();
 
+    console.log(userId,entryId,entryDataId,body,"---PATCH body---");
+
     const collection = await getEntriesCollection();
 
     const updated = await collection.updateOne(
