@@ -75,7 +75,7 @@ useEffect(() => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
+    <div className="fixed inset-0 bg-black/50 flex justify-center items-center p-2 scro">
       <div className="bg-white p-5 rounded shadow-lg w-full md:w-1/3">
         <h2 className="text-lg font-bold mb-4">Edit Entry</h2>
 

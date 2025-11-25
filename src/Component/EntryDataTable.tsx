@@ -85,10 +85,10 @@ const EntryDataTable: React.FC<{
             key={entry.entryDataId}
             className="border rounded-lg p-4 shadow-sm bg-white"
           >
-            <div className="flex justify-between text-sm text-gray-500">
-              <span>{formatDateUI(entry.date)}</span>
-              <span className="font-semibold text-green-700">
-                ৳ {entry.addAmount}
+            <div className="flex justify-between text-lg text-gray-500">
+              <span className=" font-bold">{formatDateUI(entry.date)}</span>
+              <span className="font-bold text-green-700">
+                ৳ {entry.addAmount} TK
               </span>
             </div>
 
@@ -96,10 +96,10 @@ const EntryDataTable: React.FC<{
               onClick={() => onTitleClick(String(entry.entryDataId))}
               className="mt-2 text-lg font-bold text-blue-600 cursor-pointer"
             >
-              {entry.placeName}
+            <strong className=" text-black"> Place: </strong> {entry.placeName}
             </h3>
 
-            <p className="mt-1 text-gray-700">{entry.description}</p>
+            <p className="mt-1 text-gray-700"><strong>Comment: </strong>{entry.description}</p>
 
             <div className="flex justify-end gap-3 mt-3">
               <button
