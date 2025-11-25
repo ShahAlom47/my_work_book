@@ -103,7 +103,7 @@ useEffect(() => {
 
           {/* Description */}
           <div className="flex flex-col gap-1">
-            <label className="font-medium text-gray-700">Description</label>
+            <label className="font-medium text-gray-700">Comment</label>
             <input
               {...register("description")}
               className="border p-2 rounded"

@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { EntryData } from "@/lib/interfaces/interfaces";
 import EditEntryModal from "./EditEntryModal";
 import { formatDateUI } from "@/utils/formatDateUI";
+import { MdDeleteForever } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
 
 const EntryDataTable: React.FC<{
   entries: EntryData[];
@@ -29,12 +31,12 @@ const EntryDataTable: React.FC<{
 console.log(entries)
   return (
     <>
-      <table className="w-full border-collapse border border-gray-300">
+      <table className="w-full border-collapse border border-gray-300 overflow-x-scroll bb">
         <thead className="bg-gray-200">
           <tr>
             <th className="border p-2">Date</th>
-            <th className="border p-2">Place Name</th>
-            <th className="border p-2">Description</th>
+            <th className="border p-2">Place</th>
+            <th className="border p-2">Comment</th>
             <th className="border p-2">Amount</th>
             <th className="border p-2">Actions</th>
           </tr>
@@ -42,7 +44,7 @@ console.log(entries)
 
         <tbody>
           {entries.map((entry) => (
-            <tr key={entry.entryDataId} className="hover:bg-gray-100">
+            <tr key={entry.entryDataId} className="hover:bg-gray-100 ">
               <td className="border p-2">
                 {formatDateUI(entry.date)}
               </td>
@@ -62,14 +64,14 @@ console.log(entries)
                   className="bg-yellow-500 px-2 py-1 text-white rounded"
                   onClick={() => openEditModal(entry)}
                 >
-                  Edit
+                 <FaEdit className=" text-black" />
                 </button>
 
                 <button
                   className="bg-red-600 px-2 py-1 text-white rounded"
                   onClick={() => handleDelete(String(entry.entryDataId))}
                 >
-                  Delete
+                  <MdDeleteForever className=" text-lg text-white" />
                 </button>
               </td>
             </tr>
