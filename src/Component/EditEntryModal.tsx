@@ -42,6 +42,7 @@ const EditEntryModal: React.FC<EditEntryModalProps> = ({
         ...data,
         addAmount: Number(data.addAmount),
       };
+      console.log(data)
 
       const response = await updateEntryData(
         entryData.entryDataId || "",

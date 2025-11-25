@@ -8,8 +8,8 @@ export async function PATCH(
 ) {
   try {
     const { userId } = await params;
-    const { searchParams } = new URL(req.url);
 
+    const { searchParams } = new URL(req.url);
     const entryId = searchParams.get("entryId");
     const entryDataId = searchParams.get("entryDataId");
 
@@ -21,8 +21,7 @@ export async function PATCH(
     }
 
     const body = await req.json();
-
-    console.log(userId,entryId,entryDataId,body,"---PATCH body---");
+    console.log(userId, entryId, entryDataId, body, "---PATCH body---");
 
     const collection = await getEntriesCollection();
 
@@ -34,9 +33,10 @@ export async function PATCH(
       },
       {
         $set: {
-          "entryData.$.entryName": body.entryName,
-          "entryData.$.amount": body.amount,
-          "entryData.$.note": body.note,
+          "entryData.$.date": body.date,
+          "entryData.$.placeName": body.placeName,
+          "entryData.$.addAmount": body.addAmount,
+          "entryData.$.description": body.description,
           "entryData.$.updatedAt": new Date(),
         },
       }
