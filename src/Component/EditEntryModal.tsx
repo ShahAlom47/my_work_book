@@ -4,6 +4,7 @@ import { updateEntryData } from "@/lib/allApiRequest/apiRequests";
 import { EntryData } from "@/lib/interfaces/interfaces";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 interface EditEntryModalProps {
   isOpen: boolean;
@@ -29,10 +30,20 @@ const EditEntryModal: React.FC<EditEntryModalProps> = ({
     defaultValues: entryData,
   });
 
-  // Update form default values when entryData changes
-  useEffect(() => {
-    reset(entryData);
-  }, [entryData, reset]);
+
+  function isoToInputDate(isoString: string) {
+  return isoString ? isoString.split("T")[0] : "";
+}
+
+useEffect(() => {
+  if (entryData.date) {
+    reset({
+      ...entryData,
+      date: isoToInputDate(entryData.date)
+    });
+  }
+}, [entryData, reset]);
+
 
   if (!isOpen) return null;
 
@@ -52,14 +63,14 @@ const EditEntryModal: React.FC<EditEntryModalProps> = ({
       );
 
       if (response.success) {
-        alert("Updated Successfully!");
+        toast.success("Updated Successfully!");
         onClose();
       } else {
-        alert(response.message || "Update failed!");
+        toast.error(response.message || "Update failed!");
       }
     } catch (error) {
       console.error(error);
-      alert("Something went wrong!");
+      toast.error("Something went wrong!");
     }
   };
 
@@ -72,7 +83,7 @@ const EditEntryModal: React.FC<EditEntryModalProps> = ({
 
           {/* Date */}
           <div className="flex flex-col gap-1">
-            <label className="font-medium text-gray-700">Date</label>
+            <label className="font-medium text-gray-700">Date : MM/DD/YYYY</label>
             <input
               type="date"
               {...register("date")}

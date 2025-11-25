@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { EntryData } from "@/lib/interfaces/interfaces";
 import EditEntryModal from "./EditEntryModal";
+import { formatDateUI } from "@/utils/formatDateUI";
 
 const EntryDataTable: React.FC<{
   entries: EntryData[];
@@ -25,7 +26,7 @@ const EntryDataTable: React.FC<{
     setIsModalOpen(false);
     setSelectedEntry(null);
   };
-
+console.log(entries)
   return (
     <>
       <table className="w-full border-collapse border border-gray-300">
@@ -43,7 +44,7 @@ const EntryDataTable: React.FC<{
           {entries.map((entry) => (
             <tr key={entry.entryDataId} className="hover:bg-gray-100">
               <td className="border p-2">
-                {new Date(entry.date).toLocaleDateString()}
+                {formatDateUI(entry.date)}
               </td>
 
               <td

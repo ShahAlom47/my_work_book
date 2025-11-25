@@ -33,11 +33,11 @@ export async function PATCH(
       },
       {
         $set: {
-          "entryData.$.date": body.date,
+          "entryData.$.date": new Date(body.date).toISOString(),
           "entryData.$.placeName": body.placeName,
           "entryData.$.addAmount": body.addAmount,
           "entryData.$.description": body.description,
-          "entryData.$.updatedAt": new Date(),
+          "entryData.$.updatedAt": new Date().toISOString(),
         },
       }
     );
