@@ -97,3 +97,7 @@ export const updateEntry = async (id: string, entryName: string) => {
 export const deleteEntry = async (id: string) => {
   return request("DELETE", `/my-books/entries-name/delete/${id}`);
 }
+
+export const updatePerDaySalary = async (userId: string, entryId: string,  perDaySalary: number) => {
+  return request("PATCH", `/my-books/entries/update-per-day-salary/${userId}?entryId=${entryId}`, { perDaySalary });
+};

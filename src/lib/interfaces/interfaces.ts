@@ -20,6 +20,7 @@ export interface Entry {
   totalSalary?: number;
   paidSalary?: number;
   remainingSalary?: number;
+  totalDays?: number;
   entryData?:EntryData []
   createdAt?: string;  // optional
   updatedAt?: string;  // optional

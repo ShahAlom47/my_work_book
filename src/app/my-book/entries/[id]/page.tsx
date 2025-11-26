@@ -13,6 +13,7 @@ import { Entry } from "@/lib/interfaces/interfaces";
 import EntryDataTable from "@/Component/EntryDataTable";
 import AddEntryDataModal from "@/Component/AddEntryDataModal";
 import toast from "react-hot-toast";
+import PerDaySalaryInput from "@/Component/PerDaySalary";
 
 const Entries = () => {
   const params = useParams();
@@ -79,6 +80,14 @@ const Entries = () => {
             onChange={(e) => setPerDaySalary(Number(e.target.value))}
             className="border rounded px-3 py-2 w-full sm:w-40"
           />
+          <PerDaySalaryInput
+            userId={String(userId)}
+            entryId={entryId}
+            perDaySalary={perDaySalary}
+            setPerDaySalary={setPerDaySalary}
+          > 
+
+          </PerDaySalaryInput>
 
           <button
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full sm:w-auto"
