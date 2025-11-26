@@ -9,11 +9,11 @@ import {
   deleteEntryData,
   fetchEntriesDataById,
 } from "@/lib/allApiRequest/apiRequests";
-import { Entry } from "@/lib/interfaces/interfaces";
+import { Entry, EntryData } from "@/lib/interfaces/interfaces";
 import EntryDataTable from "@/Component/EntryDataTable";
 import AddEntryDataModal from "@/Component/AddEntryDataModal";
-import toast from "react-hot-toast";
 import PerDaySalaryInput from "@/Component/PerDaySalary";
+import toast from "react-hot-toast";
 
 const Entries = () => {
   const params = useParams();
@@ -23,10 +23,10 @@ const Entries = () => {
   const userId = user?.id ?? user?._id;
   const entryId = params.id as string;
 
-  const [perDaySalary, setPerDaySalary] = useState<number>(0);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
-  // Fetch entries
+  // Fetch entries with totalDays, salary info from server
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["entries", entryId],
     enabled: !!userId && !!entryId,
@@ -39,21 +39,16 @@ const Entries = () => {
   if (isLoading) return <p className="text-center mt-10">Loading entries...</p>;
   if (!data) return <p>No entries found.</p>;
 
-  const entryData = data.entryData || [];
-
-  // -------- NEW CALCULATIONS --------
-  const totalDays = entryData.length;                  // Total entry count
-  const totalSalary = perDaySalary * totalDays;        // Per day × total entry
-  const paidSalary = entryData.reduce(
-    (sum, d) => sum + (d.addAmount || 0),
-    0
-  ); // Sum of all addAmount
-  const remainingSalary = totalSalary - paidSalary;    // Remaining
-  // -----------------------------------
+  // Sort entryData by date
+  const sortedEntryData: EntryData[] = [...(data.entryData || [])].sort((a, b) => {
+    const timeA = new Date(a.date).getTime();
+    const timeB = new Date(b.date).getTime();
+    return sortOrder === "asc" ? timeA - timeB : timeB - timeA;
+  });
 
   const handleDelete = async (entryDataId: string) => {
     const ok = await confirm({
-      title: "Delete Category",
+      title: "Delete Entry",
       message: "Are you sure you want to delete this item?",
       confirmText: "Yes, Delete",
       cancelText: "Cancel",
@@ -73,21 +68,13 @@ const Entries = () => {
         <h1 className="text-xl font-bold">{data.entryName}</h1>
 
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
-          <input
-            type="number"
-            placeholder="Per Day Salary"
-            value={perDaySalary}
-            onChange={(e) => setPerDaySalary(Number(e.target.value))}
-            className="border rounded px-3 py-2 w-full sm:w-40"
-          />
+          {/* Per Day Salary Input */}
           <PerDaySalaryInput
             userId={String(userId)}
             entryId={entryId}
-            perDaySalary={perDaySalary}
-            setPerDaySalary={setPerDaySalary}
-          > 
-
-          </PerDaySalaryInput>
+            perDaySalary={data.perDaySalary || 0}
+            setPerDaySalary={() => refetch()} // Refetch after update
+          />
 
           <button
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full sm:w-auto"
@@ -95,21 +82,35 @@ const Entries = () => {
           >
             Add Data
           </button>
+
+          {/* Sort Button */}
+          <button
+            className="bg-gray-300 text-black px-3 py-2 rounded hover:bg-gray-400"
+            onClick={() =>
+              setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"))
+            }
+          >
+            Sort by Date ({sortOrder === "asc" ? "Ascending" : "Descending"})
+          </button>
         </div>
       </div>
 
       {/* Summary */}
-      <div className="bg-gray-100 p-4 rounded grid grid-cols-1 sm:grid-cols-3 gap-3 text-center sm:text-left">
-        <div className="font-medium">Total Salary: {totalSalary} tk</div>
-        <div className="font-medium">Paid Salary: {paidSalary} tk</div>
-        <div className="font-medium">Remaining Salary: {remainingSalary} tk</div>
+      <div className="bg-gray-100 p-4 rounded grid grid-cols-1 sm:grid-cols-5 gap-3 text-center sm:text-left">
+        <div className="font-medium">Total Workdays: {data.totalDays || 0}</div>
+        <div className="font-medium">Per Day Salary: {data.perDaySalary || 0} tk</div>
+        <div className="font-medium">Total Salary: {data.totalSalary || 0} tk</div>
+        <div className="font-medium">Paid Salary: {data.paidSalary || 0} tk</div>
+        <div className="font-medium">
+          Remaining: {data.remainingSalary || 0} tk
+        </div>
       </div>
 
       {/* Table */}
       <div className="overflow-x-auto bg-white rounded shadow">
         <EntryDataTable
           userId={String(userId)}
-          entries={entryData}
+          entries={sortedEntryData}
           onTitleClick={(id) => console.log("Title clicked:", id)}
           entryId={entryId}
           handleDelete={(id) => handleDelete(id)}
