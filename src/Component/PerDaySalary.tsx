@@ -50,12 +50,12 @@ const PerDaySalaryInput: React.FC<Props> = ({
         value={value}
         onChange={(e) => setValue(Number(e.target.value))}
         placeholder="Per Day Salary"
-        className="border rounded px-3 py-2 w-full sm:w-40"
+        className="border rounded px-3 py-1 w-full sm:w-40 text-sm"
       />
       <button
         onClick={handleSave}
         disabled={loading}
-        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 disabled:bg-gray-400"
+        className="bg-green-600 text-sm text-white px-4 py-1 rounded hover:bg-green-700 disabled:bg-gray-400"
       >
         {loading ? "Saving..." : "Save"}
       </button>

@@ -76,7 +76,7 @@ const Entries = () => {
           />
 
           <button
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full sm:w-auto"
+            className="bg-blue-600 text-white px-4 py-1 text-sm rounded hover:bg-blue-700 w-full sm:w-auto"
             onClick={() => setShowAddModal(true)}
           >
             Add Data
@@ -84,7 +84,7 @@ const Entries = () => {
 
           {/* Sort Button */}
           <button
-            className="bg-gray-300 text-black px-3 py-2 rounded hover:bg-gray-400"
+            className="bg-gray-300 text-black px-3 py-1 text-sm rounded hover:bg-gray-400"
             onClick={() =>
               setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"))
             }
@@ -97,7 +97,6 @@ const Entries = () => {
       {/* Summary */}
       <div className="bg-gray-100 p-4 rounded grid grid-cols-1 sm:grid-cols-5 gap-3 text-center sm:text-left">
         <div className="font-medium">Total Workdays: {data.totalDays || 0}</div>
-        <div className="font-medium">Per Day Salary: {data.perDaySalary || 0} tk</div>
         <div className="font-medium">Total Salary: {data.totalSalary || 0} tk</div>
         <div className="font-medium">Paid Salary: {data.paidSalary || 0} tk</div>
         <div className="font-medium">
