@@ -5,7 +5,10 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { useUser } from "@/hooks/useUser";
 import { useConfirm } from "@/hooks/useConfirm";
-import { deleteEntryData, fetchEntriesDataById } from "@/lib/allApiRequest/apiRequests";
+import {
+  deleteEntryData,
+  fetchEntriesDataById,
+} from "@/lib/allApiRequest/apiRequests";
 import { Entry } from "@/lib/interfaces/interfaces";
 import EntryDataTable from "@/Component/EntryDataTable";
 import AddEntryDataModal from "@/Component/AddEntryDataModal";
@@ -36,8 +39,16 @@ const Entries = () => {
   if (!data) return <p>No entries found.</p>;
 
   const entryData = data.entryData || [];
-  const totalAddAmount = entryData.reduce((sum, d) => sum + d.addAmount, 0);
-  const remainingSalary = (data.totalSalary || 0) - (data.paidSalary || 0);
+
+  // -------- NEW CALCULATIONS --------
+  const totalDays = entryData.length;                  // Total entry count
+  const totalSalary = perDaySalary * totalDays;        // Per day × total entry
+  const paidSalary = entryData.reduce(
+    (sum, d) => sum + (d.addAmount || 0),
+    0
+  ); // Sum of all addAmount
+  const remainingSalary = totalSalary - paidSalary;    // Remaining
+  // -----------------------------------
 
   const handleDelete = async (entryDataId: string) => {
     const ok = await confirm({
@@ -55,8 +66,7 @@ const Entries = () => {
   };
 
   return (
-    <div className="p-3 space-y-6  max-w-7xl mx-auto">
-
+    <div className="p-3 space-y-6 max-w-7xl mx-auto">
       {/* Header */}
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <h1 className="text-xl font-bold">{data.entryName}</h1>
@@ -81,9 +91,9 @@ const Entries = () => {
 
       {/* Summary */}
       <div className="bg-gray-100 p-4 rounded grid grid-cols-1 sm:grid-cols-3 gap-3 text-center sm:text-left">
-        <div className="font-medium">Total Added: {totalAddAmount}</div>
-        <div className="font-medium">Paid Salary: {data.paidSalary || 0}</div>
-        <div className="font-medium">Remaining Salary: {remainingSalary}</div>
+        <div className="font-medium">Total Salary: {totalSalary} tk</div>
+        <div className="font-medium">Paid Salary: {paidSalary} tk</div>
+        <div className="font-medium">Remaining Salary: {remainingSalary} tk</div>
       </div>
 
       {/* Table */}

@@ -29,7 +29,7 @@ export interface EntryData {
 entryDataId?: string;
 date: string;
 placeName: string;
-addAmount: number;
+addAmount?: number;
 description: string;
 createdAt?: string;  // optional
 updatedAt?: string;  // optional
