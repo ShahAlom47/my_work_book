@@ -4,13 +4,14 @@ import { ObjectId } from "mongodb";
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params:Promise< { userId: string }> }
 ) {
   try {
-    const { userId } = params;
+    const { userId } =await params;
 
     const { searchParams } = new URL(req.url);
     const entryId = searchParams.get("entryId");
+    console.log(userId,entryId,'idddd')
 
     if (!userId || !entryId) {
       return NextResponse.json(
@@ -34,7 +35,7 @@ export async function PATCH(
     const updated = await collection.updateOne(
       {
         _id: new ObjectId(entryId),
-        userId: new ObjectId(userId),
+        userId: userId,
       },
       {
         $set: {

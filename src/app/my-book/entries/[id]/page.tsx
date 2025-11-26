@@ -73,7 +73,6 @@ const Entries = () => {
             userId={String(userId)}
             entryId={entryId}
             perDaySalary={data.perDaySalary || 0}
-            setPerDaySalary={() => refetch()} // Refetch after update
           />
 
           <button
