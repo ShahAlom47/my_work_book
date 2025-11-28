@@ -14,6 +14,8 @@ import EntryDataTable from "@/Component/EntryDataTable";
 import AddEntryDataModal from "@/Component/AddEntryDataModal";
 import PerDaySalaryInput from "@/Component/PerDaySalary";
 import toast from "react-hot-toast";
+import { FilterOption } from "@/types/types";
+import SearchFilter from "@/Component/SearchFilter";
 
 const Entries = () => {
   const params = useParams();
@@ -24,10 +26,12 @@ const Entries = () => {
   const entryId = params.id as string;
 
   const [showAddModal, setShowAddModal] = useState(false);
+    const [search, setSearch] = useState<string>("");
+  const [filter, setFilter] = useState<FilterOption>("All");
 
   // Fetch entries with totalDays, salary info from server
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ["entries", entryId],
+    queryKey: ["entries", entryId, userId, search, filter],
     enabled: !!userId && !!entryId,
     queryFn: async () => {
       const query ={
@@ -66,6 +70,10 @@ const Entries = () => {
       {/* Header */}
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <h1 className="text-xl font-bold">{data.entryName}</h1>
+          <SearchFilter
+        onSearchChange={setSearch}
+        onFilterChange={setFilter}
+      />
 
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
           {/* Per Day Salary Input */}
