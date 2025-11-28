@@ -3,6 +3,7 @@
 import { IFormInput } from "@/app/(auth)/register/page";
 import axios from "axios";
 import { Entry, EntryData } from "../interfaces/interfaces";
+import { FilterOption } from "@/types/types";
 
 export interface IApiResponse<T = unknown> {
   success: boolean;
@@ -58,9 +59,21 @@ export const fetchEntriesName = async (userId: string) => {
 }
 
 
-export const fetchEntriesDataById = async (userId: string, entryId: string) => {
-  return request("GET", `/my-books/entries/${userId}?entryId=${entryId}`);
+export const fetchEntriesDataByQuery = async (
+  userId: string,
+  query: {
+    entryId?: string;
+    search?: string;
+    filter?: FilterOption;
+    fromDate?: string;
+    toDate?: string;
+  }
+) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const queryString = new URLSearchParams(query as any).toString();
+  return request("GET", `/my-books/entries/${userId}?${queryString}`);
 };
+
 
 
 export const addEntryDataById = async (

@@ -7,7 +7,7 @@ import { useUser } from "@/hooks/useUser";
 import { useConfirm } from "@/hooks/useConfirm";
 import {
   deleteEntryData,
-  fetchEntriesDataById,
+  fetchEntriesDataByQuery,
 } from "@/lib/allApiRequest/apiRequests";
 import { Entry} from "@/lib/interfaces/interfaces";
 import EntryDataTable from "@/Component/EntryDataTable";
@@ -30,7 +30,14 @@ const Entries = () => {
     queryKey: ["entries", entryId],
     enabled: !!userId && !!entryId,
     queryFn: async () => {
-      const res = await fetchEntriesDataById(String(userId), entryId);
+      const query ={
+        entryId: String(entryId),
+        search: "",
+        filter: "All" as const,
+        fromDate: "",
+        toDate: ""
+      }
+      const res = await fetchEntriesDataByQuery(String(userId), query);
       return res.data as Entry;
     },
   });

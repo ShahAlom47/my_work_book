@@ -45,3 +45,4 @@ export interface EntryTableProps {
   handleEdit: (id: string) => void;
   handleDelete: (id: string) => void;
 }
+

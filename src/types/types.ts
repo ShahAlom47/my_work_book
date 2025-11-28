@@ -1,0 +1,1 @@
+export type FilterOption = "All" | "This Week" | "This Month" | "This Year";
