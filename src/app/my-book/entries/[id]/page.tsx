@@ -9,7 +9,7 @@ import {
   deleteEntryData,
   fetchEntriesDataById,
 } from "@/lib/allApiRequest/apiRequests";
-import { Entry, EntryData } from "@/lib/interfaces/interfaces";
+import { Entry} from "@/lib/interfaces/interfaces";
 import EntryDataTable from "@/Component/EntryDataTable";
 import AddEntryDataModal from "@/Component/AddEntryDataModal";
 import PerDaySalaryInput from "@/Component/PerDaySalary";
@@ -24,7 +24,6 @@ const Entries = () => {
   const entryId = params.id as string;
 
   const [showAddModal, setShowAddModal] = useState(false);
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   // Fetch entries with totalDays, salary info from server
   const { data, isLoading, refetch } = useQuery({
@@ -39,12 +38,6 @@ const Entries = () => {
   if (isLoading) return <p className="text-center mt-10">Loading entries...</p>;
   if (!data) return <p>No entries found.</p>;
 
-  // Sort entryData by date
-  const sortedEntryData: EntryData[] = [...(data.entryData || [])].sort((a, b) => {
-    const timeA = new Date(a.date).getTime();
-    const timeB = new Date(b.date).getTime();
-    return sortOrder === "asc" ? timeA - timeB : timeB - timeA;
-  });
 
   const handleDelete = async (entryDataId: string) => {
     const ok = await confirm({
@@ -82,33 +75,17 @@ const Entries = () => {
             Add Data
           </button>
 
-          {/* Sort Button */}
-          <button
-            className="bg-gray-300 text-black px-3 py-1 text-sm rounded hover:bg-gray-400"
-            onClick={() =>
-              setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"))
-            }
-          >
-            Sort by Date ({sortOrder === "asc" ? "Ascending" : "Descending"})
-          </button>
+       
         </div>
       </div>
 
-      {/* Summary */}
-      <div className="bg-gray-100 p-4 rounded grid grid-cols-1 sm:grid-cols-5 gap-3 text-center sm:text-left">
-        <div className="font-medium">Total Workdays: {data.totalDays || 0}</div>
-        <div className="font-medium">Total Salary: {data.totalSalary || 0} tk</div>
-        <div className="font-medium">Paid Salary: {data.paidSalary || 0} tk</div>
-        <div className="font-medium">
-          Remaining: {data.remainingSalary || 0} tk
-        </div>
-      </div>
+    
 
       {/* Table */}
       <div className="overflow-x-auto bg-white rounded shadow">
         <EntryDataTable
           userId={String(userId)}
-          entries={sortedEntryData}
+          entries={data.entryData || []}
           onTitleClick={(id) => console.log("Title clicked:", id)}
           entryId={entryId}
           handleDelete={(id) => handleDelete(id)}

@@ -7,11 +7,12 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
 interface EditEntryModalProps {
-  isOpen: boolean;
+  isOpen?: boolean;
   onClose: () => void;
   entryData: EntryData;
   userId: string;
   entryId: string;
+  onUpdated: () => void;
 }
 
 const EditEntryModal: React.FC<EditEntryModalProps> = ({
@@ -20,6 +21,7 @@ const EditEntryModal: React.FC<EditEntryModalProps> = ({
   entryData,
   userId,
   entryId,
+  onUpdated
 }) => {
   const {
     register,
@@ -65,6 +67,7 @@ useEffect(() => {
       if (response.success) {
         toast.success("Updated Successfully!");
         onClose();
+        onUpdated();
       } else {
         toast.error(response.message || "Update failed!");
       }

@@ -8,9 +8,10 @@ interface Props {
   entryId: string;
   userId: string;
   onClose: () => void;
+  onSuccess?: () => void;
 }
 
-const AddEntryDataModal: React.FC<Props> = ({ entryId, userId, onClose }) => {
+const AddEntryDataModal: React.FC<Props> = ({ entryId, userId, onClose,onSuccess }) => {
   const [date, setDate] = useState("");
   const [placeName, setPlaceName] = useState("");
   const [description, setDescription] = useState("");
@@ -38,6 +39,9 @@ const AddEntryDataModal: React.FC<Props> = ({ entryId, userId, onClose }) => {
       if (response?.success) {
         toast.success(response.message || "Entry data added successfully");
         queryClient.invalidateQueries({ queryKey: ["entries", entryId] });
+        if (onSuccess) {
+          onSuccess();
+        }         
 
         onClose();
       } else {
