@@ -102,35 +102,35 @@ export async function GET(
         new Date(b.updatedAt ?? 0).getTime() -
         new Date(a.updatedAt ?? 0).getTime()
     );
+// ----------------------------------------
+// ⭐ CALCULATIONS: totalDays, salary, remain
+// ----------------------------------------
 
-    // ----------------------------------------
-    // ⭐ CALCULATIONS: totalDays, salary, remain
-    // ----------------------------------------
+const perDaySalary = entry.perDaySalary || 0;
 
-    const perDaySalary = entry.perDaySalary || 0;
+// Work days count: placeName >= 3 characters clean
+const totalWorkDays = filteredData.filter(
+  (item) => item.placeName && item.placeName.trim().length >= 2
+).length;
 
-    // Count work days (minimum 3 letters placeName)
-    const totalWorkDays = filteredData.filter(
-      (item) => item.placeName && item.placeName.trim().length >= 3
-    ).length;
+// ✔ TOTAL PAID (sum of addAmount where it is positive)
+const totalPaid = filteredData.reduce(
+  (sum, item) => sum + (item.addAmount || 0),
+  0
+);
 
-    // Total extra addAmount
-    const totalExtraAmount = filteredData.reduce(
-      (sum, item) => sum + (item.addAmount || 0),
-      0
-    );
+// ✔ TOTAL SALARY (only work days × perDaySalary)
+const totalSalary = totalWorkDays * perDaySalary;
 
-    const totalSalary = totalWorkDays * perDaySalary + totalExtraAmount;
+// ✔ REMAINING SALARY
+const remainingSalary = totalSalary - totalPaid;
 
-    const paidSalary = entry.paidSalary || 0;
-
-    const remainingSalary = totalSalary - paidSalary;
-
-    // Add updated values into entry object
-    entry.entryData = filteredData;
-    entry.totalDays = totalWorkDays;
-    entry.totalSalary = totalSalary;
-    entry.remainingSalary = remainingSalary;
+// Inject calculated values into entry
+entry.entryData = filteredData;
+entry.totalDays = totalWorkDays;
+entry.totalSalary = totalSalary;
+entry.paidSalary = totalPaid;
+entry.remainingSalary = remainingSalary;
 
     return NextResponse.json(
       {
