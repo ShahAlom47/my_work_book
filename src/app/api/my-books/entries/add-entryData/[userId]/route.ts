@@ -28,7 +28,7 @@ console.log(userId,entryId ,'user and entry id in add entry data api');
       return NextResponse.json({ success: false, message: "Invalid entry ID" }, { status: 400 });
     }
 
-    if (!date || !placeName) {
+    if (!date ) {
       return NextResponse.json({ success: false, message: "Missing required fields" }, { status: 400 });
     }
 

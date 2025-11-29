@@ -19,7 +19,7 @@ const AddEntryDataModal: React.FC<Props> = ({ entryId, userId, onClose,onSuccess
   const [loading, setLoading] = useState(false); // <-- Loading State
 
   const handleSubmit = async () => {
-    if (!date || !placeName) {
+    if (!date ) {
       return toast.error("Date and Place Name are required");
     }
 
@@ -77,7 +77,7 @@ const AddEntryDataModal: React.FC<Props> = ({ entryId, userId, onClose,onSuccess
 
         <div className="mb-4">
           <label className="block mb-1 font-medium">
-            Place Name <span className="text-red-500">*</span>
+            Place Name <span className="text-red-500"></span>
           </label>
           <input
             type="text"

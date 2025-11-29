@@ -29,7 +29,7 @@ export interface Entry {
 export interface EntryData {
 entryDataId?: string;
 date: string;
-placeName: string;
+placeName?: string;
 addAmount?: number;
 description: string;
 createdAt?: string;  // optional

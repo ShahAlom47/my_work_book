@@ -128,6 +128,7 @@ const EntryDataTable: React.FC<{
           entryData={selectedEntry}
           userId={userId}
           entryId={String(entryId)}
+          onUpdated={() => {}}
         />
       )}
     </>

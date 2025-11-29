@@ -27,7 +27,7 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
           placeholder="Search..."
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
-          className="border rounded-md px-4 py-2 w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="border rounded-md px-4 py-1 w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
 
         <button
@@ -41,7 +41,7 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
       {/* Filter Select */}
       <select
         onChange={(e) => onFilterChange(e.target.value as FilterOption)}
-        className="border rounded-md px-4 py-2 w-full md:w-48 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="border rounded-md px-4 py-1 w-full md:w-48 focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
         <option value="All">All</option>
         <option value="This Week">This Week</option>

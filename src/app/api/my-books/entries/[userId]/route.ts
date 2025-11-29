@@ -12,22 +12,18 @@ export async function GET(
     const { userId } = await params;
     const searchParams = req.nextUrl.searchParams;
 
-    const entryId = searchParams.get("entryId"); 
+    const entryId = searchParams.get("entryId");
     const search = searchParams.get("search")?.toLowerCase() || "";
-    const filters=searchParams.get("filter")?.toLowerCase() || "";
+    const rawFilter = searchParams.get("filter") || "All";
 
-   
- console.log(userId, entryId,"entry id", search, filters,"API query params");
-const rawFilter = searchParams.get("filter");
-const filter: FilterOption = 
-  rawFilter === "This Week" || rawFilter === "This Month" || rawFilter === "This Year" 
-    ? rawFilter 
-    : "All";
+    const filter: FilterOption =
+      rawFilter === "This Week" ||
+      rawFilter === "This Month" ||
+      rawFilter === "This Year"
+        ? rawFilter
+        : "All";
 
-
-   
-
-    // Validate userId
+    // Validation
     if (!userId || !ObjectId.isValid(userId)) {
       return NextResponse.json(
         { success: false, message: "Invalid user ID" },
@@ -44,10 +40,10 @@ const filter: FilterOption =
 
     const entriesCollection = await getEntriesCollection();
 
-    const entry = await entriesCollection.findOne({
+    const entry = (await entriesCollection.findOne({
       _id: new ObjectId(entryId),
       userId: userId,
-    });
+    })) as Entry | null;
 
     if (!entry) {
       return NextResponse.json(
@@ -56,51 +52,85 @@ const filter: FilterOption =
       );
     }
 
-    // --- Filter and Search on entryData array ---
-    if (entry?.entryData && Array.isArray(entry.entryData)) {
-      let filteredData = entry.entryData as EntryData[];
+    // -----------------------------
+    // 🔍 SEARCH + FILTER PROCESSING
+    // -----------------------------
+    let filteredData = entry.entryData || [];
 
-      // Search
-      if (search) {
-        filteredData = filteredData.filter((item: EntryData) =>
+    // Search
+    if (search) {
+      filteredData = filteredData.filter(
+        (item) =>
           item.placeName?.toLowerCase().includes(search) ||
           item.description?.toLowerCase().includes(search)
-        );
-      }
-
-      // Filter by date (example: "this Week", "this Month", "this Year")
-      if (filter && filter !== "All") {
-        const now = new Date();
-        filteredData = filteredData.filter((item: EntryData) => {
-          const updatedAt = new Date(item.date);
-          switch (filter) {
-            case "This Week":
-              const startOfWeek = new Date(
-                now.setDate(now.getDate() - now.getDay())
-              );
-              return updatedAt >= startOfWeek;
-            case "This Month":
-              return (
-                updatedAt.getMonth() === now.getMonth() &&
-                updatedAt.getFullYear() === now.getFullYear()
-              );
-            case "This Year":
-              return updatedAt.getFullYear() === now.getFullYear();
-            default:
-              return true;
-          }
-        });
-      }
-
-      // Sort by updatedAt descending
-      filteredData.sort(
-        (a, b) =>
-          new Date(b.updatedAt ?? 0).getTime() -
-          new Date(a.updatedAt ?? 0).getTime()
       );
-
-      entry.entryData = filteredData;
     }
+
+    // Filter by date
+    if (filter !== "All") {
+      const now = new Date();
+
+      filteredData = filteredData.filter((item: EntryData) => {
+        const date = new Date(item.date);
+
+        switch (filter) {
+          case "This Week": {
+            const start = new Date();
+            const day = start.getDay();
+            start.setDate(start.getDate() - day);
+            return date >= start;
+          }
+
+          case "This Month":
+            return (
+              date.getMonth() === now.getMonth() &&
+              date.getFullYear() === now.getFullYear()
+            );
+
+          case "This Year":
+            return date.getFullYear() === now.getFullYear();
+
+          default:
+            return true;
+        }
+      });
+    }
+
+    // Sort by updatedAt DESC
+    filteredData.sort(
+      (a, b) =>
+        new Date(b.updatedAt ?? 0).getTime() -
+        new Date(a.updatedAt ?? 0).getTime()
+    );
+
+    // ----------------------------------------
+    // ⭐ CALCULATIONS: totalDays, salary, remain
+    // ----------------------------------------
+
+    const perDaySalary = entry.perDaySalary || 0;
+
+    // Count work days (minimum 3 letters placeName)
+    const totalWorkDays = filteredData.filter(
+      (item) => item.placeName && item.placeName.trim().length >= 3
+    ).length;
+
+    // Total extra addAmount
+    const totalExtraAmount = filteredData.reduce(
+      (sum, item) => sum + (item.addAmount || 0),
+      0
+    );
+
+    const totalSalary = totalWorkDays * perDaySalary + totalExtraAmount;
+
+    const paidSalary = entry.paidSalary || 0;
+
+    const remainingSalary = totalSalary - paidSalary;
+
+    // Add updated values into entry object
+    entry.entryData = filteredData;
+    entry.totalDays = totalWorkDays;
+    entry.totalSalary = totalSalary;
+    entry.remainingSalary = remainingSalary;
 
     return NextResponse.json(
       {

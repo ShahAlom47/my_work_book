@@ -43,7 +43,7 @@ const { data, isLoading, refetch } = useQuery({
   if (isLoading) return <p className="text-center mt-10">Loading entries...</p>;
   if (!data) return <p>No entries found.</p>;
 
-
+console.log(data )
   const handleDelete = async (entryDataId: string) => {
     const ok = await confirm({
       title: "Delete Entry",
