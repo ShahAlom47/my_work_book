@@ -30,21 +30,15 @@ const Entries = () => {
   const [filter, setFilter] = useState<FilterOption>("All");
 
   // Fetch entries with totalDays, salary info from server
-  const { data, isLoading, refetch } = useQuery({
-    queryKey: ["entries", entryId, userId, search, filter],
-    enabled: !!userId && !!entryId,
-    queryFn: async () => {
-      const query ={
-        entryId: String(entryId),
-        search: "",
-        filter: "All" as const,
-        fromDate: "",
-        toDate: ""
-      }
-      const res = await fetchEntriesDataByQuery(String(userId), query);
-      return res.data as Entry;
-    },
-  });
+const { data, isLoading, refetch } = useQuery({
+  queryKey: ["entries", entryId, userId, search, filter],
+  enabled: !!userId && !!entryId,
+  queryFn: async () => {
+    const query = { entryId, search, filter };
+    const res = await fetchEntriesDataByQuery(String(userId), query);
+    return res.data as Entry;
+  },
+});
 
   if (isLoading) return <p className="text-center mt-10">Loading entries...</p>;
   if (!data) return <p>No entries found.</p>;

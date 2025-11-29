@@ -1,8 +1,7 @@
 "use client";
 
 import { FilterOption } from "@/types/types";
-import React, { useState, useEffect } from "react";
-
+import React, { useState } from "react";
 
 interface SearchFilterProps {
   onSearchChange: (search: string) => void;
@@ -13,44 +12,41 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
   onSearchChange,
   onFilterChange,
 }) => {
-  const [search, setSearch] = useState<string>("");
-  const [filter, setFilter] = useState<FilterOption>("All");
+  const [inputValue, setInputValue] = useState<string>("");
 
-  // Call parent handler when search changes
-  useEffect(() => {
-    const delayDebounce = setTimeout(() => {
-      onSearchChange(search);
-    }, 300); // Debounce 300ms
-
-    return () => clearTimeout(delayDebounce);
-  }, [search, onSearchChange]);
-
-  // Call parent handler when filter changes
-  useEffect(() => {
-    onFilterChange(filter);
-  }, [filter, onFilterChange]);
+  const handleSearchClick = () => {
+    onSearchChange(inputValue);
+  };
 
   return (
     <div className="flex flex-col md:flex-row gap-4 md:items-center">
       {/* Search Input */}
-      <input
-        type="text"
-        placeholder="Search..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="border rounded-md px-4 py-2 w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
-      />
+      <div className="flex gap-2">
+        <input
+          type="text"
+          placeholder="Search..."
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          className="border rounded-md px-4 py-2 w-full md:w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+
+        <button
+          onClick={handleSearchClick}
+          className="bg-blue-600 text-white px-4 rounded-md hover:bg-blue-700"
+        >
+          Search
+        </button>
+      </div>
 
       {/* Filter Select */}
       <select
-        value={filter}
-        onChange={(e) => setFilter(e.target.value as FilterOption)}
+        onChange={(e) => onFilterChange(e.target.value as FilterOption)}
         className="border rounded-md px-4 py-2 w-full md:w-48 focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
-        <option value="all">All</option>
-        <option value="this Week">This Week</option>
-        <option value="this Month">This Month</option>
-        <option value="this Year">This Year</option>
+        <option value="All">All</option>
+        <option value="This Week">This Week</option>
+        <option value="This Month">This Month</option>
+        <option value="This Year">This Year</option>
       </select>
     </div>
   );

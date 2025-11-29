@@ -14,8 +14,10 @@ export async function GET(
 
     const entryId = searchParams.get("entryId"); 
     const search = searchParams.get("search")?.toLowerCase() || "";
+    const filters=searchParams.get("filter")?.toLowerCase() || "";
 
-
+   
+ console.log(userId, entryId,"entry id", search, filters,"API query params");
 const rawFilter = searchParams.get("filter");
 const filter: FilterOption = 
   rawFilter === "This Week" || rawFilter === "This Month" || rawFilter === "This Year" 
@@ -23,7 +25,7 @@ const filter: FilterOption =
     : "All";
 
 
-    console.log(userId, entryId, search, filter, "API query params");
+   
 
     // Validate userId
     if (!userId || !ObjectId.isValid(userId)) {

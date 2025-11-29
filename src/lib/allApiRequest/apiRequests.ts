@@ -69,6 +69,7 @@ export const fetchEntriesDataByQuery = async (
     toDate?: string;
   }
 ) => {
+  console.log(query,"query")
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const queryString = new URLSearchParams(query as any).toString();
   return request("GET", `/my-books/entries/${userId}?${queryString}`);
