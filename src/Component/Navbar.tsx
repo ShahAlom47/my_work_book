@@ -7,15 +7,13 @@ import { signOut } from "next-auth/react";
 import { useUser } from "@/hooks/useUser";
 import Image from "next/image";
 
-type Props = {
-  onQuickAdd?: () => void;
-};
 
-export default function Navbar({ onQuickAdd }: Props) {
+
+export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
 
-  const { user, isLoading } = useUser();
+  const { user } = useUser();
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isOnline, setIsOnline] = useState<boolean>(
@@ -113,16 +111,7 @@ export default function Navbar({ onQuickAdd }: Props) {
                 </span>
               </div>
 
-              {/* Quick Add */}
-              <button
-                onClick={() => (onQuickAdd ? onQuickAdd() : router.push("/entries/new"))}
-                className="hidden sm:inline-flex items-center gap-2 bg-blue-600 text-white px-3 py-2 rounded-md text-sm hover:bg-blue-700"
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24">
-                  <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" />
-                </svg>
-                Quick add
-              </button>
+          
 
               {/* User / Login */}
               {user ? (
@@ -170,17 +159,7 @@ export default function Navbar({ onQuickAdd }: Props) {
                 </Link>
               ))}
 
-              <div className="pt-2 border-t border-gray-100">
-                <button
-                  onClick={() => {
-                    onQuickAdd ? onQuickAdd() : router.push("/entries/new");
-                    setMobileOpen(false);
-                  }}
-                  className="w-full px-3 py-2 bg-blue-600 text-white rounded-md"
-                >
-                  + Quick add
-                </button>
-              </div>
+              
 
               <div className="pt-2 border-t border-gray-100">
                 {user ? (
@@ -212,16 +191,6 @@ export default function Navbar({ onQuickAdd }: Props) {
           </div>
         )}
       </header>
-
-      {/* FAB Quick Add - mobile only */}
-      <button
-        onClick={() => (onQuickAdd ? onQuickAdd() : router.push("/entries/new"))}
-        className="fixed right-4 bottom-6 z-50 md:hidden w-14 h-14 rounded-full flex items-center justify-center shadow-lg bg-blue-600 text-white"
-      >
-        <svg width="20" height="20" viewBox="0 0 24 24">
-          <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" />
-        </svg>
-      </button>
 
       <div className="h-14" />
     </>

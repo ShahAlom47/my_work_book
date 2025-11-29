@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useUser } from "@/Hooks/useUser";
 import imgFull from "@/assets/bannerBig.jpg";
 import imgMobile from "@/assets/bannerMobile.jpg";
+import { useUser } from "@/hooks/useUser";
 
 const Banner = () => {
   const { user } = useUser();
@@ -38,7 +38,7 @@ const Banner = () => {
 
         {/* Conditional Buttons */}
         {!user ? (
-          <div className="space-y-3 mb-5">
+          <div className="space-y-3 mb-7">
             <p className="text-sm md:text-base text-gray-900 ">
               চালিয়ে যেতে লগইন করা আবশ্যক
             </p>
@@ -50,14 +50,14 @@ const Banner = () => {
             </Link>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-3 mb-7">
             <p className="text-sm md:text-base text-gray-200">
               Welcome back,{" "}
               <span className="font-semibold">{user?.name || "User"}</span> 👋
             </p>
             <Link
-              href="/my-list"
-              className="inline-block bg-white text-blue-600 font-semibold px-6 py-2 rounded-xl hover:bg-blue-100 transition"
+              href="/my-book"
+              className="inline-block text-white bg-blue-600 font-semibold px-6 py-2 rounded-xl hover:bg-blue-100 transition"
             >
               📋 My List
             </Link>
