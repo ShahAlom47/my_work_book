@@ -88,7 +88,6 @@ const Entries = () => {
         totalPaid={data?.paidSalary || 0}
         totalSalary={data?.totalSalary || 0}
         totalWorkDays={data?.totalDays || 0}
-        perDaySalary={data?.perDaySalary || 0}
         remainingSalary={data?.remainingSalary || 0}
       ></HeaderSummary>
 

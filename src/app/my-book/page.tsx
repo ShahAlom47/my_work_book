@@ -83,6 +83,7 @@ const MyWorkBook = () => {
 
   // DELETE ENTRY
   const handleDelete = async (id: string) => {
+
     const ok = await confirm({
       title: "Delete Entry",
       message: "Are you sure you want to delete this entry?",

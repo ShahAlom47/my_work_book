@@ -51,14 +51,20 @@ const EntryTable: React.FC<EntryTableProps> = ({
             {/* Action Buttons */}
             <td className="p-2 border flex items-center justify-center gap-3">
               <button
-                onClick={() => handleEdit(title._id as string)}
+                onClick={(e) => {
+                  e.stopPropagation(); // 🔥 prevent parent click
+                  handleEdit(title._id as string);
+                }}
                 className="text-yellow-500 hover:text-yellow-700 transition"
               >
                 <FiEdit />
               </button>
 
               <button
-                onClick={() => handleDelete(title._id as string)}
+                onClick={(e) => {
+                  e.stopPropagation(); // 🔥 prevent parent click
+                  handleDelete(title._id as string);
+                }}
                 className="text-red-500 hover:text-red-700 transition"
               >
                 <FiTrash2 />
