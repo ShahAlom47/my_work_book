@@ -175,7 +175,9 @@ export const authOptions: NextAuthOptions = {
     error: "/login", // redirect to login on auth error
   },
 
+
+
   // ✅ 6. Secret for signing JWT tokens
-  secret: process.env.NEXT_PUBLIC_AUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET,
 };
 export default authOptions;
