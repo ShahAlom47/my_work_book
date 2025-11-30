@@ -7,6 +7,8 @@ export default withAuth(
     const token = req.nextauth.token;
     const role = token?.role;
 
+    console.log(`Role: ${role}, Pathname: ${pathname}`);
+
     // Public pages
     const publicRoutes = ["/", "/login", "/register"];
 
@@ -56,12 +58,25 @@ export default withAuth(
       return NextResponse.next();
     }
 
-    // 🚀 7) MyBook routes — logged-in users only
+   
+    // 🚀 7) MyBook page routes — logged-in users only
     if (pathname.startsWith("/my-book")) {
       return NextResponse.next();
     }
 
-    // ❌ 8) Unauthorized for others
+    // 🚀 8) MyBook API routes — logged-in users only
+    if (pathname.startsWith("/api/my-books")) {
+      // ✅ check token
+      if (!token) {
+        const redirectTo = req.nextUrl.pathname + req.nextUrl.search;
+        return NextResponse.redirect(
+          new URL(`/login?redirect=${encodeURIComponent(redirectTo)}`, req.url)
+        );
+      }
+      return NextResponse.next();
+    }
+
+    // ❌ 9) Unauthorized for others
     return NextResponse.redirect(new URL("/unauthorized", req.url));
   },
   {
@@ -92,6 +107,6 @@ export const config = {
     "/dashboard/:path*",
     "/api/:path*",
     "/user/:path*",
-    "/my-book/:path*"
+    "/my-book/:path*",
   ],
 };
