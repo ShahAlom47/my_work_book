@@ -16,7 +16,7 @@ export default function Navbar() {
   const userNavLinks = [
     { href: "/", label: "Home" },
     { href: "/my-book", label: "My Book" },
-    { href: "/settings", label: "Settings" },
+    { href: "/user/settings", label: "Settings" },
   ];
   const guestNavLinks = [{ href: "/", label: "Home" }];
   const navLinks = user ? userNavLinks : guestNavLinks;
