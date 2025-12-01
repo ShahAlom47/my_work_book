@@ -9,25 +9,23 @@ export default withAuth(
 
     console.log(`Role: ${role}, Pathname: ${pathname}`);
 
-    // Public pages
+    // -------------------
+    // 1️⃣ Public Routes
+    // -------------------
     const publicRoutes = ["/", "/login", "/register"];
+    const publicApis = ["/api/public", "/api/health"];
 
-    // Public APIs
-    const publicApi = ["/api/public", "/api/health"];
-
-    // Admin-only APIs
-    const adminApi = ["/api/admin/users", "/api/admin/stats"];
-
-    // 🚀 1) Public routes allowed (No Auth Required)
     if (
       publicRoutes.includes(pathname) ||
-      publicApi.includes(pathname) ||
+      publicApis.includes(pathname) ||
       pathname.startsWith("/api/auth")
     ) {
       return NextResponse.next();
     }
 
-    // ❌ 2) Require Login for all private routes
+    // -------------------
+    // 2️⃣ Require login for private routes
+    // -------------------
     if (!token) {
       const redirectTo = req.nextUrl.pathname + req.nextUrl.search;
       return NextResponse.redirect(
@@ -35,48 +33,44 @@ export default withAuth(
       );
     }
 
-    // 🚀 3) Admin-only pages
-    if (pathname.startsWith("/dashboard/admin") && role === "admin") {
+    // -------------------
+    // 3️⃣ Admin-only pages & APIs
+    // -------------------
+    if ((pathname.startsWith("/dashboard/admin") || ["/api/admin/users","/api/admin/stats"].includes(pathname)) && role === "admin") {
       return NextResponse.next();
     }
 
-    // 🚀 4) Admin-only APIs
-    if (adminApi.includes(pathname) && role === "admin") {
+    // -------------------
+    // 4️⃣ User-only pages
+    // -------------------
+    if (pathname.startsWith("/dashboard/user") && (role === "user" || role === "admin")) {
       return NextResponse.next();
     }
 
-    // 🚀 5) User-only pages
-    if (
-      pathname.startsWith("/dashboard/user") &&
-      (role === "user" || role === "admin")
-    ) {
+    // -------------------
+    // 5️⃣ General dashboard — any logged-in user
+    // -------------------
+    if (pathname === "/dashboard") {
       return NextResponse.next();
     }
 
-    // 🚀 6) General dashboard — logged-in users only
-    if (pathname === "/dashboard" && (role === "user" || role === "admin")) {
+    // -------------------
+    // 6️⃣ MyBook pages & APIs — any logged-in user
+    // -------------------
+    if (pathname.startsWith("/my-book") || pathname.startsWith("/api/my-books")) {
       return NextResponse.next();
     }
 
-   
-    // 🚀 7) MyBook page routes — logged-in users only
-    if (pathname.startsWith("/my-book")) {
+    // -------------------
+    // 7️⃣ Settings page — any logged-in user
+    // -------------------
+    if (pathname.startsWith("/user/settings")) {
       return NextResponse.next();
     }
 
-    // 🚀 8) MyBook API routes — logged-in users only
-    if (pathname.startsWith("/api/my-books")) {
-      // ✅ check token
-      if (!token) {
-        const redirectTo = req.nextUrl.pathname + req.nextUrl.search;
-        return NextResponse.redirect(
-          new URL(`/login?redirect=${encodeURIComponent(redirectTo)}`, req.url)
-        );
-      }
-      return NextResponse.next();
-    }
-
-    // ❌ 9) Unauthorized for others
+    // -------------------
+    // ❌ Default: Unauthorized
+    // -------------------
     return NextResponse.redirect(new URL("/unauthorized", req.url));
   },
   {
@@ -85,11 +79,11 @@ export default withAuth(
         const path = req.nextUrl.pathname.toLowerCase();
 
         const publicRoutes = ["/", "/login", "/register"];
-        const publicApi = ["/api/public", "/api/health"];
+        const publicApis = ["/api/public", "/api/health"];
 
         if (
           publicRoutes.includes(path) ||
-          publicApi.includes(path) ||
+          publicApis.includes(path) ||
           path.startsWith("/api/auth")
         ) {
           return true;
@@ -102,11 +96,14 @@ export default withAuth(
   }
 );
 
+// -------------------
+// Middleware matcher
+// -------------------
 export const config = {
   matcher: [
     "/dashboard/:path*",
     "/api/:path*",
-    "/user/:path*",
+    "/user/:path*",   // covers /user/settings
     "/my-book/:path*",
   ],
 };
