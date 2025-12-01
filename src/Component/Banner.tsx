@@ -10,49 +10,52 @@ const Banner = () => {
   const { user } = useUser();
 
   return (
-    <section className="relative max-w-7xl mx-auto h-[420px] sm:h-[500px] md:h-[650px] lg:h-[750px] rounded-2xl overflow-hidden shadow-md flex items-center justify-center">
+    <section className="relative max-w-7xl mx-auto h-[490px] sm:h-[590px] md:h-[750px] lg:h-[750px] rounded-sm  overflow-hidden shadow-md flex items-center justify-center">
       
-      {/* Desktop Image */}
+      {/* Desktop Image - slightly brightened */}
       <Image
         src={imgFull}
         alt="MyWorkBook Banner"
         fill
-        className="object-cover absolute inset-0 hidden md:block"
+        className="object-cover absolute inset-0 hidden md:block filter brightness-105"
         priority
       />
 
-      {/* Mobile Image */}
+      {/* Mobile Image - slightly brightened */}
       <Image
         src={imgMobile}
         alt="MyWorkBook Banner"
         fill
-        className="object-cover absolute inset-0 md:hidden"
+        className="object-cover absolute inset-0 md:hidden filter brightness-105"
         priority
       />
 
-      {/* Overlay for better readability */}
-      <div className="absolute inset-0 bg-black/30 md:bg-black/20"></div>
+      {/* Lighter Overlay: less dark so image stays vibrant */}
+      {/* You can change bg-black/10 -> bg-black/5 for even lighter or bg-black/20 for slightly darker */}
+      <div className="absolute inset-0 bg-black/10 md:bg-black/10"></div>
+
+      {/* Optional subtle bottom gradient to keep text readable on top/bottom */}
+      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/15 via-transparent to-transparent pointer-events-none"></div>
 
       {/* Content */}
       <div className="relative z-10 text-center px-4 max-w-md mx-auto">
 
-        {/* Login Required / User Welcome */}
         {!user ? (
           <div className="space-y-3 mt-20 md:mt-0">
-            <p className="text-base sm:text-lg text-white drop-shadow">
+            <p className="text-base sm:text-lg text-white drop-shadow-sm bg-black/40 inline-block px-2 rounded-md">
               চালিয়ে যেতে লগইন করা আবশ্যক
             </p>
 
             <Link
               href="/login"
-              className="inline-block bg-white/90 text-gray-900 font-semibold px-6 py-2 sm:px-7 sm:py-2.5 rounded-xl shadow hover:bg-white transition"
+              className="inline-block bg-white/95 text-gray-900 font-semibold px-6 py-2 sm:px-7 sm:py-2.5 rounded-xl shadow hover:bg-white transition"
             >
               Login / Continue
             </Link>
           </div>
         ) : (
-          <div className="space-y-3 mt-20 md:mt-0">
-            <p className="text-base sm:text-lg text-white drop-shadow">
+          <div className="space-y-3 mt-20 md:mt-0 flex flex-col items-center">
+            <p className="text-base sm:text-lg text-white drop-shadow-sm bg-black/40 inline-block px-2 rounded-md">
               Welcome back,{" "}
               <span className="font-semibold">{user?.name || "User"}</span> 👋
             </p>
