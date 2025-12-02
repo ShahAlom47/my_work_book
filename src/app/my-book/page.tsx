@@ -13,6 +13,7 @@ import toast from "react-hot-toast";
 import { Entry } from "@/lib/interfaces/interfaces";
 import { useConfirm } from "@/hooks/useConfirm";
 import { useUser } from "@/hooks/useUser";
+import Loading from "../loading";
 
 const MyWorkBook = () => {
   const [showAddModal, setShowAddModal] = useState(false);
@@ -102,7 +103,7 @@ const MyWorkBook = () => {
     }
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div><Loading></Loading></div>;
 
   return (
     <div className="p-6">

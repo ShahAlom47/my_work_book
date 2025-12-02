@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useUser } from "@/hooks/useUser";
+import { updateUserName } from "@/lib/allApiRequest/apiRequests";
+import toast from "react-hot-toast";
 
 const Settings = () => {
   const { user } = useUser();
@@ -12,7 +14,20 @@ const Settings = () => {
 
   const handleNameUpdate = () => {
     console.log("Update Name:", name);
-    // TODO: API Call → /api/update-name
+    const userId = user?.id;
+    if (userId) {
+      const updateName = async () => {
+        try {
+          // Assuming updateUserName is an imported API function
+         const response = await updateUserName(String(userId), name);
+          toast.success(response?.message || "Name updated successfully");
+      
+        } catch (error) {
+          toast.error(error instanceof Error ? error.message : "Failed to update name");
+        }
+      };
+      updateName();
+    }
   };
 
   const handlePasswordUpdate = () => {

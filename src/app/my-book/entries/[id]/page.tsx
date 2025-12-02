@@ -17,6 +17,7 @@ import toast from "react-hot-toast";
 import { FilterOption } from "@/types/types";
 import SearchFilter from "@/Component/SearchFilter";
 import HeaderSummary from "@/Component/HeaderSummary";
+import Loading from "@/app/loading";
 
 const Entries = () => {
   const params = useParams();
@@ -41,7 +42,7 @@ const Entries = () => {
     },
   });
 
-  if (isLoading) return <p className="text-center mt-10">Loading entries...</p>;
+  if (isLoading) return <p className="text-center mt-10"><Loading></Loading></p>;
   if (!data) return <p>No entries found.</p>;
 
   console.log(data);
