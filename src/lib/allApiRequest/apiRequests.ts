@@ -119,5 +119,5 @@ export const updatePerDaySalary = async (userId: string, entryId: string,  perDa
 
 // user related api requests
 export const updateUserName = async (userId: string, name: string) => {
-  return request("PATCH", `/user/update-name/${userId}`, { name });
+  return request("PATCH", `/user/update-name/${userId}`, { userNewName: name });
 }
