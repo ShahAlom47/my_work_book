@@ -1,40 +1,52 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, startTransition } from "react";
 import { useUser } from "@/hooks/useUser";
 import { updateUserName } from "@/lib/allApiRequest/apiRequests";
 import toast from "react-hot-toast";
+import { useSession } from "next-auth/react";
 
 const Settings = () => {
   const { user } = useUser();
+  const { data: session, update } = useSession();
 
-  const [name, setName] = useState(user?.name || "");
+  const [name, setName] = useState("");
   const [oldPass, setOldPass] = useState("");
   const [newPass, setNewPass] = useState("");
-  console.log(user)
 
-  const handleNameUpdate = () => {
-    const userId = user?.id;
-    if (userId) {
-      const updateName = async () => {
-        try {
-          // Assuming updateUserName is an imported API function
-         const response = await updateUserName(String(userId), name);
-         console.log(response);
-          toast.success(response?.message || "Name updated successfully");
-          setName(name);
-      
-        } catch (error) {
-          toast.error(error instanceof Error ? error.message : "Failed to update name");
-        }
-      };
-      updateName();
+  const [loadingName, setLoadingName] = useState(false); // 🔥 NEW
+
+  useEffect(() => {
+    if (user?.name) {
+      startTransition(() => {
+        setName(user.name);
+      });
     }
-  };
+  }, [user, session]);
 
-  const handlePasswordUpdate = () => {
-    console.log("Password Change:", { oldPass, newPass });
-    // TODO: API Call → /api/change-password
+  const handleNameUpdate = async () => {
+    const userId = user?.id;
+    if (!userId) return;
+
+    try {
+      setLoadingName(true); // 🔥 Loading ON
+
+      const response = await updateUserName(String(userId), name);
+
+      toast.success(response?.message || "Name updated successfully");
+
+      await update({
+        user: {
+          ...session?.user,
+          name: name,
+        },
+      });
+
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Failed to update");
+    } finally {
+      setLoadingName(false); // 🔥 Loading OFF
+    }
   };
 
   return (
@@ -43,7 +55,7 @@ const Settings = () => {
         ⚙️ Account Settings
       </h1>
 
-      {/* User Email – Read Only */}
+      {/* Profile Info */}
       <div className="bg-white shadow-sm rounded-xl p-5 mb-6 border">
         <h3 className="text-lg font-medium mb-3 text-gray-800">
           Profile Information
@@ -69,11 +81,24 @@ const Settings = () => {
           className="w-full px-4 py-2 border rounded-lg mb-4 focus:ring focus:ring-blue-200"
         />
 
+        {/* Save Button with Loading State */}
         <button
           onClick={handleNameUpdate}
-          className="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          disabled={loadingName}
+          className={`px-5 py-2 rounded-lg text-white transition ${
+            loadingName
+              ? "bg-blue-400 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700"
+          }`}
         >
-          Save Changes
+          {loadingName ? (
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              Updating...
+            </div>
+          ) : (
+            "Save Changes"
+          )}
         </button>
       </div>
 
@@ -102,14 +127,14 @@ const Settings = () => {
         />
 
         <button
-          onClick={handlePasswordUpdate}
+          onClick={() => console.log("Password update coming soon...")}
           className="px-5 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
         >
           Update Password
         </button>
       </div>
 
-      {/* Optional Danger Zone */}
+      {/* Danger Zone */}
       <div className="bg-red-50 border border-red-200 p-5 rounded-xl">
         <h3 className="text-lg font-medium text-red-700 mb-3">Danger Zone</h3>
 
