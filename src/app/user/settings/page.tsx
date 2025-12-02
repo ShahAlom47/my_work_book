@@ -20,6 +20,7 @@ const Settings = () => {
         try {
           // Assuming updateUserName is an imported API function
          const response = await updateUserName(String(userId), name);
+         console.log(response);
           toast.success(response?.message || "Name updated successfully");
       
         } catch (error) {
