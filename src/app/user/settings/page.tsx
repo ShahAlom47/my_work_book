@@ -11,9 +11,9 @@ const Settings = () => {
   const [name, setName] = useState(user?.name || "");
   const [oldPass, setOldPass] = useState("");
   const [newPass, setNewPass] = useState("");
+  console.log(user)
 
   const handleNameUpdate = () => {
-    console.log("Update Name:", name);
     const userId = user?.id;
     if (userId) {
       const updateName = async () => {
@@ -22,6 +22,7 @@ const Settings = () => {
          const response = await updateUserName(String(userId), name);
          console.log(response);
           toast.success(response?.message || "Name updated successfully");
+          setName(name);
       
         } catch (error) {
           toast.error(error instanceof Error ? error.message : "Failed to update name");

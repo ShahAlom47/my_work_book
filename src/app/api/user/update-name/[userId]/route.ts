@@ -19,6 +19,8 @@ export async function PATCH(
     const body = await req.json();
     const { userNewName } = body;
 
+    console.log("UPDATE NAME REQ BODY:", body,id);
+
     if (!userNewName || !userNewName.trim()) {
       return NextResponse.json(
         { success: false, message: "Name cannot be empty" },

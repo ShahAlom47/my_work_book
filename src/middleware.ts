@@ -7,7 +7,7 @@ export default withAuth(
     const token = req.nextauth.token;
     const role = token?.role;
 
-    console.log(`Role: ${role}, Pathname: ${pathname}`);
+
 
     // -------------------
     // 1️⃣ Public Routes
@@ -64,7 +64,7 @@ export default withAuth(
     // -------------------
     // 7️⃣ Settings page — any logged-in user
     // -------------------
-    if (pathname.startsWith("/user/settings")) {
+    if (pathname.startsWith("/user/settings")|| pathname.startsWith("/api/user/update-name")) {
       return NextResponse.next();
     }
 
