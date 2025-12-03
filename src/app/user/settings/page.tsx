@@ -146,7 +146,7 @@ const Settings = () => {
           Delete Account
         </button>
       </div>
-    </div>
+    </div> 
   );
 };
 
