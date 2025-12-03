@@ -1,114 +1,104 @@
-import { NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
+import { NextRequest, NextResponse } from "next/server";
 import { getUserCollection } from "@/lib/database/db_collections";
-import { MongoServerError } from "mongodb";
+import { ObjectId } from "mongodb";
+import bcrypt from "bcryptjs";
 
-// Define the types for the request body
-interface RequestBody {
-  email: string;
-  password: string;
-  role?: string;
-  photoUrl?: string | null;
-  name: string;
-}
-
-export const POST = async (req: Request): Promise<NextResponse> => {
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ userId: string }> }
+) {
   try {
-    const usersCollection = await getUserCollection();
-    const body: RequestBody = await req.json();
+    const id = (await params).userId;
 
-    const { email, password, name,  } = body;
-    console.log( email, password, name);
+    if (!id || !ObjectId.isValid(id)) {
+      return NextResponse.json(
+        { success: false, message: "Invalid user ID" },
+        { status: 400 }
+      );
+    }
+
+    const body = await req.json();
+    const { oldPassword, newPassword } = body;
+
+    console.log("PASSWORD CHANGE BODY:", body, id);
 
     // Validation
-    if (!email || !password || !name) {
+    if (!oldPassword || !newPassword) {
       return NextResponse.json(
-        { 
-          message: "Email, password and name are required",
-          success: false
-        },
+        { success: false, message: "Both old and new passwords are required" },
         { status: 400 }
       );
     }
 
-    // Email format validation (basic check)
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (newPassword.length < 6) {
       return NextResponse.json(
-        { 
-          message: "Please provide a valid email address",
-          success: false
-        },
+        { success: false, message: "New password must be at least 6 characters long" },
         { status: 400 }
       );
     }
 
-    // Check if user already exists
-    const existingUser = await usersCollection.findOne({ email });
+    const users = await getUserCollection();
 
-    if (existingUser) {
+    // Find user
+    const user = await users.findOne({ _id: new ObjectId(id) });
+
+    if (!user) {
       return NextResponse.json(
-        { 
-          message: "Email already exists. Please use a different email.",
-          success: false
-        },
-        { status: 409 }
+        { success: false, message: "User not found" },
+        { status: 404 }
       );
     }
 
-    // Hash password
+    // Compare old password
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+
+    if (!isMatch) {
+      return NextResponse.json(
+        { success: false, message: "Old password is incorrect" },
+        { status: 400 }
+      );
+    }
+
+    // If old === new
+    if (oldPassword === newPassword) {
+      return NextResponse.json(
+        { success: false, message: "New password cannot be the same as the old password" },
+        { status: 400 }
+      );
+    }
+
+    // Hash new password
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const hashedNewPass = await bcrypt.hash(newPassword, salt);
 
-    // Create new user
-    const result = await usersCollection.insertOne({
-      email,
-      name,
-      password: hashedPassword,
-      role: "user", // Default role
-      createdAt: new Date(),
-      updatedAt: new Date()
+    // Update DB
+    const updated = await users.updateOne(
+      { _id: new ObjectId(id) },
+      {
+        $set: {
+          password: hashedNewPass,
+          updatedAt: new Date().toISOString(),
+        },
+      }
+    );
+
+    if (updated.matchedCount === 0) {
+      return NextResponse.json(
+        { success: false, message: "User not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: "Password updated successfully",
     });
 
-    if (!result.acknowledged) {
-      return NextResponse.json(
-        {
-          success: false,  
-          message: "Failed to register user",
-        },
-        { status: 500 }
-      );
-    }
-
+  } catch (error) {
+    console.error("PASSWORD UPDATE ERROR:", error);
     return NextResponse.json(
-      {
-        success: true,
-        message: "User registered successfully",
-        data: result
-      },
-      { status: 201 }
-    );
-  } catch (error: unknown) {
-    // Handle MongoDB duplicate key error specifically
-    if (error instanceof MongoServerError && error.code === 11000) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "User already exists",
-        },
-        { status: 409 }
-      );
-    }
-
-    const errorMessage = error instanceof Error ? error.message : "Unknown error";
-    console.error("Registration error:", error);
-    
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Internal server error",
-        error: process.env.NODE_ENV === "development" ? errorMessage : undefined,
-      },
+      { success: false, message: "Failed to update password" },
       { status: 500 }
     );
   }
-};
+}
