@@ -1,3 +1,4 @@
+
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 
@@ -64,7 +65,7 @@ export default withAuth(
     // -------------------
     // 7️⃣ Settings page — any logged-in user
     // -------------------
-    if (pathname.startsWith("/user/settings")|| pathname.startsWith("/api/user/update-name")) {
+    if (pathname.startsWith("/user/settings")|| pathname.startsWith("/api/user/update-name")|| pathname.startsWith("/api/user/update-password")) {
       return NextResponse.next();
     }
 
