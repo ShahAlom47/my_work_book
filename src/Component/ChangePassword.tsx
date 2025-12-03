@@ -46,8 +46,9 @@ const ChangePassword = () => {
   };
 
   return (
-    <div className="bg-white shadow-sm rounded-xl p-5 mb-6 border">
-      <h3 className="text-lg font-medium mb-4 text-gray-800">
+    <div  className="backdrop-blur-xl bg-white/10 border border-white/20 shadow-2xl 
+      rounded-xl px-8 pt-6 pb-8 lg:w-4/12 md:w-6/12 sm:w-9/12 w-full">
+      <h3 className="text-lg font-medium mb-4 text-gray-100">
         Change Password
       </h3>
 
@@ -56,29 +57,29 @@ const ChangePassword = () => {
         placeholder="Old Password"
         value={oldPass}
         onChange={(e) => setOldPass(e.target.value)}
-        className="w-full px-4 py-2 border rounded-lg mb-4"
+        className="w-full px-4 py-1 border rounded-sm mb-4 text-white"
       />
 
       <input
-        type="password"
+        type="text"
         placeholder="New Password"
         value={newPass}
         onChange={(e) => setNewPass(e.target.value)}
-        className="w-full px-4 py-2 border rounded-lg mb-4"
+        className="w-full px-4 py-1 border rounded-sm mb-4 text-white"
       />
 
       <input
-        type="password"
+        type="text"
         placeholder="Confirm Password"
         value={confirmPass}
         onChange={(e) => setConfirmPass(e.target.value)}
-        className="w-full px-4 py-2 border rounded-lg mb-4"
+        className="w-full px-4 py-1 border rounded-sm mb-4 text-white"
       />
 
       <button
         onClick={updatePassword}
         disabled={loading}
-        className="px-5 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+        className="px-5 py-1 bg-green-600 text-white rounded-sm hover:bg-green-700 transition"
       >
         {loading ? "Updating..." : "Update Password"}
       </button>

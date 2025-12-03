@@ -151,7 +151,7 @@ const MyWorkBook = () => {
       {/* EDIT MODAL */}
       {showEditModal && (
         <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded shadow-md min-w-96 md:w-6/12 w-full">
+          <div className="bg-gray-500 p-6 rounded shadow-md min-w-96 md:w-6/12 w-full">
             <h2 className="text-lg font-bold mb-4">Edit Title</h2>
             <input
               type="text"

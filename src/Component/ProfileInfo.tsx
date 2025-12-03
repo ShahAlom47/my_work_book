@@ -38,29 +38,30 @@ const ProfileInfo = () => {
   };
 
   return (
-    <div className="bg-white shadow-sm rounded-xl p-5 mb-6 border">
-      <h3 className="text-lg font-medium mb-3 text-gray-800">
+   <div  className="backdrop-blur-xl bg-white/10 border border-white/20 shadow-2xl 
+      rounded-xl px-8 pt-6 pb-8 lg:w-4/12 md:w-6/12 sm:w-9/12 w-full">
+      <h3 className="text-lg font-medium mb-3 text-gray-100">
         Profile Information
       </h3>
 
-      <label className="block text-sm text-gray-600 mb-1">Email</label>
+      <label className="block text-sm text-gray-100 mb-1">Email</label>
       <input
         disabled
         value={user?.email || ""}
-        className="w-full px-4 py-2 mb-4 border rounded-lg bg-gray-100"
+        className="w-full px-4 py-1 mb-4 border rounded-sm bg-gray-100 text-gray-800"
       />
 
-      <label className="block text-sm text-gray-600 mb-1">Full Name</label>
+      <label className="block text-sm text-gray-100 mb-1">Full Name</label>
       <input
         value={name}
         onChange={(e) => setName(e.target.value)}
-        className="w-full px-4 py-2 border rounded-lg mb-4"
+        className="w-full px-4 py-1 border rounded-sm mb-4 text-white"
       />
 
       <button
         onClick={handleNameUpdate}
         disabled={loading}
-        className={`px-5 py-2 rounded-lg text-white transition ${
+        className={`px-5 py-1 rounded-sm text-white transition ${
           loading ? "bg-blue-400" : "bg-blue-600 hover:bg-blue-700"
         }`}
       >

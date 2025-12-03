@@ -27,7 +27,7 @@ const EntryTable: React.FC<EntryTableProps> = ({
   return (
     <table className="w-full border border-gray-300 rounded">
       <thead>
-        <tr className="bg-gray-100">
+        <tr className="bg-gray-600">
           <th className="p-2 border">Title Name</th>
           <th className="p-2 border w-32 text-center">Actions</th>
         </tr>
