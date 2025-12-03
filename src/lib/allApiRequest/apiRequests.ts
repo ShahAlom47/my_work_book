@@ -121,3 +121,6 @@ export const updatePerDaySalary = async (userId: string, entryId: string,  perDa
 export const updateUserName = async (userId: string, name: string) => {
   return request("PATCH", `/user/update-name/${userId}`, { userNewName: name });
 }
+export const passwordChange = async (userId: string, oldPassword: string, newPassword: string) => {
+  return request("PATCH", `/user/update-password/${userId}`, { oldPassword, newPassword });
+}

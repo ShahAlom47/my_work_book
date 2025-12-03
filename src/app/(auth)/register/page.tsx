@@ -145,9 +145,12 @@ const Register: React.FC = () => {
     {showConfirmModal && (
       <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex justify-center items-center p-4 z-50">
         <div className="bg-white/10 backdrop-blur-xl border border-white/20 p-6 rounded-xl shadow-2xl text-center w-full max-w-sm">
-          <h2 className="text-xl font-bold text-white mb-3">
-            রেজিস্ট্রেশন নিশ্চিত করুন
-          </h2>
+       
+
+          <h3 className="text-lg text-white mb-2">
+          Your Email:{" "}
+            <span className="font-semibold text-yellow-600">{formData?.email}</span>
+          </h3>
           <p className="text-gray-200 text-sm leading-relaxed mb-4">
             আপনি যেই ইমেইলটি ব্যবহার করেছেন সেটি কি সঠিক?
             ভুল হলে ভবিষ্যতে অ্যাকাউন্ট রিকভারি ও পাসওয়ার্ড রিসেট করতে সমস্যা হবে।

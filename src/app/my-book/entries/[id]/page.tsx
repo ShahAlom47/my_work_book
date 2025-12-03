@@ -42,7 +42,7 @@ const Entries = () => {
     },
   });
 
-  if (isLoading) return <p className="text-center mt-10"><Loading></Loading></p>;
+  if (isLoading) return <div className="text-center mt-10"><Loading></Loading></div>;
   if (!data) return <p>No entries found.</p>;
 
   console.log(data);

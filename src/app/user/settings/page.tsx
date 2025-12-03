@@ -2,7 +2,7 @@
 
 import { useState, useEffect, startTransition } from "react";
 import { useUser } from "@/hooks/useUser";
-import { updateUserName } from "@/lib/allApiRequest/apiRequests";
+import { passwordChange, updateUserName } from "@/lib/allApiRequest/apiRequests";
 import toast from "react-hot-toast";
 import { useSession } from "next-auth/react";
 
@@ -48,6 +48,43 @@ const Settings = () => {
       setLoadingName(false); // 🔥 Loading OFF
     }
   };
+
+const handleChangePassword = async (oldPassword: string, newPassword: string) => {
+  const userId = user?.id;
+  if (!userId) return;
+
+  // 🔥 Validation
+  if (!oldPassword || !newPassword) {
+    toast.error("Both fields are required!");
+    return;
+  }
+
+  if (newPassword.length < 6) {
+    toast.error("New password must be at least 6 characters long!");
+    return;
+  }
+
+  if (oldPassword === newPassword) {
+    toast.error("New password cannot be the same as the old password!");
+    return;
+  }
+
+  try {
+    const response = await passwordChange(String(userId), oldPassword, newPassword);
+
+    if (response.success) {
+      toast.success(response.message || "Password updated successfully");
+      setOldPass("");
+      setNewPass("");
+    } else {
+      toast.error(response.message || "Failed to update password");
+    }
+
+  } catch (error) {
+    toast.error(error instanceof Error ? error.message : "Something went wrong!");
+  }
+};
+
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
@@ -127,7 +164,7 @@ const Settings = () => {
         />
 
         <button
-          onClick={() => console.log("Password update coming soon...")}
+          onClick={() =>handleChangePassword(oldPass, newPass)}
           className="px-5 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
         >
           Update Password
