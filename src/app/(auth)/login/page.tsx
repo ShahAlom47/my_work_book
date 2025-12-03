@@ -58,10 +58,11 @@ const [password, setPassword] = useState<string>("123456");
 };
 
   return (
-    <div className="max-w flex flex-col items-center justify-center h-screen bg-gray-100">
+  <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black p-4">
       <form
         onSubmit={handleLogin}
-        className="bg-color-primary rounded px-8 pt-6 pb-8 mb-4 lg:w-4/12 md:w-6/12 sm:w-9/12 w-11/12 h-fit"
+      className="backdrop-blur-xl bg-white/10 border border-white/20 shadow-2xl 
+      rounded-xl px-8 pt-6 pb-8 lg:w-4/12 md:w-6/12 sm:w-9/12 w-full"
       >
         <h1 className="text-3xl font-semibold text-white text-center mb-6 border-b-2 border-color-secondary pb-2">
           Login
