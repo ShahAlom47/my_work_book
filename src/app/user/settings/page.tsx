@@ -11,8 +11,10 @@ const Settings = () => {
   const { data: session, update } = useSession();
 
   const [name, setName] = useState("");
-  const [oldPass, setOldPass] = useState("");
-  const [newPass, setNewPass] = useState("");
+  // PASSWORD STATES
+const [oldPass, setOldPass] = useState("");
+const [newPass, setNewPass] = useState("");
+const [confirmPass, setConfirmPass] = useState("");
 
   const [loadingName, setLoadingName] = useState(false); // 🔥 NEW
 
@@ -49,23 +51,35 @@ const Settings = () => {
     }
   };
 
-const handleChangePassword = async (oldPassword: string, newPassword: string) => {
+
+
+// HANDLE CHANGE PASSWORD
+const handleChangePassword = async (
+  oldPassword: string,
+  newPassword: string,
+  confirmPassword: string
+) => {
   const userId = user?.id;
   if (!userId) return;
 
-  // 🔥 Validation
-  if (!oldPassword || !newPassword) {
-    toast.error("Both fields are required!");
+  // VALIDATION
+  if (!oldPassword || !newPassword || !confirmPassword) {
+    toast.error("All fields are required!");
     return;
   }
 
   if (newPassword.length < 6) {
-    toast.error("New password must be at least 6 characters long!");
+    toast.error("New password must be at least 6 characters!");
+    return;
+  }
+
+  if (newPassword !== confirmPassword) {
+    toast.error("New password and confirm password do not match!");
     return;
   }
 
   if (oldPassword === newPassword) {
-    toast.error("New password cannot be the same as the old password!");
+    toast.error("New password cannot be the same as old password!");
     return;
   }
 
@@ -74,12 +88,13 @@ const handleChangePassword = async (oldPassword: string, newPassword: string) =>
 
     if (response.success) {
       toast.success(response.message || "Password updated successfully");
+
       setOldPass("");
       setNewPass("");
+      setConfirmPass("");
     } else {
       toast.error(response.message || "Failed to update password");
     }
-
   } catch (error) {
     toast.error(error instanceof Error ? error.message : "Something went wrong!");
   }
@@ -140,36 +155,46 @@ const handleChangePassword = async (oldPassword: string, newPassword: string) =>
       </div>
 
       {/* Password Change */}
-      <div className="bg-white shadow-sm rounded-xl p-5 mb-6 border">
-        <h3 className="text-lg font-medium mb-4 text-gray-800">
-          Change Password
-        </h3>
+     {/* Password Change */}
+<div className="bg-white shadow-sm rounded-xl p-5 mb-6 border">
+  <h3 className="text-lg font-medium mb-4 text-gray-800">
+    Change Password
+  </h3>
 
-        <label className="block text-sm text-gray-600 mb-1">Old Password</label>
-        <input
-          type="password"
-          value={oldPass}
-          onChange={(e) => setOldPass(e.target.value)}
-          className="w-full px-4 py-2 border rounded-lg mb-4 focus:ring focus:ring-blue-200"
-        />
+  <label className="block text-sm text-gray-600 mb-1">Old Password</label>
+  <input
+    type="password"
+    value={oldPass}
+    onChange={(e) => setOldPass(e.target.value)}
+    className="w-full px-4 py-2 border rounded-lg mb-4 focus:ring focus:ring-blue-200"
+  />
 
-        <label className="block text-sm text-gray-600 mb-1">
-          New Password
-        </label>
-        <input
-          type="password"
-          value={newPass}
-          onChange={(e) => setNewPass(e.target.value)}
-          className="w-full px-4 py-2 border rounded-lg mb-4 focus:ring focus:ring-blue-200"
-        />
+  <label className="block text-sm text-gray-600 mb-1">New Password</label>
+  <input
+    type="password"
+    value={newPass}
+    onChange={(e) => setNewPass(e.target.value)}
+    className="w-full px-4 py-2 border rounded-lg mb-4 focus:ring focus:ring-blue-200"
+  />
 
-        <button
-          onClick={() =>handleChangePassword(oldPass, newPass)}
-          className="px-5 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
-        >
-          Update Password
-        </button>
-      </div>
+  <label className="block text-sm text-gray-600 mb-1">Confirm Password</label>
+  <input
+    type="password"
+    value={confirmPass}
+    onChange={(e) => setConfirmPass(e.target.value)}
+    className="w-full px-4 py-2 border rounded-lg mb-4 focus:ring focus:ring-blue-200"
+  />
+
+  <button
+    onClick={() =>
+      handleChangePassword(oldPass, newPass, confirmPass)
+    }
+    className="px-5 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+  >
+    Update Password
+  </button>
+</div>
+
 
       {/* Danger Zone */}
       <div className="bg-red-50 border border-red-200 p-5 rounded-xl">
