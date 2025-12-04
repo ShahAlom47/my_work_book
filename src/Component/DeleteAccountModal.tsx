@@ -16,7 +16,7 @@ const DeleteAccountModal = ({ close }: { close: () => void }) => {
 
   const handleDelete = async () => {
     if (!password) return toast.error("Please enter your password");
-
+ 
 
     if (!user?.id) return;
 
