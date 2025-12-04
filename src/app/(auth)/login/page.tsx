@@ -104,18 +104,24 @@ const [password, setPassword] = useState<string>("123456");
         <SocialLogin></SocialLogin>
 
         {/* Register & Home Links */}
-        <div className="text-center text-sm text-white">
+        <div className="text-center text-sm text-white space-y-3 flex flex-col mt-4">
           <p>
             Don&apos;t have an account?{" "}
             <Link href="/register" className="text-blue-300 hover:underline">
               Register here
             </Link>
           </p>
+            <Link href="/forgot-password" className="hover:underline text-blue-400">
+          Forgot Password?
+        </Link>
+   
           <p>
             <Link href="/" className="text-blue-300 hover:underline">
               Go to Home
             </Link>
           </p>
+     
+      
         </div>
       </form>
     </div>
