@@ -1,8 +1,7 @@
-
 // src/utils/api.ts
 import { IFormInput } from "@/app/(auth)/register/page";
 import axios from "axios";
-import { Entry, EntryData } from "../interfaces/interfaces";
+import {  EntryData } from "../interfaces/interfaces";
 import { FilterOption } from "@/types/types";
 
 export interface IApiResponse<T = unknown> {
@@ -123,4 +122,7 @@ export const updateUserName = async (userId: string, name: string) => {
 }
 export const passwordChange = async (userId: string, oldPassword: string, newPassword: string) => {
   return request("PATCH", `/user/update-password/${userId}`, { oldPassword, newPassword });
+}
+export const deleteUserAccount = async (userId: string, password: string) => {
+  return request("DELETE", `/user/delete-account/${userId}`, { password });
 }
