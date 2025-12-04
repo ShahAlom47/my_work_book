@@ -23,9 +23,9 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-md border-b border-gray-200">
+      <header className="fixed top-0 left-0 right-0 z-40 bg-white backdrop-blur-md border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-14">
+          <div className="flex items-center justify-between h-14 text-black">
             
             {/* Logo + Mobile Menu Button */}
             <div className="flex items-center gap-3">
@@ -48,10 +48,10 @@ export default function Navbar() {
                 <Link
                   key={l.href}
                   href={l.href}
-                  className={`px-3 py-2 rounded-md text-sm transition ${
+                  className={`px-3 py-1 rounded-sm text-sm transition ${
                     pathname === l.href
-                      ? "bg-gray-100 font-medium"
-                      : "text-gray-600 hover:bg-gray-50"
+                      ? "bg-gray-300 font-medium"
+                      : " hover:bg-gray-100"
                   }`}
                 >
                   {l.label}
@@ -108,15 +108,15 @@ export default function Navbar() {
 
         {/* Mobile Menu */}
         {mobileOpen && (
-          <div className="md:hidden border-t bg-white/95 py-2 space-y-1 px-3">
+          <div className="md:hidden border-t bg-white/95 border border-gray-600 rounded-sm m-2 py-2 space-y-1 px-3 text-black">
             {navLinks.map((l) => (
               <Link
                 key={l.href}
                 href={l.href}
                 className={`block px-3 py-2 rounded-md text-sm ${
                   pathname === l.href
-                    ? "bg-gray-100 font-medium"
-                    : "text-gray-700 hover:bg-gray-50"
+                    ? "bg-gray-300 font-medium"
+                    : " hover:bg-gray-100"
                 }`}
                 onClick={() => setMobileOpen(false)}
               >

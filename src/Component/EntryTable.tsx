@@ -7,14 +7,12 @@ import { FiEdit, FiTrash2 } from "react-icons/fi";
 // ---- Props Interface ----
 interface EntryTableProps {
   entries: Entry[];
-  onTitleClick: (id: string) => void;
   handleEdit: (id: string) => void;
   handleDelete: (id: string) => void;
 }
 
 const EntryTable: React.FC<EntryTableProps> = ({
   entries,
-  onTitleClick,
   handleEdit,
   handleDelete,
 }) => {
@@ -36,20 +34,21 @@ const EntryTable: React.FC<EntryTableProps> = ({
       <tbody>
         {entries.map((title) => (
           <tr
-            onClick={handleNavigate(title?._id as string)}
+          
             key={title._id as string}
-            className="hover:bg-gray-50 transition cursor-pointer"
+            className="hover:bg-gray-700 transition cursor-pointer my-auto"
           >
             {/* Title Cell */}
             <td
-              className="p-2 border"
-              onClick={() => onTitleClick(title._id as string)}
+              className=" p-1 border"
+              onClick={() =>handleNavigate(title?._id as string)}
+              
             >
               {title.entryName}
             </td>
 
             {/* Action Buttons */}
-            <td className="p-2 border flex items-center justify-center gap-3">
+            <td className="p-1  flex items-center justify-center  mt-1 gap-3">
               <button
                 onClick={(e) => {
                   e.stopPropagation(); // 🔥 prevent parent click

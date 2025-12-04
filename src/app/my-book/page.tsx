@@ -120,8 +120,8 @@ const MyWorkBook = () => {
 
       {/* ADD MODAL */}
       {showAddModal && (
-        <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded shadow-md min-w-96 md:w-6/12 w-full">
+        <div className="fixed inset-0 backdrop-blur-xl bg-white/10 flex justify-center items-center">
+          <div className="backdrop-blur-xl bg-white/10 p-6 rounded shadow-md min-w-96 md:w-6/12 w-full">
             <h2 className="text-lg font-bold mb-4">Add New Title</h2>
             <input
               type="text"
@@ -133,7 +133,7 @@ const MyWorkBook = () => {
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setShowAddModal(false)}
-                className="px-4 py-2 rounded border hover:bg-gray-100"
+                className="px-4 py-2 rounded border hover:bg-gray-400"
               >
                 Cancel
               </button>
@@ -150,8 +150,8 @@ const MyWorkBook = () => {
 
       {/* EDIT MODAL */}
       {showEditModal && (
-        <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
-          <div className="bg-gray-500 p-6 rounded shadow-md min-w-96 md:w-6/12 w-full">
+                <div className="fixed inset-0 backdrop-blur-xl bg-white/10 flex justify-center items-center">
+          <div className="backdrop-blur-xl bg-white/10 p-6 rounded shadow-md min-w-96 md:w-6/12 w-full">
             <h2 className="text-lg font-bold mb-4">Edit Title</h2>
             <input
               type="text"
@@ -181,7 +181,6 @@ const MyWorkBook = () => {
       {/* TABLE */}
       <EntryTable
         entries={entries}
-        onTitleClick={(id) => console.log("Clicked:", id)}
         handleEdit={(id) => {
           const entry = entries.find((e) => e._id === id);
           if (entry) openEditModal(entry);
