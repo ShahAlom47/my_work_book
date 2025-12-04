@@ -1,3 +1,4 @@
+import { deleteUserAccount } from '@/lib/allApiRequest/apiRequests';
 
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
@@ -65,7 +66,7 @@ export default withAuth(
     // -------------------
     // 7️⃣ Settings page — any logged-in user
     // -------------------
-    if (pathname.startsWith("/user/settings")|| pathname.startsWith("/api/user/update-name")|| pathname.startsWith("/api/user/update-password")) {
+    if (pathname.startsWith("/user/settings")|| pathname.startsWith("/api/user/update-name")|| pathname.startsWith("/api/user/update-password") || pathname.startsWith("/api/user/delete-account")) {
       return NextResponse.next();
     }
 

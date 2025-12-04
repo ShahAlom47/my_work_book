@@ -21,9 +21,6 @@ export async function DELETE(
     const body = await req.json();
     const { password } = body;
 
-    console.log("DELETE ACCOUNT BODY:", body, id);
-
-    // Input validation
     if (!password) {
       return NextResponse.json(
         { success: false, message: "Password is required" },
@@ -32,9 +29,9 @@ export async function DELETE(
     }
 
     const users = await getUserCollection();
-    const entryCollection = await getEntriesCollection();
+    const entries = await getEntriesCollection();
 
-    // Find user
+    // Check user exists
     const user = await users.findOne({ _id: new ObjectId(id) });
 
     if (!user) {
@@ -44,7 +41,7 @@ export async function DELETE(
       );
     }
 
-    // Compare password
+    // Verify password
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
@@ -54,10 +51,15 @@ export async function DELETE(
       );
     }
 
-    // Delete user from DB
-    const deleted = await users.deleteOne({ _id: new ObjectId(id) });
+    // 🔥 Step 1: Delete entries related to this user
+    const deletedEntries = await entries.deleteMany({ userId: id });
 
-    if (deleted.deletedCount === 0) {
+    console.log("ENTRIES DELETED:", deletedEntries.deletedCount);
+
+    // 🔥 Step 2: Delete user account
+    const deletedUser = await users.deleteOne({ _id: new ObjectId(id) });
+
+    if (deletedUser.deletedCount === 0) {
       return NextResponse.json(
         { success: false, message: "Failed to delete user" },
         { status: 500 }
@@ -66,8 +68,9 @@ export async function DELETE(
 
     return NextResponse.json({
       success: true,
-      message: "Account deleted successfully",
+      message: "Account and all related entries deleted successfully",
     });
+
   } catch (error) {
     console.error("ACCOUNT DELETE ERROR:", error);
     return NextResponse.json(
