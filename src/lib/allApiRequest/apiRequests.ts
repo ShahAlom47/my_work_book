@@ -126,3 +126,8 @@ export const passwordChange = async (userId: string, oldPassword: string, newPas
 export const deleteUserAccount = async (userId: string, password: string) => {
   return request("DELETE", `/user/delete-account/${userId}`, { password });
 }
+
+// forgot password api request
+export const forgotPasswordRequest = async (email: string) => {
+  return request("POST", `/auth/forgot-password`, { email });
+} 

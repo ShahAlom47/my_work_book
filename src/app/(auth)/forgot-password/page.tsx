@@ -1,27 +1,49 @@
 "use client";
+import { forgotPasswordRequest } from "@/lib/allApiRequest/apiRequests";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!email) {
       return alert("Please enter your email address");
     }
-
-    // API call here…
-    console.log("Reset email sent to:", email);
+    setLoading(true);
+    try {
+      const response = await forgotPasswordRequest(email);
+      if (response.success) {
+        toast.success(response.message || "Reset link sent to your email!");
+        setEmail("");
+        setLoading(false);
+      } else {
+        toast.error(response.message || "Failed to send reset link.");
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error("Error sending reset email:", error);
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "There was an error sending the reset email. Please try again later."
+      );
+    }
   };
 
   return (
-    <div className="min-h-screen flex justify-center items-center bg-gray-100 px-3">
-      <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black p-4">
+      <div
+        className="backdrop-blur-xl bg-white/10 border border-white/20 shadow-2xl 
+      rounded-xl px-8 pt-6 pb-8 lg:w-4/12 md:w-6/12 sm:w-9/12 w-full"
+      >
         <h2 className="text-2xl font-semibold text-center mb-2">
           Forgot Password?
         </h2>
-        <p className="text-gray-600 text-center mb-6">
+        <p className="text-gray-200 text-center mb-6">
           Enter your email address and we’ll send you a reset link.
         </p>
 
@@ -43,12 +65,12 @@ const ForgotPassword = () => {
             type="submit"
             className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
           >
-            Send Reset Link
+            {loading ? "Sending..." : "Send Reset Link"}
           </button>
         </form>
 
         <p className="text-center text-sm text-gray-600 mt-5">
-          Remembered your password?{" "}
+          Remembered your password?
           <a href="/login" className="text-blue-600 hover:underline">
             Go back to Login
           </a>
