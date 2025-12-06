@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import crypto from "crypto";
 import { getUserCollection } from "@/lib/database/db_collections";
 
 export async function POST(req: Request) {
@@ -16,7 +15,7 @@ export async function POST(req: Request) {
 
     const userCollection = await getUserCollection();
 
-    // 1️⃣ User exists or not
+    // 1️⃣ Check if user exists
     const user = await userCollection.findOne({ email });
 
     if (!user) {
@@ -26,32 +25,33 @@ export async function POST(req: Request) {
       );
     }
 
-    // 2️⃣ Generate Reset Token
-    const resetToken = crypto.randomBytes(32).toString("hex");
-    const resetTokenExpire = Date.now() + 15 * 60 * 1000; // 15 minutes
+    // 2️⃣ Generate OTP (6 digits)
+    const otp = Math.floor(100000 + Math.random() * 900000);
 
-    // 3️⃣ Save token to DB
+    // 3️⃣ OTP Expire time (5 minutes)
+    const otpExpire = Date.now() + 5 * 60 * 1000;
+
+    // 4️⃣ Save OTP in DB
     await userCollection.updateOne(
       { email },
       {
         $set: {
-          resetToken,
-          resetTokenExpire,
+          resetOtp: otp,
+          resetOtpExpire: otpExpire,
         },
       }
     );
 
-    // 4️⃣ Reset Link (frontend page)
-    const resetLink = `${process.env.NEXT_PUBLIC_APP_URL}/reset-password?token=${resetToken}`;
+    // ⭐ Backend Email পাঠাবে না
+    // কারণ তুমি EmailJS দিয়ে frontend থেকে পাঠাবে
 
-    // ⭐ Email পাঠানোর কাজ (পরবর্তীতে add করবে)
-    // await sendEmail(email, "Reset Password", resetLink);
-
+    // Response এ OTP দিচ্ছি যাতে frontend EmailJS এ পাঠাতে পারে
     return NextResponse.json(
       {
         success: true,
-        message: "Password reset link has been sent to your email",
-        resetLink, // test করার জন্য দিচ্ছি
+        message: "OTP generated and saved",
+        otp, // frontend এ EmailJS দিয়ে email করার জন্য
+        email, // frontend এ দরকার হবে
       },
       { status: 200 }
     );
