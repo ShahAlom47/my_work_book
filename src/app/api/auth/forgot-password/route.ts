@@ -50,8 +50,10 @@ export async function POST(req: Request) {
       {
         success: true,
         message: "OTP generated and saved",
-        otp, // frontend এ EmailJS দিয়ে email করার জন্য
-        email, // frontend এ দরকার হবে
+     data :{
+         otp, // frontend এ EmailJS দিয়ে email করার জন্য
+        email,
+     } // frontend এ দরকার হবে
       },
       { status: 200 }
     );
