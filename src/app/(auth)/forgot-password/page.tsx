@@ -18,18 +18,19 @@ const ForgotPassword = () => {
   const [loading, setLoading] = useState(false);
 
   // ⭐ EmailJS দিয়ে OTP পাঠানোর function
-  const sendOtpEmail = async (otp: number, email: string) => {
+  const sendOtpEmail = async (otp: number, userEmail: string,reset_link:string) => {
     try {
-      await emailjs.send(
-        process.env.NEXT_PUBLIC_EMAIL_SERVICE_ID!,
-        process.env.NEXT_PUBLIC_EMAIL_TEMPLATE_ID!,
-        {
-          user_email: email,
-          otp: otp, // template এ ব্যবহার হবে
-        },
-        process.env.NEXT_PUBLIC_EMAIL_PUBLIC_KEY!
-      );
-
+    await emailjs.send(
+  process.env.NEXT_PUBLIC_EMAIL_SERVICE_ID!,
+  process.env.NEXT_PUBLIC_EMAIL_TEMPLATE_ID!,
+  {
+    user_email: userEmail,   // To Email
+    name: "My App",          // From Name
+    reset_link: reset_link,   // OTP link
+    otp: otp                 // OTP
+  },
+  process.env.NEXT_PUBLIC_EMAIL_PUBLIC_KEY!
+);
       toast.success("OTP has been sent to your email.");
     } catch (err) {
       console.log(err);
@@ -66,9 +67,10 @@ const ForgotPassword = () => {
         toast.error("Invalid response from server.");
         return;
       }
+      const reset_link = `http://localhost:3000/reset-password?email=${encodeURIComponent(userEmail)}&otp=${otp}`;
 
       // EmailJS দিয়ে OTP পাঠানো
-      await sendOtpEmail(otp, userEmail);
+      await sendOtpEmail(otp, userEmail, reset_link);
 
       toast.success(res.message || "Check your email for OTP!");
       setEmail("");
