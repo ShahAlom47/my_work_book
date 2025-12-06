@@ -2,13 +2,38 @@
 import { forgotPasswordRequest } from "@/lib/allApiRequest/apiRequests";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
+import emailjs from "emailjs-com";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
+
+   const handleSend = (e) => {
+    e.preventDefault();
+
+  const res=   emailjs.send(
+      process.env.NEXT_PUBLIC_EMAIL_SERVICE_ID as string,
+      process.env.NEXT_PUBLIC_EMAIL_TEMPLATE_ID as string,
+      {
+        user_email: email,
+        reset_link: `https://your-website.com/reset-password?email=${email}`,
+      },
+      process.env.NEXT_PUBLIC_EMAIL_PUBLIC_KEY as string
+    )
+    
+    .then(() => {
+      alert("Password reset email sent!");
+    })
+    .catch((err) => {
+      console.log(err);
+      alert("Failed to send email");
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+  console.log(  handleSend(e))
 
     if (!email) {
       return alert("Please enter your email address");
