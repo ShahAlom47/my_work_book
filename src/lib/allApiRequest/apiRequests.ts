@@ -131,3 +131,7 @@ export const deleteUserAccount = async (userId: string, password: string) => {
 export const forgotPasswordRequest = async (email: string) => {
   return request("POST", `/auth/forgot-password`, { email });
 } 
+
+export const resetPasswordRequest = async (email: string, otp: number, newPassword: string) => {
+  return request("POST", `/auth/reset-password`, { email, otp, newPassword });
+}
