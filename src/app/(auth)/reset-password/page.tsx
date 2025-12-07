@@ -17,38 +17,45 @@ const ResetPassword = () => {
   const [confirmPass, setConfirmPass] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleReset = async (e: React.FormEvent) => {
-    e.preventDefault();
+const handleReset = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-    if (!otp || !password || !confirmPass || !email) {
-      toast.error("Please fill all fields");
-      return;
+  if (!otp || !password || !confirmPass || !email) {
+    toast.error("Please fill all fields");
+    return;
+  }
+
+  if (password !== confirmPass) {
+    toast.error("Passwords do not match");
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    const res = await resetPasswordRequest(email, Number(otp), password);
+
+    if (res.success) {
+      toast.success(res.message || "Password reset successful!");
+      router.push("/login");
+    } else {
+      toast.error(res.message || "Failed to reset password");
     }
 
-    if (password !== confirmPass) {
-      toast.error("Passwords do not match");
-      return;
-    }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    const msg =
+      error?.message ||
+      error?.response?.data?.message ||
+      "Something went wrong";
 
-    setLoading(true);
+    toast.error(msg);
+    console.log("RESET ERROR:", error);
+  } finally {
+    setLoading(false);
+  }
+};
 
-    try {
-      // ⭐ Backend API here:
-      const res = await  resetPasswordRequest(email, Number(otp), password);
-      if(res.success){
-        toast.success("Password reset successful!");
-        router.push("/login");
-      }
-   else {
-        toast.error(res.message || "Failed to reset password");
-      }
-    } catch (error) {
-      toast.error("Something went wrong");
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black p-4">

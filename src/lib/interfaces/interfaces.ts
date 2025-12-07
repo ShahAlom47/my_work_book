@@ -6,6 +6,8 @@ export interface UserData {
   email: string;
   name: string;
   password: string;
+  resetOtp?: number;
+  resetOtpExpire?: number;
   role?: string;
   image?: string | null;
   createdAt?: Date | string;
