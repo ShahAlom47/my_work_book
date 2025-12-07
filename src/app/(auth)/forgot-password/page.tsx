@@ -16,6 +16,7 @@ interface ForgotPasswordResponse {
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [successMsg, setSuccessMsg] = useState(false); // ⭐ NEW
 
   const sendOtpEmail = async (otp: number, userEmail: string, reset_link: string) => {
     try {
@@ -30,7 +31,6 @@ const ForgotPassword = () => {
         },
         process.env.NEXT_PUBLIC_EMAIL_PUBLIC_KEY!
       );
-      toast.success("OTP has been sent to your email.");
     } catch (err) {
       console.log(err);
       toast.error("Failed to send OTP email.");
@@ -46,6 +46,7 @@ const ForgotPassword = () => {
     }
 
     setLoading(true);
+    setSuccessMsg(false);
 
     try {
       const response = await forgotPasswordRequest(email);
@@ -66,13 +67,12 @@ const ForgotPassword = () => {
 
         await sendOtpEmail(otp, userEmail, reset_link);
 
-        toast.success(res.message || "Check your email for OTP!");
+        setSuccessMsg(true); // ⭐ SUCCESS MESSAGE SHOW
         setEmail("");
       } else {
         toast.error(res.message || "Failed to send OTP.");
       }
-    } catch (error) {
-      console.error("Error:", error);
+    } catch {
       toast.error("Something went wrong. Try again.");
     } finally {
       setLoading(false);
@@ -82,19 +82,33 @@ const ForgotPassword = () => {
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black p-4">
 
-      {/* ⭐ LOADING OVERLAY (Visible when loading=true) */}
+      {/* ⭐ LOADING OVERLAY */}
       {loading && (
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex flex-col justify-center items-center z-50 text-white px-6">
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex flex-col justify-center items-center z-[100] text-white px-6">
           <div className="animate-spin h-10 w-10 border-4 border-gray-300 border-t-transparent rounded-full mb-4"></div>
           <h3 className="text-xl font-semibold">Sending OTP...</h3>
-          <p className="text-gray-300 text-center mt-2 max-w-xs">
-            Please wait a moment.  
-            OTP & Reset Password link is being sent to your email.  
-            Click the link in your email to reset your password.
-          </p>
         </div>
       )}
 
+      {/* ⭐ SUCCESS MESSAGE OVERLAY */}
+      {successMsg && (
+        <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex flex-col justify-center items-center z-[100] text-white px-8 text-center">
+          <h3 className="text-2xl font-bold mb-3">OTP Sent Successfully 🎉</h3>
+          <p className="text-gray-200 text-lg max-w-md">
+            OTP এবং Reset Password Link আপনার ইমেইলে পাঠানো হয়েছে।  
+            অনুগ্রহ করে আপনার ইমেইল চেক করুন এবং লিঙ্কে ক্লিক করে পাসওয়ার্ড রিসেট করুন।
+          </p>
+
+          <button
+            className="mt-6 px-5 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white"
+            onClick={() => setSuccessMsg(false)}
+          >
+            Okay
+          </button>
+        </div>
+      )}
+
+      {/* Main Form */}
       <div className="backdrop-blur-xl bg-white/10 border border-white/20 shadow-2xl rounded-xl px-8 pt-6 pb-8 lg:w-4/12 md:w-6/12 sm:w-9/12 w-full">
         <h2 className="text-2xl font-semibold text-center mb-2 text-white">
           Forgot Password?
@@ -120,7 +134,7 @@ const ForgotPassword = () => {
             className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
             disabled={loading}
           >
-            {loading ? "Processing..." : "Send OTP"}
+            Send OTP
           </button>
         </form>
 
