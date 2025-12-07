@@ -17,20 +17,19 @@ const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // ⭐ EmailJS দিয়ে OTP পাঠানোর function
-  const sendOtpEmail = async (otp: number, userEmail: string,reset_link:string) => {
+  const sendOtpEmail = async (otp: number, userEmail: string, reset_link: string) => {
     try {
-    await emailjs.send(
-  process.env.NEXT_PUBLIC_EMAIL_SERVICE_ID!,
-  process.env.NEXT_PUBLIC_EMAIL_TEMPLATE_ID!,
-  {
-    user_email: userEmail,   // To Email
-    name: "My App",          // From Name
-    reset_link: reset_link,   // OTP link
-    otp: otp                 // OTP
-  },
-  process.env.NEXT_PUBLIC_EMAIL_PUBLIC_KEY!
-);
+      await emailjs.send(
+        process.env.NEXT_PUBLIC_EMAIL_SERVICE_ID!,
+        process.env.NEXT_PUBLIC_EMAIL_TEMPLATE_ID!,
+        {
+          user_email: userEmail,
+          name: "My App",
+          reset_link: reset_link,
+          otp: otp
+        },
+        process.env.NEXT_PUBLIC_EMAIL_PUBLIC_KEY!
+      );
       toast.success("OTP has been sent to your email.");
     } catch (err) {
       console.log(err);
@@ -38,60 +37,65 @@ const ForgotPassword = () => {
     }
   };
 
-  // ⭐ Main Submit Handler
- const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  if (!email) {
-    toast.error("Please enter your email address.");
-    return;
-  }
-
-  setLoading(true);
-
-  try {
-    // Backend request → OTP generate করে দিবে
-    const response = await forgotPasswordRequest(email);
-    const res = response as ForgotPasswordResponse;
-
-    if (!res || !res.data) {
-      toast.error("Something went wrong!");
+    if (!email) {
+      toast.error("Please enter your email address.");
       return;
     }
 
-    if (res.success) {
-      const userEmail = res.data.email;
-      const otp = res.data.otp;
+    setLoading(true);
 
-      if (!userEmail || !otp) {
-        toast.error("Invalid response from server.");
+    try {
+      const response = await forgotPasswordRequest(email);
+      const res = response as ForgotPasswordResponse;
+
+      if (!res || !res.data) {
+        toast.error("Something went wrong!");
         return;
       }
-      const reset_link = `http://localhost:3000/reset-password?email=${encodeURIComponent(userEmail)}&otp=${otp}`;
 
-      // EmailJS দিয়ে OTP পাঠানো
-      await sendOtpEmail(otp, userEmail, reset_link);
+      if (res.success) {
+        const userEmail = res.data.email;
+        const otp = res.data.otp;
 
-      toast.success(res.message || "Check your email for OTP!");
-      setEmail("");
-    } else {
-      toast.error(res.message || "Failed to send OTP.");
+        const reset_link = `http://localhost:3000/reset-password?email=${encodeURIComponent(
+          userEmail
+        )}&otp=${otp}`;
+
+        await sendOtpEmail(otp, userEmail, reset_link);
+
+        toast.success(res.message || "Check your email for OTP!");
+        setEmail("");
+      } else {
+        toast.error(res.message || "Failed to send OTP.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("Something went wrong. Try again.");
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    console.error("Error:", error);
-    toast.error("Something went wrong. Try again.");
-  } finally {
-    setLoading(false);
-  }
-};
-
+  };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black p-4">
-      <div
-        className="backdrop-blur-xl bg-white/10 border border-white/20 shadow-2xl 
-      rounded-xl px-8 pt-6 pb-8 lg:w-4/12 md:w-6/12 sm:w-9/12 w-full"
-      >
+    <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black p-4">
+
+      {/* ⭐ LOADING OVERLAY (Visible when loading=true) */}
+      {loading && (
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex flex-col justify-center items-center z-50 text-white px-6">
+          <div className="animate-spin h-10 w-10 border-4 border-gray-300 border-t-transparent rounded-full mb-4"></div>
+          <h3 className="text-xl font-semibold">Sending OTP...</h3>
+          <p className="text-gray-300 text-center mt-2 max-w-xs">
+            Please wait a moment.  
+            OTP & Reset Password link is being sent to your email.  
+            Click the link in your email to reset your password.
+          </p>
+        </div>
+      )}
+
+      <div className="backdrop-blur-xl bg-white/10 border border-white/20 shadow-2xl rounded-xl px-8 pt-6 pb-8 lg:w-4/12 md:w-6/12 sm:w-9/12 w-full">
         <h2 className="text-2xl font-semibold text-center mb-2 text-white">
           Forgot Password?
         </h2>
@@ -101,9 +105,7 @@ const ForgotPassword = () => {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="text-sm font-medium text-white">
-              Email Address
-            </label>
+            <label className="text-sm font-medium text-white">Email Address</label>
             <input
               type="email"
               placeholder="example@gmail.com"
@@ -118,7 +120,7 @@ const ForgotPassword = () => {
             className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
             disabled={loading}
           >
-            {loading ? "Sending OTP..." : "Send OTP"}
+            {loading ? "Processing..." : "Send OTP"}
           </button>
         </form>
 
