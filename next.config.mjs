@@ -2,13 +2,8 @@ import withPWA from "next-pwa";
 
 const baseConfig = {
   reactStrictMode: true,
-
-  // This disables Turbopack-based config requirement
   turbopack: {},
-
-  webpack: (config) => {
-    return config;
-  },
+  webpack: (config) => config,
 };
 
 export default withPWA({
