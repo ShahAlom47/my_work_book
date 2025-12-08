@@ -22,22 +22,30 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
+      <head>
+        {/* PWA Manifest */}
+        <link rel="manifest" href="/site.webmanifest" />
+        <meta name="theme-color" content="#ffffff" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+      </head>
+
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased  bg-blur
-        min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black  text-white
-        `}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-blur
+          min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white`}
       >
-        
         <Providers>
           <Navbar />
-        {children}
+          {children}
         </Providers>
-        <InstallPrompt />
+
+        {/* Floating Install Button */}
+        <div className="fixed bottom-4 right-4 z-50">
+          <InstallPrompt />
+        </div>
       </body>
     </html>
   );

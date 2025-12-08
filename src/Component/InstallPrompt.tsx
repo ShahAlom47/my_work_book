@@ -48,7 +48,7 @@ export default function InstallPrompt() {
       {showInstall && (
         <button
           onClick={installApp}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+          className=" px-4 py-1 bg-blue-600 text-white rounded-sm mx-auto hover:bg-blue-700 transition"
         >
           Download App
         </button>
