@@ -11,7 +11,6 @@ export async function PATCH(
 
     const { searchParams } = new URL(req.url);
     const entryId = searchParams.get("entryId");
-    console.log(userId,entryId,'idddd')
 
     if (!userId || !entryId) {
       return NextResponse.json(

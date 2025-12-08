@@ -31,7 +31,7 @@ const [password, setPassword] = useState<string>("123456");
     });
 
     stopLoading();
-    console.log("Login response:", res);
+ 
 
  if (res?.ok) {
   toast.success("Logged in successfully!");

@@ -52,9 +52,10 @@ export async function DELETE(
     }
 
     // 🔥 Step 1: Delete entries related to this user
-    const deletedEntries = await entries.deleteMany({ userId: id });
+    // const deletedEntries = await entries.deleteMany({ userId: id });
+    await entries.deleteMany({ userId: id });
 
-    console.log("ENTRIES DELETED:", deletedEntries.deletedCount);
+   
 
     // 🔥 Step 2: Delete user account
     const deletedUser = await users.deleteOne({ _id: new ObjectId(id) });

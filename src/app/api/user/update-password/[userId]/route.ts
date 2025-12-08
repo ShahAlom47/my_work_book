@@ -20,7 +20,7 @@ export async function PATCH(
     const body = await req.json();
     const { oldPassword, newPassword } = body;
 
-    console.log("PASSWORD CHANGE BODY:", body, id);
+
 
     // Validation
     if (!oldPassword || !newPassword) {

@@ -55,7 +55,7 @@ useEffect(() => {
         ...data,
         addAmount: Number(data.addAmount),
       };
-      console.log(data)
+
 
       const response = await updateEntryData(
         entryData.entryDataId || "",

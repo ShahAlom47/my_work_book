@@ -45,7 +45,6 @@ const Entries = () => {
   if (isLoading) return <div className="text-center mt-10"><Loading></Loading></div>;
   if (!data) return <p>No entries found.</p>;
 
-  console.log(data);
   const handleDelete = async (entryDataId: string) => {
     const ok = await confirm({
       title: "Delete Entry",
@@ -97,7 +96,7 @@ const Entries = () => {
         <EntryDataTable
           userId={String(userId)}
           entries={data.entryData || []}
-          onTitleClick={(id) => console.log("Title clicked:", id)}
+          onTitleClick={(id) => {}}
           entryId={entryId}
           handleDelete={(id) => handleDelete(id)}
         />

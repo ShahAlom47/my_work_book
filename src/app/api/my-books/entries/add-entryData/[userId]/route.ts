@@ -17,7 +17,6 @@ export async function POST(
     const { date, placeName, description, addAmount } = body;
 
 
-console.log(userId,entryId ,'user and entry id in add entry data api');
 
 
     if (!userId || !ObjectId.isValid(userId)) {

@@ -35,9 +35,9 @@ const [showInstall, setShowInstall] = useState(false);
     const { outcome } = await deferredPrompt.userChoice;
 
     if (outcome === "accepted") {
-      console.log("User accepted the installation");
+      // console.log("User accepted the installation");
     } else {
-      console.log("User dismissed the installation");
+      // console.log("User dismissed the installation");
     }
 
     setDeferredPrompt(null);

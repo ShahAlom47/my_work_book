@@ -32,7 +32,7 @@ const MyWorkBook = () => {
     enabled: !!userId,
     queryFn: async () => {
       const res = await fetchEntriesName(String(userId));
-      console.log(res)
+
       return res.data as Entry[];
     },
   });

@@ -7,7 +7,7 @@ export async function POST(req: Request) {
   try {
    const body = await req.json();
     const { entryName,userId, createdAt, updatedAt } = body;
-    console.log(body)
+
 
     // Validate payload
     if (!entryName || entryName.trim().length < 1) {
