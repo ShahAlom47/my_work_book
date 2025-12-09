@@ -14,7 +14,8 @@ export interface IApiResponse<T = unknown> {
 
 
 const api = axios.create({
-  baseURL: "http://localhost:3000/api",
+  // baseURL: "http://localhost:3000/api",
+  baseURL: "https://myworkbook.vercel.app/api",
 });
 
 export const request = async <T>(

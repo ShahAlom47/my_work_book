@@ -13,12 +13,20 @@ interface ForgotPasswordResponse {
   };
 }
 
+// const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+const baseUrl =
+  process.env.NEXT_PUBLIC_BASE_URL || "https://myworkbook.vercel.app";
+
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [successMsg, setSuccessMsg] = useState(false); // ⭐ NEW
 
-  const sendOtpEmail = async (otp: number, userEmail: string, reset_link: string) => {
+  const sendOtpEmail = async (
+    otp: number,
+    userEmail: string,
+    reset_link: string
+  ) => {
     try {
       await emailjs.send(
         process.env.NEXT_PUBLIC_EMAIL_SERVICE_ID!,
@@ -27,7 +35,7 @@ const ForgotPassword = () => {
           user_email: userEmail,
           name: "My App",
           reset_link: reset_link,
-          otp: otp
+          otp: otp,
         },
         process.env.NEXT_PUBLIC_EMAIL_PUBLIC_KEY!
       );
@@ -61,7 +69,7 @@ const ForgotPassword = () => {
         const userEmail = res.data.email;
         const otp = res.data.otp;
 
-        const reset_link = `http://localhost:3000/reset-password?email=${encodeURIComponent(
+        const reset_link = `${baseUrl}/reset-password?email=${encodeURIComponent(
           userEmail
         )}&otp=${otp}`;
 
@@ -81,7 +89,6 @@ const ForgotPassword = () => {
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black p-4">
-
       {/* ⭐ LOADING OVERLAY */}
       {loading && (
         <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex flex-col justify-center items-center z-[100] text-white px-6">
@@ -95,8 +102,8 @@ const ForgotPassword = () => {
         <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex flex-col justify-center items-center z-[100] text-white px-8 text-center">
           <h3 className="text-2xl font-bold mb-3">OTP Sent Successfully 🎉</h3>
           <p className="text-gray-200 text-lg max-w-md">
-            OTP এবং Reset Password Link আপনার ইমেইলে পাঠানো হয়েছে।  
-            অনুগ্রহ করে আপনার ইমেইল চেক করুন এবং লিঙ্কে ক্লিক করে পাসওয়ার্ড রিসেট করুন।
+            OTP এবং Reset Password Link আপনার ইমেইলে পাঠানো হয়েছে। অনুগ্রহ করে
+            আপনার ইমেইল চেক করুন এবং লিঙ্কে ক্লিক করে পাসওয়ার্ড রিসেট করুন।
           </p>
 
           <button
@@ -119,7 +126,9 @@ const ForgotPassword = () => {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="text-sm font-medium text-white">Email Address</label>
+            <label className="text-sm font-medium text-white">
+              Email Address
+            </label>
             <input
               type="email"
               placeholder="example@gmail.com"
