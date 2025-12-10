@@ -36,19 +36,19 @@ const EntryTable: React.FC<EntryTableProps> = ({
           <tr
           
             key={title._id as string}
-            className="hover:bg-gray-700 transition cursor-pointer my-auto"
+            className="hover:bg-gray-700 transition cursor-pointer my-auto border"
           >
             {/* Title Cell */}
             <td
-              className=" p-1 border"
-              onClick={() =>handleNavigate(title?._id as string)}
+              className=" p-1  border"
+              onClick={handleNavigate(title?._id as string)}
               
             >
               {title.entryName}
             </td>
 
             {/* Action Buttons */}
-            <td className="p-1  flex items-center justify-center  mt-1 gap-3">
+            <td className="p-1  flex items-center justify-center  mt-1 gap-3 ">
               <button
                 onClick={(e) => {
                   e.stopPropagation(); // 🔥 prevent parent click
