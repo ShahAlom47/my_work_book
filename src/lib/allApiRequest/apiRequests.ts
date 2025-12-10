@@ -12,11 +12,16 @@ export interface IApiResponse<T = unknown> {
 }
 
 
+const baseURL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+// const baseURL = process.env.NEXT_PUBLIC_BASE_URL || "https://myworkbook.vercel.app";
+
 
 const api = axios.create({
   // baseURL: "http://localhost:3000/api",
-  baseURL: "https://myworkbook.vercel.app/api",
-});
+      // baseURL: "https://myworkbook.vercel.app/api",
+  baseURL: `${baseURL}/api`,
+
+    });
 
 export const request = async <T>(
   method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE",

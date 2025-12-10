@@ -13,8 +13,8 @@ import PrimaryButton from "@/Component/PrimaryButton";
 import SocialLogin from "@/Component/SocialLogin";
 
 const Login: React.FC = () => {
-const [email, setEmail] = useState<string>("user1@gmail.com");
-const [password, setPassword] = useState<string>("123456");
+const [email, setEmail] = useState<string>("");
+const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const { loading, startLoading, stopLoading } = useLoading();
   const router = useRouter();
