@@ -32,11 +32,11 @@ export function useConfirm() {
   const ConfirmModal = options
     ? createPortal(
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 ">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-[90%] max-w-md">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">
+          <div className="bg-gray-700 dark:bg-gray-800 p-6 rounded-lg shadow-lg w-[90%] max-w-md">
+            <h3 className="text-lg font-semibold text-gray-100 dark:text-white mb-4">
               {options.title || "Are you sure?"}
             </h3>
-            <p className="text-gray-600 dark:text-gray-300 mb-6">
+            <p className="text-gray-100 dark:text-gray-300 mb-6">
               {options.message}
             </p>
             <div className="flex justify-end gap-3">

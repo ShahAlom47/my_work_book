@@ -10,7 +10,7 @@ import { signIn } from "next-auth/react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import PrimaryButton from "@/Component/PrimaryButton";
-import SocialLogin from "@/Component/SocialLogin";
+// import SocialLogin from "@/Component/SocialLogin";
 
 const Login: React.FC = () => {
 const [email, setEmail] = useState<string>("");
@@ -101,7 +101,7 @@ const [password, setPassword] = useState<string>("");
         </PrimaryButton>
 
         {/* Social Login */}
-        <SocialLogin></SocialLogin>
+        {/* <SocialLogin></SocialLogin> */}
 
         {/* Register & Home Links */}
         <div className="text-center text-sm text-white space-y-3 flex flex-col mt-4">

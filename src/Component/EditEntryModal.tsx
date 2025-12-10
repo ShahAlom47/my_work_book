@@ -79,14 +79,14 @@ useEffect(() => {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex justify-center items-center p-2 scro">
-      <div className="bg-white p-5 rounded shadow-lg w-full md:w-1/3">
+      <div className="bg-gray-600 p-5 rounded shadow-lg w-full md:w-1/3">
         <h2 className="text-lg font-bold mb-4">Edit Entry</h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
 
           {/* Date */}
           <div className="flex flex-col gap-1">
-            <label className="font-medium text-gray-700">Date : MM/DD/YYYY</label>
+            <label className="font-medium text-gray-100">Date : MM/DD/YYYY</label>
             <input
               type="date"
               {...register("date")}
@@ -96,7 +96,7 @@ useEffect(() => {
 
           {/* Place Name */}
           <div className="flex flex-col gap-1">
-            <label className="font-medium text-gray-700">Place Name</label>
+            <label className="font-medium text-gray-100">Place Name</label>
             <input
               {...register("placeName")}
               className="border p-2 rounded"
@@ -106,7 +106,7 @@ useEffect(() => {
 
           {/* Description */}
           <div className="flex flex-col gap-1">
-            <label className="font-medium text-gray-700">Comment</label>
+            <label className="font-medium text-gray-100">Comment</label>
             <input
               {...register("description")}
               className="border p-2 rounded"
@@ -116,7 +116,7 @@ useEffect(() => {
 
           {/* Amount */}
           <div className="flex flex-col gap-1">
-            <label className="font-medium text-gray-700">Amount</label>
+            <label className="font-medium text-gray-100">Amount</label>
             <input
               type="number"
               {...register("addAmount", { valueAsNumber: true })}
@@ -128,7 +128,7 @@ useEffect(() => {
           <div className="flex justify-end gap-3 mt-5">
             <button
               type="button"
-              className="px-3 py-1 bg-gray-400 text-white rounded"
+              className="px-3 py-1 bg-gray-700 text-white rounded"
               onClick={onClose}
               disabled={isSubmitting}
             >

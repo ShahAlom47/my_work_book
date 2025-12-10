@@ -41,7 +41,7 @@ const SearchFilter: React.FC<SearchFilterProps> = ({
       {/* Filter Select */}
       <select
         onChange={(e) => onFilterChange(e.target.value as FilterOption)}
-        className="border rounded-md px-4 py-1 w-full md:w-48 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="border rounded-md px-4 py-1 w-full bg-gray-700 md:w-32 focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
         <option value="All">All</option>
         <option value="This Week">This Week</option>

@@ -9,7 +9,7 @@ import { handleApiError } from "@/utils/handleApiError";
 import { useRouter } from "next/navigation";
 import { useLoading } from "@/hooks/useLoading";
 import PrimaryButton from "@/Component/PrimaryButton";
-import SocialLogin from "@/Component/SocialLogin";
+// import SocialLogin from "@/Component/SocialLogin";
 
 export interface IFormInput {
   name: string;
@@ -123,7 +123,7 @@ const Register: React.FC = () => {
         Register
       </PrimaryButton>
 
-      <SocialLogin />
+      {/* <SocialLogin /> */}
 
       {/* Links */}
       <div className="text-center text-sm text-gray-200 mt-4">

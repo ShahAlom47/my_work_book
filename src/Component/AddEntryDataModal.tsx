@@ -60,7 +60,7 @@ const AddEntryDataModal: React.FC<Props> = ({ entryId, userId, onClose,onSuccess
 
   return (
     <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 max-h-screen overflow-y-scroll p-2">
-      <div className="bg-white p-6 rounded-md md:w-6/12 w-full shadow-lg">
+      <div className="bg-gray-700  p-6 rounded-md md:w-6/12 w-full shadow-lg">
         <h2 className="text-xl font-semibold mb-5 text-center">Add Entry Data</h2>
 
         <div className="mb-4">
