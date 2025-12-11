@@ -2,6 +2,7 @@
 
 import { updateEntryData } from "@/lib/allApiRequest/apiRequests";
 import { EntryData } from "@/lib/interfaces/interfaces";
+import { queryClient } from "@/Providers/Provider";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -68,6 +69,7 @@ useEffect(() => {
         toast.success("Updated Successfully!");
         onClose();
         onUpdated();
+        queryClient.invalidateQueries({ queryKey: ["entries", entryId, userId],});
       } else {
         toast.error(response.message || "Update failed!");
       }
