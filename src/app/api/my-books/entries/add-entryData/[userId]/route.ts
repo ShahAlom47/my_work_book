@@ -43,10 +43,13 @@ export async function POST(
       updatedAt: new Date().toISOString(),
     };
 
-    const updateResult = await entriesCollection.updateOne(
-      { _id: new ObjectId(entryId), userId },
-      { $push: { entryData: newEntryData } }
-    );
+   const updateResult = await entriesCollection.updateOne(
+  { _id: new ObjectId(entryId), userId },
+  {
+    $push: { entryData: newEntryData },
+    $set: { updatedAt: new Date().toISOString() }
+  }
+)
 
     if (updateResult.modifiedCount === 0) {
       return NextResponse.json({ success: false, message: "Entry not found or not updated" }, { status: 404 });

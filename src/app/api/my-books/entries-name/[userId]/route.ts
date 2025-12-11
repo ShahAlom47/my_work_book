@@ -27,7 +27,7 @@ export async function GET(
           projection: { entryName: 1, userId: 1, createdAt: 1, updatedAt: 1 }, // only needed fields
         }
       )
-      .sort({ createdAt: -1 }) // latest first
+      .sort({ updatedAt: -1 }) // latest first
       .toArray();
 
     return NextResponse.json(

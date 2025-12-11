@@ -24,22 +24,25 @@ export async function PATCH(
 
     const collection = await getEntriesCollection();
 
-    const updated = await collection.updateOne(
-      {
-        _id: new ObjectId(entryId),
-        userId: userId,
-        "entryData.entryDataId": entryDataId,
-      },
-      {
-        $set: {
-          "entryData.$.date": new Date(body.date).toISOString(),
-          "entryData.$.placeName": body.placeName,
-          "entryData.$.addAmount": body.addAmount,
-          "entryData.$.description": body.description,
-          "entryData.$.updatedAt": new Date().toISOString(),
-        },
-      }
-    );
+const updated = await collection.updateOne(
+  {
+    _id: new ObjectId(entryId),
+    userId: userId,
+    "entryData.entryDataId": entryDataId,
+  },
+  {
+    $set: {
+      "entryData.$.date": new Date(body.date).toISOString(),
+      "entryData.$.placeName": body.placeName,
+      "entryData.$.addAmount": body.addAmount,
+      "entryData.$.description": body.description,
+      "entryData.$.updatedAt": new Date().toISOString(),
+
+      // 🔥 Main entry updatedAt update here:
+      updatedAt: new Date().toISOString(),
+    },
+  }
+);
 
     if (updated.matchedCount === 0) {
       return NextResponse.json(
