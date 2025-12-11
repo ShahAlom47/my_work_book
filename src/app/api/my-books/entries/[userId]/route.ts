@@ -99,8 +99,8 @@ export async function GET(
     // Sort by updatedAt DESC
     filteredData.sort(
       (a, b) =>
-        new Date(b.updatedAt ?? 0).getTime() -
-        new Date(a.updatedAt ?? 0).getTime()
+        new Date(b.date ?? 0).getTime() -
+        new Date(a.date ?? 0).getTime()
     );
 // ----------------------------------------
 // ⭐ CALCULATIONS: totalDays, salary, remain
