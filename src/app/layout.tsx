@@ -26,6 +26,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <title>My Work Book</title>
+        <meta name="description" content="A personal collection of my projects, notes, and experiments." />
         {/* PWA Manifest */}
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="theme-color" content="#ffffff" />
