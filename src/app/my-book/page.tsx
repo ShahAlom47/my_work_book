@@ -86,7 +86,7 @@ const MyWorkBook = () => {
   const handleDelete = async (id: string) => {
 
     const ok = await confirm({
-      title: "Delete Entry",
+      title: `Delete  ${entries.find(e => e._id === id)?.entryName}  `,
       message: "Are you sure you want to delete this entry?",
       confirmText: "Yes, Delete",
       cancelText: "Cancel",
