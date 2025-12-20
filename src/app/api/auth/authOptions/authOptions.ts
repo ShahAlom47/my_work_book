@@ -115,18 +115,33 @@ export const authOptions: NextAuthOptions = {
       },
     }),
     // 🟢 Google OAuth Provider (optional)
-
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
-  
   ],
 
   // ✅ 2. Session Configuration
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
+
+  // 🔥 2a. Cookie configuration for PWA/mobile session persistence
+  // Without this, standalone PWA mode may lose session after closing/reopening the app
+  cookies: {
+    sessionToken: {
+      name:
+        process.env.NODE_ENV === "production"
+          ? "__Secure-next-auth.session-token"
+          : "next-auth.session-token",
+      options: {
+        httpOnly: true,           // Only accessible by server
+        sameSite: "lax",          // Mobile & PWA friendly
+        path: "/",
+        secure: process.env.NODE_ENV === "production", // only use secure cookies in production
+      },
+    },
   },
 
   // ✅ 3. JWT Callback — stores custom user info in token
@@ -158,12 +173,11 @@ export const authOptions: NextAuthOptions = {
   // ✅ 5. Custom Pages (login, error)
   pages: {
     signIn: "/login", // custom login page
-    error: "/login", // redirect to login on auth error
+    error: "/login",  // redirect to login on auth error
   },
-
-
 
   // ✅ 6. Secret for signing JWT tokens
   secret: process.env.NEXTAUTH_SECRET,
 };
+
 export default authOptions;
