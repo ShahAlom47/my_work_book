@@ -53,8 +53,7 @@ export function useConfirm() {
             {options.requireText && (
               <div className="mb-4">
                 <p className="text-sm text-gray-300 mb-1">
-                  Type <span className="font-semibold">{options.requireText}</span>{" "}
-                  to confirm
+                  Type <span className="font-semibold text text-red-400">{options.requireText}</span> to confirm
                 </p>
                 <input
                   type="text"

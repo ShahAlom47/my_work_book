@@ -90,6 +90,10 @@ const MyWorkBook = () => {
       message: "Are you sure you want to delete this entry?",
       confirmText: "Yes, Delete",
       cancelText: "Cancel",
+
+          // 🔥 NEW FEATURE
+    requireText: `${entries.find(e => e._id === id)?.entryName}`,
+    inputPlaceholder: "Type Entry name to confirm",
     });
 
     if (!ok) return;
