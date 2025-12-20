@@ -74,7 +74,7 @@ export default function Navbar() {
                     onClick={() => setMenuOpen((s) => !s)}
                     className="flex items-center gap-2 px-3 py-1.5 rounded-md hover:bg-gray-100 transition"
                   >
-                    <span className="font-medium text-sm">{user?.name}</span>
+                    <span className="font-medium text-sm capitalize">{user?.name}</span>
 
                     <svg
                       width="18"
