@@ -35,10 +35,9 @@ const Banner = () => {
       <div className="absolute inset-0 bg-black/10 md:bg-black/10"></div>
 
       {/* Optional subtle bottom gradient to keep text readable on top/bottom */}
-      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black/15 via-transparent to-transparent pointer-events-none"></div>
-
-      {/* Content */}
-      <div className="relative z-10 text-center px-4 max-w-md mx-auto">
+      <div className="  absolute inset-x-0 bottom-2  bg-gradient-to-t from-black/15 via-transparent to-transparent pointer-events-none">
+        {/* Content */}
+      <div className="relative z-10 text-center px-4 max-w-md mx-auto  bottom-1">
 
         {!user ? (
           <div className="space-y-3 mt-20 md:mt-0">
@@ -69,6 +68,9 @@ const Banner = () => {
           </div>
         )}
       </div>
+      </div>
+
+    
     </section>
   );
 };
