@@ -27,7 +27,7 @@ const HeaderSummary: React.FC<HeaderSummaryProps> = ({
 
       <div className="p-4 rounded-xl bg-gray-500/50 shadow text-center">
         <h3 className="text-sm font-semibold text-gray-50">Total Salary</h3>
-        <p className="text-xl font-bold text-blue-600">৳ {totalSalary}</p>
+        <p className="text-xl font-bold text-blue-300">৳ {totalSalary}</p>
       </div>
 
       <div className="p-4 rounded-xl bg-gray-500/50 shadow text-center">
@@ -37,7 +37,7 @@ const HeaderSummary: React.FC<HeaderSummaryProps> = ({
 
       <div className="p-4 rounded-xl bg-gray-500/50 shadow text-center">
         <h3 className="text-sm font-semibold text-gray-50">Remaining Salary</h3>
-        <p className="text-xl font-bold text-red-400">৳ {remainingSalary}</p>
+        <p className="text-xl font-bold text-yellow-400">৳ {remainingSalary}</p>
       </div>
     
 
