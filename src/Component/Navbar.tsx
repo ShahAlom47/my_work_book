@@ -23,7 +23,7 @@ export default function Navbar() {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-40 bg-white backdrop-blur-md border-b border-gray-200">
+      <header className="fixed top-0 left-0 right-0 z-40 bg-yellow-400 backdrop-blur-md border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14 text-black">
             
