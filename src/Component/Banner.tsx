@@ -10,7 +10,7 @@ const Banner = () => {
   const { user } = useUser();
 
   return (
-    <section className="relative max-w-7xl mx-auto h-[490px] sm:h-[590px] md:h-[750px] lg:h-[750px] rounded-sm  overflow-hidden shadow-md flex items-center justify-center">
+    <section className="relative max-w-7xl  mx-auto h-[490px] sm:h-[590px] md:h-[750px] lg:h-[750px] rounded-sm  overflow-hidden shadow-md flex items-center justify-center">
       {/* Desktop Image - slightly brightened */}
       <Image
         src={imgFull}

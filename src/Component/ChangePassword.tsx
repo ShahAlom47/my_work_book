@@ -79,7 +79,7 @@ const ChangePassword = () => {
       <button
         onClick={updatePassword}
         disabled={loading}
-        className="px-5 py-1 bg-green-600 text-white rounded-sm hover:bg-green-700 transition"
+        className="px-5 py-1 bg-green-600 text-white rounded-sm text-sm hover:bg-green-700 transition"
       >
         {loading ? "Updating..." : "Update Password"}
       </button>

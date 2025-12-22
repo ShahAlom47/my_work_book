@@ -19,7 +19,7 @@ const DangerZone = () => {
 
         <button
           onClick={() => setOpenModal(true)}
-          className="px-5 py-1 bg-red-600 text-white rounded-sm hover:bg-red-700 transition"
+          className="px-5 py-1 bg-red-600 text-sm text-white rounded-sm hover:bg-red-700 transition"
         >
           Delete Account
         </button>

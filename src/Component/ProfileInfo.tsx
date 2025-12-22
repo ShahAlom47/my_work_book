@@ -61,7 +61,7 @@ const ProfileInfo = () => {
       <button
         onClick={handleNameUpdate}
         disabled={loading}
-        className={`px-5 py-1 rounded-sm text-white transition ${
+        className={`px-5 py-1 rounded-sm text-sm text-white transition ${
           loading ? "bg-blue-400" : "bg-blue-600 hover:bg-blue-700"
         }`}
       >
