@@ -18,7 +18,7 @@ const Logo = ({ className }: PropsType) => {
                  overflow-hidden"
     >
       <Image
-        src={'/logo.png'}
+        src={'/logo-removebg.png'}
         alt="Logo"
         width={300} // default width
         height={200} // default height

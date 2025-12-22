@@ -43,15 +43,15 @@ export default function Navbar() {
             </div>
 
             {/* Desktop Nav */}
-            <nav className="hidden md:flex items-center gap-4">
+            <nav className="hidden md:flex items-center gap-4 bg-blue-900 rounded-full ">
               {navLinks.map((l) => (
                 <Link
                   key={l.href}
                   href={l.href}
-                  className={`px-3 py-1 rounded-sm text-sm transition ${
+                  className={`px-3 py-1  text-sm transition text-white rounded-full ${
                     pathname === l.href
-                      ? "bg-gray-300 font-medium"
-                      : " hover:bg-gray-100"
+                      ? "bg-blue-950 font-medium "
+                      : " hover:bg-blue-900"
                   }`}
                 >
                   {l.label}
