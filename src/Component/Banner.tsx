@@ -10,7 +10,7 @@ const Banner = () => {
   const { user } = useUser();
 
   return (
-    <section className="relative max-w-7xl  mx-auto h-[490px] sm:h-[590px] md:h-[750px] lg:h-[750px] rounded-sm  overflow-hidden shadow-md flex items-center justify-center">
+    <section className="relative max-w-7xl  mx-auto h-[590px] sm:h-[590px] md:h-[750px] lg:h-[750px] rounded-sm  overflow-hidden shadow-md flex items-center justify-center">
       {/* Desktop Image - slightly brightened */}
       <Image
         src={imgFull}
@@ -29,7 +29,7 @@ const Banner = () => {
         priority
       />
 
-      <div className="h-full flex justify-center items-end z-50 py-4 text-center px-4 max-w-md mx-auto  bottom-1 w-full ">
+      <div className="h-full flex justify-center items-end z-30 py-4 text-center px-4 max-w-md mx-auto  bottom-1 w-full ">
         {!user ? (
           <div className="space-y-3 mt-20 md:mt-0">
             <p className="text-base sm:text-lg text-white drop-shadow-sm bg-black/40 inline-block px-2 rounded-md">
@@ -44,7 +44,7 @@ const Banner = () => {
             </Link>
           </div>
         ) : (
-          <div className="space-y-3 mt-20 md:mt-0 flex flex-col items-center">
+          <div className="space-y-3 mt-30  md:mt-0 flex flex-col items-center">
             <p className="text-base sm:text-lg text-white drop-shadow-sm bg-black/40 inline-block px-2 rounded-md">
               Welcome back,{" "}
               <span className="font-semibold">{user?.name || "User"}</span> 👋

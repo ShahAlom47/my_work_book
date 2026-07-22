@@ -2,29 +2,46 @@
 
 import { useEffect, useState } from "react";
 
-// Custom type for BeforeInstallPromptEvent
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
+  userChoice: Promise<{
+    outcome: "accepted" | "dismissed";
+    platform: string;
+  }>;
 }
 
 export default function InstallPrompt() {
- const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-const [showInstall, setShowInstall] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] =
+    useState<BeforeInstallPromptEvent | null>(null);
 
+  const [showInstall, setShowInstall] = useState(false);
 
   useEffect(() => {
-    const handler = (e: Event) => {
-      const event = e as BeforeInstallPromptEvent;
-      event.preventDefault();
-      setDeferredPrompt(event);
+    const handleBeforeInstallPrompt = (e: Event) => {
+      e.preventDefault();
+
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
       setShowInstall(true);
     };
 
-    window.addEventListener("beforeinstallprompt", handler);
+    const handleAppInstalled = () => {
+      setDeferredPrompt(null);
+      setShowInstall(false);
+    };
+
+    window.addEventListener(
+      "beforeinstallprompt",
+      handleBeforeInstallPrompt
+    );
+
+    window.addEventListener("appinstalled", handleAppInstalled);
 
     return () => {
-      window.removeEventListener("beforeinstallprompt", handler);
+      window.removeEventListener(
+        "beforeinstallprompt",
+        handleBeforeInstallPrompt
+      );
+      window.removeEventListener("appinstalled", handleAppInstalled);
     };
   }, []);
 
@@ -32,28 +49,25 @@ const [showInstall, setShowInstall] = useState(false);
     if (!deferredPrompt) return;
 
     await deferredPrompt.prompt();
+
     const { outcome } = await deferredPrompt.userChoice;
 
     if (outcome === "accepted") {
-      // console.log("User accepted the installation");
-    } else {
-      // console.log("User dismissed the installation");
+      console.log("App Installed");
     }
 
     setDeferredPrompt(null);
     setShowInstall(false);
   };
 
+  if (!showInstall) return null;
+
   return (
-    <>
-      {showInstall && (
-        <button
-          onClick={installApp}
-          className=" px-4 py-1 bg-blue-600 text-white rounded-sm mx-auto hover:bg-blue-700 transition"
-        >
-          Download App
-        </button>
-      )}
-    </>
+    <button
+      onClick={installApp}
+      className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition"
+    >
+      Download App
+    </button>
   );
 }

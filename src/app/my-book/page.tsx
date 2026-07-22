@@ -110,7 +110,7 @@ const MyWorkBook = () => {
   if (isLoading) return <div><Loading></Loading></div>;
 
   return (
-    <div className="p-6">
+    <div className="p-6 ">
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
         <h1 className="md:text-2xl text-lg font-bold">MyWorkBook Titles</h1>

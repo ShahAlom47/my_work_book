@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
@@ -10,145 +10,293 @@ import Logo from "./Logo";
 export default function Navbar() {
   const pathname = usePathname();
   const { user } = useUser();
+
   const [mobileOpen, setMobileOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-  const userNavLinks = [
-    { href: "/", label: "Home" },
-    { href: "/my-book", label: "My Book" },
-    { href: "/user/settings", label: "Settings" },
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 5);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(e.target as Node)
+      ) {
+        setMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+    };
+  }, []);
+
+  const userLinks = [
+    {
+      href: "/",
+      label: "Home",
+    },
+    {
+      href: "/my-book",
+      label: "My Book",
+    },
+    {
+      href: "/user/settings",
+      label: "Settings",
+    },
   ];
-  const guestNavLinks = [{ href: "/", label: "Home" }];
-  const navLinks = user ? userNavLinks : guestNavLinks;
+
+  const guestLinks = [
+    {
+      href: "/",
+      label: "Home",
+    },
+  ];
+
+  const navLinks = user ? userLinks : guestLinks;
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 z-40 bg-yellow-400 backdrop-blur-md border-b border-gray-200">
-        <div className="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-14 text-black">
-            
-            {/* Logo + Mobile Menu Button */}
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300
+        ${
+          !scrolled
+            ? "bg-yellow-200 shadow-md border-b"
+            : "bg-gray-200/60 backdrop-blur"
+        }`}
+      >
+        <div className="max-w-6xl mx-auto px-4">
+
+          <div className="h-16 flex items-center justify-between">
+
+            {/* Left */}
             <div className="flex items-center gap-3">
+
+   <button
+  onClick={() => setMobileOpen(!mobileOpen)}
+  className="md:hidden p-2 rounded-lg text-black hover:bg-gray-100"
+>
+  <svg
+    width="24"
+    height="24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    className="text-black"
+  >
+    {mobileOpen ? (
+      <path d="M6 6L18 18M6 18L18 6" />
+    ) : (
+      <path d="M4 6H20M4 12H20M4 18H20" />
+    )}
+  </svg>
+</button>
+
               <Logo />
 
-              <button
-                aria-label="Open menu"
-                className="p-2 rounded-md md:hidden hover:bg-gray-100"
-                onClick={() => setMobileOpen((s) => !s)}
-              >
-                <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M4 6H20M4 12H20M4 18H20" />
-                </svg>
-              </button>
             </div>
 
-            {/* Desktop Nav */}
-            <nav className="hidden md:flex items-center gap-4 bg-blue-900 rounded-full ">
-              {navLinks.map((l) => (
+            {/* Desktop Menu */}
+
+            <nav className="hidden md:flex items-center gap-2">
+
+              {navLinks.map((item) => (
                 <Link
-                  key={l.href}
-                  href={l.href}
-                  className={`px-3 py-1  text-sm transition text-white rounded-full ${
-                    pathname === l.href
-                      ? "bg-blue-950 font-medium "
-                      : " hover:bg-blue-900"
-                  }`}
+                  key={item.href}
+                  href={item.href}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300
+
+                  ${
+                    pathname === item.href
+                      ? "bg-blue-600 text-white shadow"
+                      : "text-gray-700 hover:bg-blue-50 hover:text-blue-700"
+                  }
+                  `}
                 >
-                  {l.label}
+                  {item.label}
                 </Link>
               ))}
+
             </nav>
 
-            {/* Right Side: Login OR User */}
-            <div className="relative">
+            {/* Right */}
+
+            <div className="relative" ref={menuRef}>
+
               {!user ? (
                 <Link
                   href="/login"
-                  className="px-4 py-1.5 rounded-md border text-sm hover:bg-gray-50 transition"
+                  className="px-5 py-2 rounded-full bg-blue-600 text-white text-sm hover:bg-blue-700 transition"
                 >
                   Login
                 </Link>
               ) : (
-                <div>
+                <>
                   <button
-                    onClick={() => setMenuOpen((s) => !s)}
-                    className="flex items-center gap-2 px-3 py-1.5 rounded-md hover:bg-gray-100 transition"
+                    onClick={() => setMenuOpen(!menuOpen)}
+                    className="flex items-center gap-3 rounded-full border px-2 py-1 hover:bg-gray-100 transition"
                   >
-                    <span className="font-medium text-sm capitalize">{user?.name}</span>
+                    <div className="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-semibold uppercase">
+                      {user.name?.charAt(0)}
+                    </div>
+
+                    <div className="hidden sm:block text-left">
+
+                      <p className="text-sm font-semibold capitalize">
+                        {user.name}
+                      </p>
+
+                      <p className="text-xs text-gray-500">
+                        Welcome
+                      </p>
+
+                    </div>
 
                     <svg
                       width="18"
                       height="18"
-                      viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
                       strokeWidth="2"
-                      className={`${menuOpen ? "rotate-180" : ""} transition`}
+                      className={`transition ${
+                        menuOpen ? "rotate-180" : ""
+                      }`}
                     >
                       <path d="M6 9l6 6 6-6" />
                     </svg>
+
                   </button>
 
-                  {/* Dropdown */}
                   {menuOpen && (
-                    <div className="absolute right-0 mt-2 w-40 bg-white shadow-md border rounded-md text-sm overflow-hidden">
-                      <button
-                        onClick={() => signOut({ callbackUrl: "/login" })}
-                        className="w-full text-left px-4 py-2 hover:bg-gray-50"
+                    <div className="absolute right-0 mt-3 w-52 rounded-xl border bg-white shadow-xl overflow-hidden">
+
+                      <Link
+                        href="/user/settings"
+                        onClick={() => setMenuOpen(false)}
+                        className="block px-4 py-3 text-sm hover:bg-gray-50"
                       >
-                        Sign Out
+                        ⚙️ Settings
+                      </Link>
+
+                      <button
+                        onClick={() =>
+                          signOut({
+                            callbackUrl: "/login",
+                          })
+                        }
+                        className="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50"
+                      >
+                        🚪 Sign Out
                       </button>
+
                     </div>
                   )}
-                </div>
+                </>
               )}
+
             </div>
+
           </div>
         </div>
 
         {/* Mobile Menu */}
-        {mobileOpen && (
-          <div className="md:hidden border-t bg-white/95 border border-gray-600 rounded-sm m-2 py-2 space-y-1 px-3 text-black">
-            {navLinks.map((l) => (
-              <Link
-                key={l.href}
-                href={l.href}
-                className={`block px-3 py-2 rounded-md text-sm ${
-                  pathname === l.href
-                    ? "bg-gray-300 font-medium"
-                    : " hover:bg-gray-100"
-                }`}
-                onClick={() => setMobileOpen(false)}
-              >
-                {l.label}
-              </Link>
-            ))}
+                {mobileOpen && (
+         <div className="md:hidden border-t border-yellow-500 bg-yellow-400 shadow-xl rounded-b-2xl ">
+  <div className="px-4 py-4 space-y-2">
 
-            {/* Mobile Login / Logout */}
-            {!user ? (
-              <Link
-                href="/login"
-                className="block px-3 py-2 text-sm rounded-md border hover:bg-gray-50"
-                onClick={() => setMobileOpen(false)}
-              >
-                Login
-              </Link>
-            ) : (
-              <button
-                onClick={() => {
-                  signOut({ callbackUrl: "/login" });
-                  setMobileOpen(false);
-                }}
-                className="block w-full text-left px-3 py-2 text-sm rounded-md hover:bg-gray-50"
-              >
-                Sign Out
-              </button>
-            )}
+    {navLinks.map((item) => (
+      <Link
+        key={item.href}
+        href={item.href}
+        onClick={() => setMobileOpen(false)}
+        className={`block rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 ${
+          pathname === item.href
+            ? "bg-blue-700 text-white shadow-md"
+            : "text-gray-900 hover:bg-yellow-300"
+        }`}
+      >
+        {item.label}
+      </Link>
+    ))}
+
+    <div className="border-t border-yellow-500 pt-4 mt-4">
+
+      {!user ? (
+        <Link
+          href="/login"
+          onClick={() => setMobileOpen(false)}
+          className="block w-full rounded-xl bg-blue-700 text-white text-center py-3 font-semibold shadow hover:bg-blue-800 transition"
+        >
+          Login
+        </Link>
+      ) : (
+        <>
+          {/* User Card */}
+          <div className="flex items-center gap-3 rounded-xl bg-white p-3 shadow-sm mb-3">
+
+            <div className="w-11 h-11 rounded-full bg-blue-700 text-white flex items-center justify-center font-bold uppercase">
+              {user.name?.charAt(0)}
+            </div>
+
+            <div className="flex-1">
+              <p className="font-semibold text-gray-900 capitalize">
+                {user.name}
+              </p>
+
+              <p className="text-xs text-gray-500">
+                Welcome Back 👋
+              </p>
+            </div>
+
           </div>
+
+          {/* Settings */}
+          <Link
+            href="/user/settings"
+            onClick={() => setMobileOpen(false)}
+            className="block rounded-xl bg-white px-4 py-3 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-100 transition"
+          >
+            ⚙️ Settings
+          </Link>
+
+          {/* Logout */}
+          <button
+            onClick={() => {
+              setMobileOpen(false);
+              signOut({ callbackUrl: "/login" });
+            }}
+            className="mt-3 w-full rounded-xl bg-red-500 text-white py-3 font-semibold shadow hover:bg-red-600 transition"
+          >
+            Sign Out
+          </button>
+        </>
+      )}
+
+    </div>
+
+  </div>
+</div>
         )}
+
       </header>
 
-      <div className="h-14" />
+      {/* Spacer */}
+      <div className="h-16" />
     </>
   );
 }

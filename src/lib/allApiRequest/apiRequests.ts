@@ -12,8 +12,8 @@ export interface IApiResponse<T = unknown> {
 }
 
 
-const baseURL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-// const baseURL = process.env.NEXT_PUBLIC_BASE_URL || "https://myworkbook.vercel.app";
+// const baseURL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+const baseURL = process.env.NEXT_PUBLIC_BASE_URL || "https://myworkbook.vercel.app";
 
 
 const api = axios.create({

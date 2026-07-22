@@ -8,7 +8,7 @@ import { SlSocialLinkedin } from "react-icons/sl";
 const Footer = () => {
 
   return (
-    <footer className="bg-color-primary dark:bg-gray-900 text-gray-100 dark:text-gray-200 mt-10 py-10">
+    <footer className="bg-gray-300 mt-10 py-10">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-2 md:grid-cols-3 gap-5 items-start  justify-betwee">
         {/* Logo Section */}
       <div className="flex flex-col space-y-3 col-span-2 md:col-span-1 row-span-1 row-start-1 mb-5">
@@ -21,7 +21,7 @@ const Footer = () => {
             className=" w-24 -ml-3"
           />
           <span className="text-2xl font-semibold text-color-secondary">
-            DevDiary
+          
           </span>
           <p className="text-sm text-gray-300 dark:text-gray-400 md:max-w-xs w-full  mt-3">
             A digital diary for developers — sharing code snippets, lessons, and

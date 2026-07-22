@@ -31,7 +31,7 @@ const EntryDataTable: React.FC<{
     <>
       {/* DESKTOP TABLE */}
       <div className="hidden md:block">
-        <table className="w-full border-collapse border border-gray-300">
+        <table className="w-full border-collapse border border-gray-300 text-white">
           <thead className="bg-gray-700">
             <tr>
               <th className="border p-2">Date</th>

@@ -1,10 +1,10 @@
 "use client";
+
 import { Entry } from "@/lib/interfaces/interfaces";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import { FiEdit, FiTrash2 } from "react-icons/fi";
 
-// ---- Props Interface ----
 interface EntryTableProps {
   entries: Entry[];
   handleEdit: (id: string) => void;
@@ -16,63 +16,85 @@ const EntryTable: React.FC<EntryTableProps> = ({
   handleEdit,
   handleDelete,
 }) => {
-  const route = useRouter();
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
-  const handleNavigate = (id: string) => () => {
-    route.push(`/my-book/entries/${id}`);
+  const handleNavigate = (id: string) => {
+     setLoading(true);
+    router.push(`/my-book/entries/${id}`);
   };
 
   return (
-    <table className="w-full border border-gray-300 rounded">
-      <thead>
-        <tr className="bg-gray-600">
-          <th className="p-2 border">Title Name</th>
-          <th className="p-2 border w-32 text-center">Actions</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        {entries.map((title) => (
-          <tr
-          
-            key={title._id as string}
-            className="hover:bg-gray-700 transition cursor-pointer my-auto border"
-          >
-            {/* Title Cell */}
-            <td
-              className=" p-1  border"
-              onClick={handleNavigate(title?._id as string)}
-              
-            >
-              {title.entryName}
-            </td>
-
-            {/* Action Buttons */}
-            <td className="p-1  flex items-center justify-center  mt-1 gap-3 ">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation(); // 🔥 prevent parent click
-                  handleEdit(title._id as string);
-                }}
-                className="text-yellow-500 hover:text-yellow-700 transition"
-              >
-                <FiEdit />
-              </button>
-
-              <button
-                onClick={(e) => {
-                  e.stopPropagation(); // 🔥 prevent parent click
-                  handleDelete(title._id as string);
-                }}
-                className="text-red-500 hover:text-red-700 transition"
-              >
-                <FiTrash2 />
-              </button>
-            </td>
+    <>
+      {loading && (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm">
+      <span className="loading loading-spinner loading-lg text-primary"></span>
+    </div>
+  )}
+    <div className="overflow-x-auto rounded-xl border border-gray-700 bg-gray-200 shadow-lg">
+      <table className="table table-zebra w-full p-3">
+        <thead className="bg-gray-700/40 sticky top-0 text-black z-10">
+          <tr>
+            <th className="py-4 text-base font-semibold">Entry Name</th>
+            <th className="w-40 text-center text-base font-semibold">
+              Actions
+            </th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+
+        <tbody>
+          {entries.length > 0 ? (
+            entries.map((entry) => (
+              <tr
+                key={entry._id as string}
+                className="hover:bg-gray-400 transition-all duration-200 shadow-lg rounded-sm"
+              >
+                <td
+                  onClick={() => handleNavigate(entry._id as string)}
+                  className="cursor-pointer p-4 font-medium hover:text-primary transition"
+                >
+                  {entry.entryName}
+                </td>
+
+                <td>
+                  <div className="flex items-center justify-center gap-2 px-3">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEdit(entry._id as string);
+                      }}
+                      className="btn btn-sm btn-warning btn-outline"
+                    >
+                      <FiEdit size={18} />
+                    </button>
+
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(entry._id as string);
+                      }}
+                      className="btn btn-sm btn-error btn-outline"
+                    >
+                      <FiTrash2 size={18} />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td
+                colSpan={2}
+                className="py-12 text-center text-base-content/60"
+              >
+                No entries found.
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+    </>
   );
 };
 

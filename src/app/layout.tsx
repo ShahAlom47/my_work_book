@@ -1,19 +1,10 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "@/Providers/Provider";
-import Navbar from "@/Component/Navbar";
 import InstallPrompt from "@/Component/InstallPrompt";
+import Navbar from "@/Component/Navbar";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: "My Work Book",
@@ -23,6 +14,7 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+ 
   return (
     <html lang="en">
       <head>
@@ -36,8 +28,7 @@ export default function RootLayout({
       </head>
 
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-blur
-          min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white`}
+        className={` bg-white text-black`}
       >
         <Providers>
           <Navbar />
@@ -45,8 +36,14 @@ export default function RootLayout({
         </Providers>
 
         {/* Floating Install Button */}
-        <div className="fixed bottom-4 right-4 z-50">
+
+        <div className=" w-full flex  justify-center  items-center  bg-slate-100 text-black bottom-4 right-4  ">
+              <p>
+    © {new Date().getFullYear()} All Rights Reserved. Developed by{" "}
+    <span className="font-semibold">Shah Alom</span>
+  </p>
           <InstallPrompt />
+     
         </div>
       </body>
     </html>
